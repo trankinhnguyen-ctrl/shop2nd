@@ -30,6 +30,14 @@
         {
             components = new System.ComponentModel.Container();
             panel1 = new Panel();
+            Them_bt = new Button();
+            label7 = new Label();
+            label6 = new Label();
+            textBox4 = new TextBox();
+            label5 = new Label();
+            label4 = new Label();
+            textBox3 = new TextBox();
+            textBox2 = new TextBox();
             label3 = new Label();
             textBox1 = new TextBox();
             label2 = new Label();
@@ -41,14 +49,7 @@
             ThanhTimKiem = new TextBox();
             contextMenuStrip1 = new ContextMenuStrip(components);
             dđToolStripMenuItem = new ToolStripMenuItem();
-            textBox2 = new TextBox();
-            textBox3 = new TextBox();
-            label4 = new Label();
-            label5 = new Label();
-            textBox4 = new TextBox();
-            label6 = new Label();
-            label7 = new Label();
-            Them_bt = new Button();
+            contextMenuStrip2 = new ContextMenuStrip(components);
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)Hinh_Sp).BeginInit();
             panel2.SuspendLayout();
@@ -75,6 +76,74 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(736, 175);
             panel1.TabIndex = 0;
+            // 
+            // Them_bt
+            // 
+            Them_bt.Location = new Point(3, 139);
+            Them_bt.Name = "Them_bt";
+            Them_bt.Size = new Size(494, 29);
+            Them_bt.TabIndex = 14;
+            Them_bt.Text = "Thêm";
+            Them_bt.UseVisualStyleBackColor = true;
+            Them_bt.Click += button2_Click;
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(572, 83);
+            label7.Name = "label7";
+            label7.Size = new Size(70, 20);
+            label7.TabIndex = 13;
+            label7.Text = "Hình Ảnh";
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(317, 89);
+            label6.Name = "label6";
+            label6.Size = new Size(72, 20);
+            label6.TabIndex = 12;
+            label6.Text = "Số Lượng";
+            // 
+            // textBox4
+            // 
+            textBox4.Location = new Point(317, 106);
+            textBox4.Name = "textBox4";
+            textBox4.Size = new Size(180, 27);
+            textBox4.TabIndex = 11;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(410, 36);
+            label5.Name = "label5";
+            label5.Size = new Size(65, 20);
+            label5.TabIndex = 10;
+            label5.Text = "Màu Sắc";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(317, 36);
+            label4.Name = "label4";
+            label4.Size = new Size(36, 20);
+            label4.TabIndex = 9;
+            label4.Text = "Size";
+            // 
+            // textBox3
+            // 
+            textBox3.Location = new Point(410, 59);
+            textBox3.Name = "textBox3";
+            textBox3.Size = new Size(87, 27);
+            textBox3.TabIndex = 8;
+            // 
+            // textBox2
+            // 
+            textBox2.Location = new Point(317, 59);
+            textBox2.Name = "textBox2";
+            textBox2.Size = new Size(87, 27);
+            textBox2.TabIndex = 7;
+            textBox2.TextChanged += textBox2_TextChanged;
             // 
             // label3
             // 
@@ -132,9 +201,9 @@
             // 
             panel2.Controls.Add(Tim_bt);
             panel2.Controls.Add(ThanhTimKiem);
-            panel2.Location = new Point(3, 55);
+            panel2.Location = new Point(3, 61);
             panel2.Name = "panel2";
-            panel2.Size = new Size(736, 70);
+            panel2.Size = new Size(736, 60);
             panel2.TabIndex = 1;
             // 
             // Tim_bt
@@ -169,73 +238,11 @@
             dđToolStripMenuItem.Size = new Size(96, 24);
             dđToolStripMenuItem.Text = "dđ";
             // 
-            // textBox2
+            // contextMenuStrip2
             // 
-            textBox2.Location = new Point(317, 59);
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(87, 27);
-            textBox2.TabIndex = 7;
-            textBox2.TextChanged += textBox2_TextChanged;
-            // 
-            // textBox3
-            // 
-            textBox3.Location = new Point(410, 59);
-            textBox3.Name = "textBox3";
-            textBox3.Size = new Size(87, 27);
-            textBox3.TabIndex = 8;
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Location = new Point(317, 36);
-            label4.Name = "label4";
-            label4.Size = new Size(36, 20);
-            label4.TabIndex = 9;
-            label4.Text = "Size";
-            // 
-            // label5
-            // 
-            label5.AutoSize = true;
-            label5.Location = new Point(410, 36);
-            label5.Name = "label5";
-            label5.Size = new Size(65, 20);
-            label5.TabIndex = 10;
-            label5.Text = "Màu Sắc";
-            // 
-            // textBox4
-            // 
-            textBox4.Location = new Point(317, 106);
-            textBox4.Name = "textBox4";
-            textBox4.Size = new Size(180, 27);
-            textBox4.TabIndex = 11;
-            // 
-            // label6
-            // 
-            label6.AutoSize = true;
-            label6.Location = new Point(317, 89);
-            label6.Name = "label6";
-            label6.Size = new Size(72, 20);
-            label6.TabIndex = 12;
-            label6.Text = "Số Lượng";
-            // 
-            // label7
-            // 
-            label7.AutoSize = true;
-            label7.Location = new Point(572, 83);
-            label7.Name = "label7";
-            label7.Size = new Size(70, 20);
-            label7.TabIndex = 13;
-            label7.Text = "Hình Ảnh";
-            // 
-            // Them_bt
-            // 
-            Them_bt.Location = new Point(115, 139);
-            Them_bt.Name = "Them_bt";
-            Them_bt.Size = new Size(94, 29);
-            Them_bt.TabIndex = 14;
-            Them_bt.Text = "Thêm";
-            Them_bt.UseVisualStyleBackColor = true;
-            Them_bt.Click += button2_Click;
+            contextMenuStrip2.ImageScalingSize = new Size(20, 20);
+            contextMenuStrip2.Name = "contextMenuStrip2";
+            contextMenuStrip2.Size = new Size(61, 4);
             // 
             // KhoHang
             // 
@@ -244,7 +251,7 @@
             Controls.Add(panel2);
             Controls.Add(panel1);
             Name = "KhoHang";
-            Size = new Size(742, 504);
+            Size = new Size(754, 504);
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)Hinh_Sp).EndInit();
@@ -276,5 +283,6 @@
         private TextBox textBox4;
         private Label label5;
         private Label label4;
+        private ContextMenuStrip contextMenuStrip2;
     }
 }
