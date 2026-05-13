@@ -58,6 +58,7 @@
             // 
             // panel1
             // 
+            panel1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             panel1.Controls.Add(Them_bt);
             panel1.Controls.Add(label7);
             panel1.Controls.Add(label6);
@@ -74,7 +75,7 @@
             panel1.Controls.Add(Hinh_Sp);
             panel1.Location = new Point(3, 326);
             panel1.Name = "panel1";
-            panel1.Size = new Size(736, 175);
+            panel1.Size = new Size(729, 181);
             panel1.TabIndex = 0;
             // 
             // Them_bt
@@ -83,7 +84,7 @@
             Them_bt.Name = "Them_bt";
             Them_bt.Size = new Size(494, 29);
             Them_bt.TabIndex = 14;
-            Them_bt.Text = "Thêm";
+            Them_bt.Text = "Thêm+";
             Them_bt.UseVisualStyleBackColor = true;
             Them_bt.Click += button2_Click;
             // 
@@ -132,6 +133,7 @@
             // 
             // textBox3
             // 
+            textBox3.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             textBox3.Location = new Point(410, 59);
             textBox3.Name = "textBox3";
             textBox3.Size = new Size(87, 27);
@@ -191,26 +193,29 @@
             // 
             // Hinh_Sp
             // 
-            Hinh_Sp.Location = new Point(503, 13);
+            Hinh_Sp.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            Hinh_Sp.Location = new Point(503, 9);
             Hinh_Sp.Name = "Hinh_Sp";
-            Hinh_Sp.Size = new Size(217, 159);
+            Hinh_Sp.Size = new Size(202, 159);
             Hinh_Sp.TabIndex = 1;
             Hinh_Sp.TabStop = false;
             // 
             // panel2
             // 
+            panel2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             panel2.Controls.Add(Tim_bt);
             panel2.Controls.Add(ThanhTimKiem);
             panel2.Location = new Point(3, 61);
             panel2.Name = "panel2";
-            panel2.Size = new Size(736, 60);
+            panel2.Size = new Size(741, 60);
             panel2.TabIndex = 1;
             // 
             // Tim_bt
             // 
+            Tim_bt.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             Tim_bt.Location = new Point(642, 15);
             Tim_bt.Name = "Tim_bt";
-            Tim_bt.Size = new Size(94, 29);
+            Tim_bt.Size = new Size(87, 29);
             Tim_bt.TabIndex = 3;
             Tim_bt.Text = "Tìm Kiếm";
             Tim_bt.UseVisualStyleBackColor = true;
@@ -218,9 +223,10 @@
             // 
             // ThanhTimKiem
             // 
+            ThanhTimKiem.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             ThanhTimKiem.Location = new Point(3, 15);
             ThanhTimKiem.Name = "ThanhTimKiem";
-            ThanhTimKiem.Size = new Size(623, 27);
+            ThanhTimKiem.Size = new Size(628, 27);
             ThanhTimKiem.TabIndex = 2;
             ThanhTimKiem.Text = "Tìm Sản Phẩm";
             ThanhTimKiem.TextChanged += textBox1_TextChanged;
@@ -251,7 +257,7 @@
             Controls.Add(panel2);
             Controls.Add(panel1);
             Name = "KhoHang";
-            Size = new Size(754, 504);
+            Size = new Size(747, 510);
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)Hinh_Sp).EndInit();

@@ -4,7 +4,13 @@
     <Compile Update="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Khach_Hang.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="KhoHang.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="The_sp.cs">
       <SubType>UserControl</SubType>
     </Compile>
   </ItemGroup>
