@@ -17,3 +17,33 @@ D:\New folder\dosi\dosi\obj\Debug\net8.0-windows\ref\dosi.dll
 D:\New folder\dosi\dosi\obj\Debug\net8.0-windows\dosi.KhoHang.resources
 D:\New folder\dosi\dosi\obj\Debug\net8.0-windows\dosi.sourcelink.json
 D:\New folder\dosi\dosi\obj\Debug\net8.0-windows\dosi.Khach_Hang.resources
+D:\Dev\Shop2\dosi\obj\Debug\net8.0-windows\dosi.csproj.AssemblyReference.cache
+D:\Dev\Shop2\dosi\obj\Debug\net8.0-windows\dosi.Form1.resources
+D:\Dev\Shop2\dosi\obj\Debug\net8.0-windows\dosi.csproj.GenerateResource.cache
+D:\Dev\Shop2\dosi\obj\Debug\net8.0-windows\dosi.GeneratedMSBuildEditorConfig.editorconfig
+D:\Dev\Shop2\dosi\obj\Debug\net8.0-windows\dosi.AssemblyInfoInputs.cache
+D:\Dev\Shop2\dosi\obj\Debug\net8.0-windows\dosi.AssemblyInfo.cs
+D:\Dev\Shop2\dosi\obj\Debug\net8.0-windows\dosi.csproj.CoreCompileInputs.cache
+D:\Dev\Shop2\dosi\obj\Debug\net8.0-windows\dosi.sourcelink.json
+D:\Dev\Shop2\dosi\obj\Debug\net8.0-windows\dosi.dll
+D:\Dev\Shop2\dosi\obj\Debug\net8.0-windows\refint\dosi.dll
+D:\Dev\Shop2\dosi\obj\Debug\net8.0-windows\dosi.pdb
+D:\Dev\Shop2\dosi\bin\Debug\net8.0-windows\dosi.exe
+D:\Dev\Shop2\dosi\bin\Debug\net8.0-windows\dosi.deps.json
+D:\Dev\Shop2\dosi\bin\Debug\net8.0-windows\dosi.runtimeconfig.json
+D:\Dev\Shop2\dosi\bin\Debug\net8.0-windows\dosi.dll
+D:\Dev\Shop2\dosi\bin\Debug\net8.0-windows\dosi.pdb
+D:\Dev\Shop2\dosi\bin\Debug\net8.0-windows\Dapper.dll
+D:\Dev\Shop2\dosi\bin\Debug\net8.0-windows\System.Data.SQLite.dll
+D:\Dev\Shop2\dosi\bin\Debug\net8.0-windows\runtimes\linux-x64\native\SQLite.Interop.dll
+D:\Dev\Shop2\dosi\bin\Debug\net8.0-windows\runtimes\osx-x64\native\SQLite.Interop.dll
+D:\Dev\Shop2\dosi\bin\Debug\net8.0-windows\runtimes\win-x64\native\SQLite.Interop.dll
+D:\Dev\Shop2\dosi\bin\Debug\net8.0-windows\runtimes\win-x86\native\SQLite.Interop.dll
+D:\Dev\Shop2\dosi\obj\Debug\net8.0-windows\dosi.csproj.Up2Date
+D:\Dev\Shop2\dosi\obj\Debug\net8.0-windows\dosi.genruntimeconfig.cache
+D:\Dev\Shop2\dosi\obj\Debug\net8.0-windows\ref\dosi.dll
+D:\Dev\Shop2\dosi\obj\Debug\net8.0-windows\dosi.TheSanPham.resources
+D:\Dev\Shop2\dosi\obj\Debug\net8.0-windows\dosi.SuaSanPhamForm.resources
+D:\Dev\Shop2\dosi\obj\Debug\net8.0-windows\dosi.ViewKhachHang.resources
+D:\Dev\Shop2\dosi\obj\Debug\net8.0-windows\dosi.ViewKhoHang.resources
+D:\Dev\Shop2\dosi\obj\Debug\net8.0-windows\dosi.TheKhachHang.resources

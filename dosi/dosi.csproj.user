@@ -4,13 +4,19 @@
     <Compile Update="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Khach_Hang.cs">
+    <Compile Update="SuaSanPhamForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="TheKhachHang.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="KhoHang.cs">
+    <Compile Update="ViewKhachHang.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="The_sp.cs">
+    <Compile Update="ViewKhoHang.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="TheSanPham.cs">
       <SubType>UserControl</SubType>
     </Compile>
   </ItemGroup>

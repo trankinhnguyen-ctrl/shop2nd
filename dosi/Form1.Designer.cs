@@ -2,15 +2,8 @@
 {
     partial class Form1
     {
-        /// <summary>
-        ///  Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        ///  Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -22,112 +15,91 @@
 
         #region Windows Form Designer generated code
 
-        /// <summary>
-        ///  Required method for Designer support - do not modify
-        ///  the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
-            Menu_panel = new Panel();
-            button1 = new Button();
+            panelSidebar = new Panel();
             button4 = new Button();
-            button2 = new Button();
-            button3 = new Button();
+            btnKhachHang = new Button();
+            btnKhoHang = new Button();
+            button1 = new Button();
             panelMain = new Panel();
-            panel1 = new Panel();
-            Menu_panel.SuspendLayout();
+            panelSidebar.SuspendLayout();
             SuspendLayout();
-            // 
-            // Menu_panel
-            // 
-            Menu_panel.Controls.Add(button1);
-            Menu_panel.Controls.Add(button4);
-            Menu_panel.Controls.Add(button2);
-            Menu_panel.Controls.Add(button3);
-            Menu_panel.Dock = DockStyle.Left;
-            Menu_panel.Location = new Point(0, 0);
-            Menu_panel.Name = "Menu_panel";
-            Menu_panel.Size = new Size(153, 568);
-            Menu_panel.TabIndex = 0;
-            // 
-            // button1
-            // 
-            button1.Location = new Point(0, 197);
+
+            panelSidebar.BackColor = Color.FromArgb(245, 245, 245);
+            panelSidebar.Controls.Add(button4);
+            panelSidebar.Controls.Add(btnKhachHang);
+            panelSidebar.Controls.Add(btnKhoHang);
+            panelSidebar.Controls.Add(button1);
+            panelSidebar.Dock = DockStyle.Left;
+            panelSidebar.Location = new Point(0, 0);
+            panelSidebar.Name = "panelSidebar";
+            panelSidebar.Padding = new Padding(10);
+            panelSidebar.Size = new Size(200, 700);
+            panelSidebar.TabIndex = 0;
+
+            button1.Dock = DockStyle.Top;
+            button1.Location = new Point(10, 10);
             button1.Name = "button1";
-            button1.Size = new Size(132, 64);
-            button1.TabIndex = 1;
-            button1.Text = "Kho Hàng";
+            button1.Size = new Size(180, 60);
+            button1.TabIndex = 0;
+            button1.Text = "button2";
             button1.UseVisualStyleBackColor = true;
-            button1.Click += btnKhoHang_Click;
-            // 
-            // button4
-            // 
-            button4.Location = new Point(0, 337);
+            button1.Click += button1_Click;
+
+            btnKhoHang.Dock = DockStyle.Top;
+            btnKhoHang.Location = new Point(10, 80);
+            btnKhoHang.Margin = new Padding(0, 10, 0, 0);
+            btnKhoHang.Name = "btnKhoHang";
+            btnKhoHang.Size = new Size(180, 60);
+            btnKhoHang.TabIndex = 1;
+            btnKhoHang.Text = "Kho Hàng";
+            btnKhoHang.UseVisualStyleBackColor = true;
+            btnKhoHang.Click += btnKhoHang_Click;
+
+            btnKhachHang.Dock = DockStyle.Top;
+            btnKhachHang.Location = new Point(10, 150);
+            btnKhachHang.Name = "btnKhachHang";
+            btnKhachHang.Size = new Size(180, 60);
+            btnKhachHang.TabIndex = 2;
+            btnKhachHang.Text = "Khách Hàng";
+            btnKhachHang.UseVisualStyleBackColor = true;
+            btnKhachHang.Click += btnKhachHang_Click;
+
+            button4.Dock = DockStyle.Top;
+            button4.Location = new Point(10, 220);
             button4.Name = "button4";
-            button4.Size = new Size(132, 61);
-            button4.TabIndex = 5;
+            button4.Size = new Size(180, 60);
+            button4.TabIndex = 3;
             button4.Text = "button4";
             button4.UseVisualStyleBackColor = true;
-            button4.Click += button4_Click;
-            // 
-            // button2
-            // 
-            button2.Location = new Point(0, 127);
-            button2.Name = "button2";
-            button2.Size = new Size(132, 64);
-            button2.TabIndex = 3;
-            button2.Text = "button2";
-            button2.UseVisualStyleBackColor = true;
-            // 
-            // button3
-            // 
-            button3.Location = new Point(0, 267);
-            button3.Name = "button3";
-            button3.Size = new Size(132, 64);
-            button3.TabIndex = 4;
-            button3.Text = "Khách Hàng";
-            button3.UseVisualStyleBackColor = true;
-            button3.Click += btnKhachHang_Click;
-            // 
-            // panelMain
-            // 
+
             panelMain.Dock = DockStyle.Fill;
-            panelMain.Location = new Point(153, 0);
+            panelMain.Location = new Point(200, 0);
             panelMain.Name = "panelMain";
-            panelMain.Size = new Size(756, 568);
-            panelMain.TabIndex = 6;
-            panelMain.Paint += panelMain_Paint;
-            // 
-            // panel1
-            // 
-            panel1.Dock = DockStyle.Top;
-            panel1.Location = new Point(153, 0);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(756, 125);
-            panel1.TabIndex = 7;
-            // 
-            // Form1
-            // 
+            panelMain.Size = new Size(900, 700);
+            panelMain.TabIndex = 1;
+
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(909, 568);
-            Controls.Add(panel1);
+            ClientSize = new Size(1100, 700);
             Controls.Add(panelMain);
-            Controls.Add(Menu_panel);
+            Controls.Add(panelSidebar);
+            MinimumSize = new Size(1000, 600);
             Name = "Form1";
-            Text = "Form1";
-            Menu_panel.ResumeLayout(false);
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Quản Lý Cửa Hàng";
+            panelSidebar.ResumeLayout(false);
             ResumeLayout(false);
         }
 
         #endregion
 
-        private Panel Menu_panel;
+        private Panel panelSidebar;
+        private Button btnKhoHang;
+        private Button btnKhachHang;
         private Button button1;
-        private Button button2;
-        private Button button3;
         private Button button4;
         private Panel panelMain;
-        private Panel panel1;
     }
 }
