@@ -17,3 +17,4 @@ D:\New folder\dosi\dosi\obj\Debug\net8.0-windows\ref\dosi.dll
 D:\New folder\dosi\dosi\obj\Debug\net8.0-windows\dosi.KhoHang.resources
 D:\New folder\dosi\dosi\obj\Debug\net8.0-windows\dosi.sourcelink.json
 D:\New folder\dosi\dosi\obj\Debug\net8.0-windows\dosi.Khach_Hang.resources
+D:\New folder\dosi\dosi\obj\Debug\net8.0-windows\dosi.The_sp.resources

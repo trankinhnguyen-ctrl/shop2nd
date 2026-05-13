@@ -69,5 +69,6 @@
             // Nạp nó vào cái PanelMain (cái thùng chứa bên phải Form1)
             addUserControl(uc);
         }
+        
     }
 }

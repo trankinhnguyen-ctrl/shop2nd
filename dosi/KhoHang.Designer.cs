@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
             panel1 = new Panel();
             Them_bt = new Button();
             label7 = new Label();
@@ -47,13 +46,10 @@
             panel2 = new Panel();
             Tim_bt = new Button();
             ThanhTimKiem = new TextBox();
-            contextMenuStrip1 = new ContextMenuStrip(components);
-            dđToolStripMenuItem = new ToolStripMenuItem();
-            contextMenuStrip2 = new ContextMenuStrip(components);
+            flowLayoutPanel1 = new FlowLayoutPanel();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)Hinh_Sp).BeginInit();
             panel2.SuspendLayout();
-            contextMenuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // panel1
@@ -231,29 +227,18 @@
             ThanhTimKiem.Text = "Tìm Sản Phẩm";
             ThanhTimKiem.TextChanged += textBox1_TextChanged;
             // 
-            // contextMenuStrip1
+            // flowLayoutPanel1
             // 
-            contextMenuStrip1.ImageScalingSize = new Size(20, 20);
-            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { dđToolStripMenuItem });
-            contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(97, 28);
-            // 
-            // dđToolStripMenuItem
-            // 
-            dđToolStripMenuItem.Name = "dđToolStripMenuItem";
-            dđToolStripMenuItem.Size = new Size(96, 24);
-            dđToolStripMenuItem.Text = "dđ";
-            // 
-            // contextMenuStrip2
-            // 
-            contextMenuStrip2.ImageScalingSize = new Size(20, 20);
-            contextMenuStrip2.Name = "contextMenuStrip2";
-            contextMenuStrip2.Size = new Size(61, 4);
+            flowLayoutPanel1.Location = new Point(6, 127);
+            flowLayoutPanel1.Name = "flowLayoutPanel1";
+            flowLayoutPanel1.Size = new Size(738, 193);
+            flowLayoutPanel1.TabIndex = 2;
             // 
             // KhoHang
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(flowLayoutPanel1);
             Controls.Add(panel2);
             Controls.Add(panel1);
             Name = "KhoHang";
@@ -263,7 +248,6 @@
             ((System.ComponentModel.ISupportInitialize)Hinh_Sp).EndInit();
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
-            contextMenuStrip1.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -275,8 +259,6 @@
         private TextBox ThanhTimKiem;
         private PictureBox Hinh_Sp;
         private TextBox Textinput_MaSp;
-        private ContextMenuStrip contextMenuStrip1;
-        private ToolStripMenuItem dđToolStripMenuItem;
         private Label label1;
         private Label label2;
         private Label label3;
@@ -289,6 +271,6 @@
         private TextBox textBox4;
         private Label label5;
         private Label label4;
-        private ContextMenuStrip contextMenuStrip2;
+        private FlowLayoutPanel flowLayoutPanel1;
     }
 }
