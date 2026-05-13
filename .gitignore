@@ -1,2 +1,5 @@
-# Visual Studio / .NET
+[Bb]in/
+[Oo]bj/
 .vs/
+*.db
+*.user
