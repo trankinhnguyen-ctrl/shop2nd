@@ -13,9 +13,10 @@ namespace dosi
             this.Load += ViewKhoHang_Load;
             this.Resize += (s, e) => { LoadSanPham(ThanhTimKiem.Text); };
             pic_HinhSP.Click += pic_HinhSP_Click;
+            Tim_bt.Click += Tim_bt_Click;
         }
 
-        private void ViewKhoHang_Load(object sender, EventArgs e)
+        private void ViewKhoHang_Load(object? sender, EventArgs e)
         {
             LoadSanPham();
         }
@@ -24,7 +25,7 @@ namespace dosi
         {
             txt_MaSP.Clear();
             txt_TenSP.Clear();
-            txt_Size.Clear();
+            txt_GiaBan.Clear();
             txtSL.Clear();
             pic_HinhSP.Image = null;
             pic_HinhSP.Tag = null;
@@ -45,11 +46,15 @@ namespace dosi
                     pathLuuDB = CopyAnhVaoProject(pathGoc);
                 }
 
+                decimal.TryParse(txt_GiaBan.Text, out decimal gia);
+                int.TryParse(txtSL.Text, out int sl);
+
                 SanPham sp = new SanPham
                 {
                     MaSP = txt_MaSP.Text,
                     TenSP = txt_TenSP.Text,
-                    SoLuong = int.TryParse(txtSL.Text, out int sl) ? sl : 0,
+                    GiaBan = gia,
+                    SoLuong = sl,
                     HinhAnh = pathLuuDB
                 };
 
@@ -74,9 +79,9 @@ namespace dosi
                 using (var conn = new SQLiteConnection(ConnectionString))
                 {
                     conn.Open();
-                    string sql = "SELECT id, ma_sp AS MaSP, ten_sp AS TenSP, so_luong_ton AS SoLuong, hinh_anh AS HinhAnh FROM SanPham";
+                    string sql = "SELECT id, ma_sp AS MaSP, ten_sp AS TenSP, so_luong_ton AS SoLuong, hinh_anh AS HinhAnh, gia_ban AS GiaBan FROM SanPham";
 
-                    if (!string.IsNullOrEmpty(searchKey) && searchKey != "Tìm Sản Phẩm")
+                    if (!string.IsNullOrEmpty(searchKey))
                     {
                         sql += " WHERE ma_sp LIKE @key OR ten_sp LIKE @key";
                     }
@@ -97,13 +102,7 @@ namespace dosi
                             }
                         };
 
-                        card.Click += (s, ev) => openEdit();
-
-                        foreach (Control child in card.Controls)
-                        {
-                            child.Click += (s, ev) => openEdit();
-                        }
-
+                        card.OnSelect = openEdit;
                         CardLayout.Controls.Add(card);
                     }
                 }
@@ -120,12 +119,12 @@ namespace dosi
             ThemSanPham();
         }
 
-        private void Tim_bt_Click(object sender, EventArgs e)
+        private void Tim_bt_Click(object? sender, EventArgs e)
         {
             LoadSanPham(ThanhTimKiem.Text);
         }
 
-        private void pic_HinhSP_Click(object sender, EventArgs e)
+        private void pic_HinhSP_Click(object? sender, EventArgs e)
         {
             using (OpenFileDialog ofd = new OpenFileDialog())
             {

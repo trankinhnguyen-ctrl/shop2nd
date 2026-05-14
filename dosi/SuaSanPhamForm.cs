@@ -18,6 +18,7 @@ namespace dosi
         {
             txt_MaSP.Text = _sp.MaSP;
             txt_TenSP.Text = _sp.TenSP;
+            txt_GiaBan.Text = _sp.GiaBan.ToString("N0");
             txt_SoLuong.Text = _sp.SoLuong.ToString();
 
             if (!string.IsNullOrEmpty(_sp.HinhAnh))
@@ -25,9 +26,16 @@ namespace dosi
                 string fullPath = Path.Combine(Application.StartupPath, _sp.HinhAnh);
                 if (File.Exists(fullPath))
                 {
-                    using (FileStream fs = new FileStream(fullPath, FileMode.Open, FileAccess.Read))
+                    try
                     {
-                        pic_HinhSP.Image = Image.FromStream(fs);
+                        using (FileStream fs = new FileStream(fullPath, FileMode.Open, FileAccess.Read))
+                        {
+                            pic_HinhSP.Image = Image.FromStream(fs);
+                        }
+                    }
+                    catch
+                    {
+                        pic_HinhSP.Image = null;
                     }
                 }
             }
@@ -69,6 +77,10 @@ namespace dosi
         {
             _sp.MaSP = txt_MaSP.Text;
             _sp.TenSP = txt_TenSP.Text;
+                
+            string giaText = txt_GiaBan.Text.Replace(",", "").Replace(".", "");
+            _sp.GiaBan = decimal.TryParse(giaText, out decimal gia) ? gia : 0;
+
             _sp.SoLuong = int.TryParse(txt_SoLuong.Text, out int sl) ? sl : 0;
 
             if (pic_HinhSP.Tag?.ToString() is string path)

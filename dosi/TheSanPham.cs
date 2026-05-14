@@ -1,13 +1,18 @@
-﻿using System.Drawing;
-using System.IO;
-
-namespace dosi
+﻿namespace dosi
 {
     public partial class TheSanPham : UserControl
     {
+        public Action? OnSelect { get; set; }
+
         public TheSanPham()
         {
             InitializeComponent();
+
+            this.Click += (s, e) => OnSelect?.Invoke();
+            foreach (Control child in this.Controls)
+            {
+                child.Click += (s, e) => OnSelect?.Invoke();
+            }
         }
 
         public void LayDuLieu(SanPham sp)
@@ -15,22 +20,21 @@ namespace dosi
             TenSP.Text = sp.TenSP;
             MaSP.Text = "Mã: " + sp.MaSP;
             SL.Text = "Kho: " + sp.SoLuong;
+            GiaBan.Text = sp.GiaBan.ToString("N0") + "đ";
 
-            string placeholderPath = Path.Combine(Application.StartupPath, "Images", "item_placeholder.png");
-            string targetPath = string.IsNullOrEmpty(sp.HinhAnh)
-                ? placeholderPath
-                : Path.Combine(Application.StartupPath, sp.HinhAnh);
-
-            if (!File.Exists(targetPath))
+            string path = Path.Combine(Application.StartupPath, sp.HinhAnh);
+            if (!string.IsNullOrEmpty(sp.HinhAnh) && File.Exists(path))
             {
-                targetPath = placeholderPath;
-            }
-
-            if (File.Exists(targetPath))
-            {
-                using (FileStream fs = new FileStream(targetPath, FileMode.Open, FileAccess.Read))
+                try
                 {
-                    HinhAnh.Image = Image.FromStream(fs);
+                    using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
+                    {
+                        HinhAnh.Image = Image.FromStream(fs);
+                    }
+                }
+                catch
+                {
+                    HinhAnh.Image = null;
                 }
             }
             else
