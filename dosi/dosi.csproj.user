@@ -25,5 +25,8 @@
     <Compile Update="TheSanPham.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="ViewTongQuan.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
   </ItemGroup>
 </Project>

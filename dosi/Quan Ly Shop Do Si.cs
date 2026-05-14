@@ -8,9 +8,7 @@ namespace dosi
         public Form1()
         {
             InitializeComponent();
-
-            ViewKhoHang uc = new ViewKhoHang();
-            addUserControl(uc);
+            this.Load += (s, e) => MoTrangTongQuan();
         }
 
         private void addUserControl(UserControl userControl)
@@ -19,6 +17,17 @@ namespace dosi
             panelMain.Controls.Clear();
             panelMain.Controls.Add(userControl);
             userControl.BringToFront();
+        }
+
+        private void MoTrangTongQuan()
+        {
+            ViewTongQuan uc = new ViewTongQuan();
+            addUserControl(uc);
+        }
+
+        private void btnTongQuan_Click(object sender, EventArgs e)
+        {
+            MoTrangTongQuan();
         }
 
         private void btnKhoHang_Click(object sender, EventArgs e)
@@ -37,10 +46,6 @@ namespace dosi
         {
             ViewGiaoDich uc = new ViewGiaoDich();
             addUserControl(uc);
-        }
-        private void button1_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("Đứa nào bấm vô là gay đó nha :v");
         }
     }
 }

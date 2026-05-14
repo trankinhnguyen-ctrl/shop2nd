@@ -77,7 +77,7 @@ namespace dosi
         {
             _sp.MaSP = txt_MaSP.Text;
             _sp.TenSP = txt_TenSP.Text;
-                
+
             string giaText = txt_GiaBan.Text.Replace(",", "").Replace(".", "");
             _sp.GiaBan = decimal.TryParse(giaText, out decimal gia) ? gia : 0;
 
@@ -102,6 +102,11 @@ namespace dosi
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
+        }
+
+        private void SuaSanPhamForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

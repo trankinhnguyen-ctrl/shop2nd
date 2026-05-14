@@ -172,5 +172,10 @@ namespace dosi
         {
 
         }
+
+        private void mainSplit_SplitterMoved(object sender, SplitterEventArgs e)
+        {
+
+        }
     }
 }

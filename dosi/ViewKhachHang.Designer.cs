@@ -69,6 +69,7 @@
             mainSplit.Size = new Size(1100, 700);
             mainSplit.SplitterDistance = 350;
             mainSplit.TabIndex = 0;
+            mainSplit.SplitterMoved += mainSplit_SplitterMoved;
             // 
             // panelLeft
             // 
