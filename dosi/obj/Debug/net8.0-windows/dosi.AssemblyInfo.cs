@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("dosi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6bff4e102b0e281d153b5c3f28760a44823bcadc")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3d47773a0bad4cba1e14ae85e09e4d7ad205e8d6")]
 [assembly: System.Reflection.AssemblyProductAttribute("dosi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("dosi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
