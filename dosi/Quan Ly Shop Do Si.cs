@@ -33,6 +33,11 @@ namespace dosi
             addUserControl(uc);
         }
 
+        private void btnGiaoDich_Click(object sender, EventArgs e)
+        {
+            ViewGiaoDich uc = new ViewGiaoDich();
+            addUserControl(uc);
+        }
         private void button1_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Đứa nào bấm vô là gay đó nha :v");

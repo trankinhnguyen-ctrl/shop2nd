@@ -13,8 +13,6 @@
             base.Dispose(disposing);
         }
 
-        #region Component Designer generated code
-
         private void InitializeComponent()
         {
             panelSearch = new Panel();
@@ -25,8 +23,8 @@
             panelFields = new Panel();
             lblSL = new Label();
             txtSL = new TextBox();
-            lblSize = new Label();
-            txt_Size = new TextBox();
+            lblGiaBan = new Label();
+            txt_GiaBan = new TextBox();
             lblTenSP = new Label();
             txt_TenSP = new TextBox();
             lblMaSP = new Label();
@@ -42,9 +40,7 @@
             ((System.ComponentModel.ISupportInitialize)pic_HinhSP).BeginInit();
             panelActions.SuspendLayout();
             SuspendLayout();
-            // 
-            // panelSearch
-            // 
+
             panelSearch.Controls.Add(Tim_bt);
             panelSearch.Controls.Add(ThanhTimKiem);
             panelSearch.Dock = DockStyle.Top;
@@ -53,9 +49,7 @@
             panelSearch.Padding = new Padding(15);
             panelSearch.Size = new Size(1100, 70);
             panelSearch.TabIndex = 0;
-            // 
-            // Tim_bt
-            // 
+
             Tim_bt.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             Tim_bt.BackColor = Color.FromArgb(79, 70, 229);
             Tim_bt.FlatStyle = FlatStyle.Flat;
@@ -66,9 +60,7 @@
             Tim_bt.TabIndex = 1;
             Tim_bt.Text = "Tìm Kiếm";
             Tim_bt.UseVisualStyleBackColor = false;
-            // 
-            // ThanhTimKiem
-            // 
+
             ThanhTimKiem.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             ThanhTimKiem.Font = new Font("Segoe UI", 12F);
             ThanhTimKiem.Location = new Point(15, 18);
@@ -76,9 +68,7 @@
             ThanhTimKiem.PlaceholderText = "Tìm sản phẩm...";
             ThanhTimKiem.Size = new Size(950, 34);
             ThanhTimKiem.TabIndex = 0;
-            // 
-            // panelInput
-            // 
+
             panelInput.BackColor = Color.White;
             panelInput.Controls.Add(tableContent);
             panelInput.Controls.Add(panelActions);
@@ -88,9 +78,7 @@
             panelInput.Padding = new Padding(15);
             panelInput.Size = new Size(1100, 350);
             panelInput.TabIndex = 1;
-            // 
-            // tableContent
-            // 
+
             tableContent.ColumnCount = 2;
             tableContent.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableContent.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
@@ -103,13 +91,11 @@
             tableContent.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableContent.Size = new Size(1070, 260);
             tableContent.TabIndex = 0;
-            // 
-            // panelFields
-            // 
+
             panelFields.Controls.Add(lblSL);
             panelFields.Controls.Add(txtSL);
-            panelFields.Controls.Add(lblSize);
-            panelFields.Controls.Add(txt_Size);
+            panelFields.Controls.Add(lblGiaBan);
+            panelFields.Controls.Add(txt_GiaBan);
             panelFields.Controls.Add(lblTenSP);
             panelFields.Controls.Add(txt_TenSP);
             panelFields.Controls.Add(lblMaSP);
@@ -119,73 +105,51 @@
             panelFields.Name = "panelFields";
             panelFields.Size = new Size(529, 254);
             panelFields.TabIndex = 0;
-            // 
-            // lblSL
-            // 
-            lblSL.AutoSize = true;
-            lblSL.Location = new Point(5, 170);
-            lblSL.Name = "lblSL";
-            lblSL.Size = new Size(72, 20);
-            lblSL.TabIndex = 0;
-            lblSL.Text = "Số Lượng";
-            // 
-            // txtSL
-            // 
-            txtSL.Location = new Point(5, 190);
-            txtSL.Name = "txtSL";
-            txtSL.Size = new Size(510, 27);
-            txtSL.TabIndex = 1;
-            // 
-            // lblSize
-            // 
-            lblSize.AutoSize = true;
-            lblSize.Location = new Point(5, 115);
-            lblSize.Name = "lblSize";
-            lblSize.Size = new Size(36, 20);
-            lblSize.TabIndex = 4;
-            lblSize.Text = "Size";
-            // 
-            // txt_Size
-            // 
-            txt_Size.Location = new Point(5, 135);
-            txt_Size.Name = "txt_Size";
-            txt_Size.Size = new Size(510, 27);
-            txt_Size.TabIndex = 5;
-            // 
-            // lblTenSP
-            // 
-            lblTenSP.AutoSize = true;
-            lblTenSP.Location = new Point(5, 60);
-            lblTenSP.Name = "lblTenSP";
-            lblTenSP.Size = new Size(52, 20);
-            lblTenSP.TabIndex = 6;
-            lblTenSP.Text = "Tên SP";
-            // 
-            // txt_TenSP
-            // 
-            txt_TenSP.Location = new Point(5, 80);
-            txt_TenSP.Name = "txt_TenSP";
-            txt_TenSP.Size = new Size(510, 27);
-            txt_TenSP.TabIndex = 7;
-            // 
-            // lblMaSP
-            // 
+
             lblMaSP.AutoSize = true;
             lblMaSP.Location = new Point(5, 5);
             lblMaSP.Name = "lblMaSP";
             lblMaSP.Size = new Size(50, 20);
-            lblMaSP.TabIndex = 8;
             lblMaSP.Text = "Mã SP";
-            // 
-            // txt_MaSP
-            // 
+
             txt_MaSP.Location = new Point(5, 25);
             txt_MaSP.Name = "txt_MaSP";
             txt_MaSP.Size = new Size(510, 27);
             txt_MaSP.TabIndex = 9;
-            // 
-            // pic_HinhSP
-            // 
+
+            lblTenSP.AutoSize = true;
+            lblTenSP.Location = new Point(5, 60);
+            lblTenSP.Name = "lblTenSP";
+            lblTenSP.Size = new Size(52, 20);
+            lblTenSP.Text = "Tên SP";
+
+            txt_TenSP.Location = new Point(5, 80);
+            txt_TenSP.Name = "txt_TenSP";
+            txt_TenSP.Size = new Size(510, 27);
+            txt_TenSP.TabIndex = 7;
+
+            lblGiaBan.AutoSize = true;
+            lblGiaBan.Location = new Point(5, 115);
+            lblGiaBan.Name = "lblGiaBan";
+            lblGiaBan.Size = new Size(60, 20);
+            lblGiaBan.Text = "Giá Bán";
+
+            txt_GiaBan.Location = new Point(5, 135);
+            txt_GiaBan.Name = "txt_GiaBan";
+            txt_GiaBan.Size = new Size(510, 27);
+            txt_GiaBan.TabIndex = 5;
+
+            lblSL.AutoSize = true;
+            lblSL.Location = new Point(5, 170);
+            lblSL.Name = "lblSL";
+            lblSL.Size = new Size(72, 20);
+            lblSL.Text = "Số Lượng";
+
+            txtSL.Location = new Point(5, 190);
+            txtSL.Name = "txtSL";
+            txtSL.Size = new Size(510, 27);
+            txtSL.TabIndex = 1;
+
             pic_HinhSP.BackColor = Color.FromArgb(248, 250, 252);
             pic_HinhSP.BorderStyle = BorderStyle.FixedSingle;
             pic_HinhSP.Dock = DockStyle.Fill;
@@ -196,19 +160,14 @@
             pic_HinhSP.SizeMode = PictureBoxSizeMode.Zoom;
             pic_HinhSP.TabIndex = 1;
             pic_HinhSP.TabStop = false;
-            pic_HinhSP.Click += this.pic_HinhSP_Click;
-            // 
-            // panelActions
-            // 
+
             panelActions.Controls.Add(Them_bt);
             panelActions.Dock = DockStyle.Bottom;
             panelActions.Location = new Point(15, 275);
             panelActions.Name = "panelActions";
             panelActions.Size = new Size(1070, 60);
             panelActions.TabIndex = 1;
-            // 
-            // Them_bt
-            // 
+
             Them_bt.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             Them_bt.BackColor = Color.FromArgb(34, 197, 94);
             Them_bt.FlatStyle = FlatStyle.Flat;
@@ -220,9 +179,7 @@
             Them_bt.Text = "Thêm SP";
             Them_bt.UseVisualStyleBackColor = false;
             Them_bt.Click += Them_bt_Click;
-            // 
-            // CardLayout
-            // 
+
             CardLayout.AutoScroll = true;
             CardLayout.Dock = DockStyle.Fill;
             CardLayout.Location = new Point(0, 70);
@@ -230,9 +187,7 @@
             CardLayout.Padding = new Padding(15);
             CardLayout.Size = new Size(1100, 280);
             CardLayout.TabIndex = 2;
-            // 
-            // ViewKhoHang
-            // 
+
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(CardLayout);
@@ -251,8 +206,6 @@
             ResumeLayout(false);
         }
 
-        #endregion
-
         private Panel panelSearch;
         private TextBox ThanhTimKiem;
         private Button Tim_bt;
@@ -263,8 +216,8 @@
         private TextBox txt_MaSP;
         private Label lblTenSP;
         private TextBox txt_TenSP;
-        private Label lblSize;
-        private TextBox txt_Size;
+        private Label lblGiaBan;
+        private TextBox txt_GiaBan;
         private Label lblSL;
         private TextBox txtSL;
         private PictureBox pic_HinhSP;

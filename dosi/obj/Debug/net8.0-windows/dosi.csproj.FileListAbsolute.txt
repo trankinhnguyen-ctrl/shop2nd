@@ -47,3 +47,5 @@ D:\Dev\Shop2\dosi\obj\Debug\net8.0-windows\dosi.SuaSanPhamForm.resources
 D:\Dev\Shop2\dosi\obj\Debug\net8.0-windows\dosi.ViewKhachHang.resources
 D:\Dev\Shop2\dosi\obj\Debug\net8.0-windows\dosi.ViewKhoHang.resources
 D:\Dev\Shop2\dosi\obj\Debug\net8.0-windows\dosi.TheKhachHang.resources
+D:\Dev\Shop2\dosi\obj\Debug\net8.0-windows\dosi.ViewGiaoDich.resources
+D:\Dev\Shop2\dosi\obj\Debug\net8.0-windows\dosi.TheLichSu.resources
