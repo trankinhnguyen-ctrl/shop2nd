@@ -66,5 +66,10 @@ namespace dosi
                 }
             }
         }
+
+        private void lblTitle4_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

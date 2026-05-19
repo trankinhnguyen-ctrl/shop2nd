@@ -15,5 +15,10 @@
             lblTen.Text = kh.HoTen;
             lblSdt.Text = kh.SoDienThoai;
         }
+
+        private void TheKhachHang_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

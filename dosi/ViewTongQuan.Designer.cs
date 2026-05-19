@@ -102,7 +102,8 @@
             lblTitle4.Padding = new Padding(10, 10, 0, 0);
             lblTitle4.Size = new Size(408, 45);
             lblTitle4.TabIndex = 1;
-            lblTitle4.Text = "Cảnh báo số lượng (Hết hàng)";
+            lblTitle4.Text = "Cảnh báo hết hàng";
+            lblTitle4.Click += lblTitle4_Click;
             // 
             // card3
             // 
@@ -174,7 +175,7 @@
             lblTitle2.Padding = new Padding(10, 10, 0, 0);
             lblTitle2.Size = new Size(408, 39);
             lblTitle2.TabIndex = 1;
-            lblTitle2.Text = "Số lượng mặt hàng";
+            lblTitle2.Text = "Số lượng hàng";
             // 
             // card1
             // 
