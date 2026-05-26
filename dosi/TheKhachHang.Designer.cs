@@ -45,7 +45,7 @@
             // 
             // picAvatar
             // 
-            picAvatar.BackColor = Color.MediumPurple;
+            picAvatar.BackColor = Color.LightSteelBlue;
             picAvatar.Location = new Point(12, 12);
             picAvatar.Name = "picAvatar";
             picAvatar.Size = new Size(45, 45);

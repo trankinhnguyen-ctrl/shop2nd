@@ -1,5 +1,10 @@
 ﻿using Dapper;
-using System.Data.SQLite;
+using Microsoft.Data.Sqlite;
+using System;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace dosi
 {
@@ -11,6 +16,13 @@ namespace dosi
         {
             InitializeComponent();
             this.Load += ViewTongQuan_Load;
+
+            // Gán sự kiện Paint gốc để tự vẽ bo góc tròn trịa giống Figma
+            card1.Paint += Panels_Paint;
+            card2.Paint += Panels_Paint;
+            card3.Paint += Panels_Paint;
+            card4.Paint += Panels_Paint;
+            panelHistory.Paint += Panels_Paint;
         }
 
         private void ViewTongQuan_Load(object? sender, EventArgs e)
@@ -19,9 +31,52 @@ namespace dosi
             LoadHistory();
         }
 
+        // Hàm tự xử lý bo góc mịn màng bằng GDI+ mặc định của Windows
+        private void Panels_Paint(object? sender, PaintEventArgs e)
+        {
+            Panel? pnl = sender as Panel;
+            if (pnl == null) return;
+
+            // Kích hoạt chế độ khử răng cưa cao cấp cho cả hình vẽ và chữ
+            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+            e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+
+            // Tăng bán kính bo tròn lên 24 để góc mềm mại, hiện đại đúng chuẩn Figma
+            int borderRadius = 24;
+
+            // Tạo đường dẫn đồ họa bao quanh panel
+            using (GraphicsPath path = new GraphicsPath())
+            {
+                path.StartFigure();
+                path.AddArc(new Rectangle(0, 0, borderRadius, borderRadius), 180, 90);
+                path.AddArc(new Rectangle(pnl.Width - borderRadius - 1, 0, borderRadius, borderRadius), 270, 90);
+                path.AddArc(new Rectangle(pnl.Width - borderRadius - 1, pnl.Height - borderRadius - 1, borderRadius, borderRadius), 0, 90);
+                path.AddArc(new Rectangle(0, pnl.Height - borderRadius - 1, borderRadius, borderRadius), 90, 90);
+                path.CloseFigure();
+
+                // Xóa nền cũ bị răng cưa của Windows Forms bằng cách vẽ đè màu nền cha lên trước
+                using (SolidBrush backBrush = new SolidBrush(this.BackColor))
+                {
+                    e.Graphics.FillRectangle(backBrush, pnl.ClientRectangle);
+                }
+
+                // Đổ màu trắng tinh khiết bên trong vùng bo góc đã khử răng cưa
+                using (SolidBrush cardBrush = new SolidBrush(Color.White))
+                {
+                    e.Graphics.FillPath(cardBrush, path);
+                }
+
+                // Vẽ đường viền Border mỏng, màu xám Slate cực nhẹ (E2E8F0) bao quanh để tạo chiều sâu phẳng
+                using (Pen borderPen = new Pen(Color.FromArgb(226, 232, 240), 1))
+                {
+                    e.Graphics.DrawPath(borderPen, path);
+                }
+            }
+        }
+
         private void LoadStats()
         {
-            using (var conn = new SQLiteConnection(ConnectionString))
+            using (var conn = new SqliteConnection(ConnectionString))
             {
                 conn.Open();
 
@@ -42,7 +97,7 @@ namespace dosi
         private void LoadHistory()
         {
             flpHistory.Controls.Clear();
-            using (var conn = new SQLiteConnection(ConnectionString))
+            using (var conn = new SqliteConnection(ConnectionString))
             {
                 conn.Open();
                 string sql = @"
@@ -59,9 +114,12 @@ namespace dosi
                 {
                     Label lbl = new Label();
                     lbl.AutoSize = false;
-                    lbl.Size = new Size(flpHistory.Width - 30, 40);
-                    lbl.Text = "• " + act.ho_ten + " đã mua " + act.ten_sp + " (" + act.ngay_tao + ")";
-                    lbl.Font = new Font("Segoe UI", 9F);
+                    lbl.Size = new Size(flpHistory.Width - 40, 35);
+                    lbl.Text = "  •  " + act.ho_ten + " đã mua " + act.ten_sp + " (" + act.ngay_tao + ")";
+                    lbl.Font = new Font("Segoe UI", 10F);
+                    lbl.ForeColor = Color.FromArgb(71, 85, 105);
+                    lbl.TextAlign = ContentAlignment.MiddleLeft;
+
                     flpHistory.Controls.Add(lbl);
                 }
             }
@@ -69,7 +127,6 @@ namespace dosi
 
         private void lblTitle4_Click(object sender, EventArgs e)
         {
-
         }
     }
 }

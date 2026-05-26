@@ -55,6 +55,7 @@
             // 
             // mainSplit
             // 
+            mainSplit.BackColor = Color.FromArgb(226, 232, 240);
             mainSplit.Dock = DockStyle.Fill;
             mainSplit.Location = new Point(0, 0);
             mainSplit.Name = "mainSplit";
@@ -67,59 +68,67 @@
             // 
             mainSplit.Panel2.Controls.Add(panelRight);
             mainSplit.Size = new Size(1100, 700);
-            mainSplit.SplitterDistance = 350;
+            mainSplit.SplitterDistance = 360;
+            mainSplit.SplitterWidth = 2;
             mainSplit.TabIndex = 0;
             mainSplit.SplitterMoved += mainSplit_SplitterMoved;
             // 
             // panelLeft
             // 
+            panelLeft.BackColor = Color.FromArgb(241, 245, 249);
             panelLeft.Controls.Add(listKhachHang);
             panelLeft.Controls.Add(panelSearch);
             panelLeft.Dock = DockStyle.Fill;
             panelLeft.Location = new Point(0, 0);
             panelLeft.Name = "panelLeft";
-            panelLeft.Padding = new Padding(10);
-            panelLeft.Size = new Size(350, 700);
+            panelLeft.Padding = new Padding(15, 15, 5, 15);
+            panelLeft.Size = new Size(360, 700);
             panelLeft.TabIndex = 0;
             // 
             // listKhachHang
             // 
             listKhachHang.AutoScroll = true;
+            listKhachHang.BackColor = Color.FromArgb(241, 245, 249);
             listKhachHang.Dock = DockStyle.Fill;
-            listKhachHang.Location = new Point(10, 60);
+            listKhachHang.Location = new Point(15, 75);
             listKhachHang.Name = "listKhachHang";
-            listKhachHang.Size = new Size(330, 630);
+            listKhachHang.Size = new Size(340, 610);
             listKhachHang.TabIndex = 0;
             // 
             // panelSearch
             // 
+            panelSearch.BackColor = Color.FromArgb(241, 245, 249);
             panelSearch.Controls.Add(txtSearch);
             panelSearch.Dock = DockStyle.Top;
-            panelSearch.Location = new Point(10, 10);
+            panelSearch.Location = new Point(15, 15);
             panelSearch.Name = "panelSearch";
-            panelSearch.Size = new Size(330, 50);
+            panelSearch.Size = new Size(340, 60);
             panelSearch.TabIndex = 1;
             // 
             // txtSearch
             // 
-            txtSearch.Dock = DockStyle.Top;
-            txtSearch.Font = new Font("Segoe UI", 11F);
-            txtSearch.Location = new Point(0, 0);
+            txtSearch.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            txtSearch.BackColor = Color.White;
+            txtSearch.BorderStyle = BorderStyle.FixedSingle;
+            txtSearch.Font = new Font("Segoe UI", 12F);
+            txtSearch.ForeColor = Color.FromArgb(15, 23, 42);
+            txtSearch.Location = new Point(0, 4);
             txtSearch.Name = "txtSearch";
-            txtSearch.PlaceholderText = " Tìm kiếm khách hàng...";
-            txtSearch.Size = new Size(330, 32);
+            txtSearch.PlaceholderText = "  Tìm kiếm khách hàng...";
+            txtSearch.Size = new Size(335, 34);
             txtSearch.TabIndex = 0;
             // 
             // panelRight
             // 
+            panelRight.BackColor = Color.FromArgb(241, 245, 249);
             panelRight.Controls.Add(dgvHistory);
             panelRight.Controls.Add(panelStats);
             panelRight.Controls.Add(panelHeader);
             panelRight.Dock = DockStyle.Fill;
             panelRight.Location = new Point(0, 0);
             panelRight.Name = "panelRight";
-            panelRight.Padding = new Padding(20);
-            panelRight.Size = new Size(746, 700);
+            panelRight.Padding = new Padding(10, 15, 15, 15);
+            panelRight.Size = new Size(738, 700);
             panelRight.TabIndex = 0;
             // 
             // dgvHistory
@@ -128,10 +137,10 @@
             dgvHistory.BorderStyle = BorderStyle.None;
             dgvHistory.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvHistory.Dock = DockStyle.Fill;
-            dgvHistory.Location = new Point(20, 260);
+            dgvHistory.Location = new Point(10, 275);
             dgvHistory.Name = "dgvHistory";
             dgvHistory.RowHeadersWidth = 51;
-            dgvHistory.Size = new Size(706, 420);
+            dgvHistory.Size = new Size(713, 410);
             dgvHistory.TabIndex = 0;
             // 
             // panelStats
@@ -144,137 +153,157 @@
             panelStats.Controls.Add(panelStat2, 1, 0);
             panelStats.Controls.Add(panelStat1, 0, 0);
             panelStats.Dock = DockStyle.Top;
-            panelStats.Location = new Point(20, 140);
+            panelStats.Location = new Point(10, 145);
             panelStats.Name = "panelStats";
             panelStats.RowCount = 1;
             panelStats.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            panelStats.Size = new Size(706, 120);
+            panelStats.Size = new Size(713, 130);
             panelStats.TabIndex = 1;
             // 
             // panelStat3
             // 
-            panelStat3.BackColor = Color.WhiteSmoke;
+            panelStat3.BackColor = Color.White;
             panelStat3.Controls.Add(lblStatValue3);
             panelStat3.Controls.Add(lblStatTitle3);
             panelStat3.Dock = DockStyle.Fill;
-            panelStat3.Location = new Point(473, 3);
+            panelStat3.Location = new Point(478, 3);
+            panelStat3.Margin = new Padding(3, 3, 0, 12);
             panelStat3.Name = "panelStat3";
-            panelStat3.Size = new Size(230, 114);
+            panelStat3.Padding = new Padding(10);
+            panelStat3.Size = new Size(235, 115);
             panelStat3.TabIndex = 0;
             // 
             // lblStatValue3
             // 
             lblStatValue3.Dock = DockStyle.Fill;
-            lblStatValue3.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-            lblStatValue3.Location = new Point(0, 23);
+            lblStatValue3.Font = new Font("Segoe UI Bold", 18F, FontStyle.Bold);
+            lblStatValue3.ForeColor = Color.FromArgb(79, 70, 229);
+            lblStatValue3.Location = new Point(10, 35);
             lblStatValue3.Name = "lblStatValue3";
-            lblStatValue3.Size = new Size(230, 91);
+            lblStatValue3.Size = new Size(215, 70);
             lblStatValue3.TabIndex = 0;
-            lblStatValue3.Text = "*";
+            lblStatValue3.Text = "-";
             lblStatValue3.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // lblStatTitle3
             // 
             lblStatTitle3.Dock = DockStyle.Top;
-            lblStatTitle3.Location = new Point(0, 0);
+            lblStatTitle3.Font = new Font("Segoe UI Semibold", 8.5F, FontStyle.Bold);
+            lblStatTitle3.ForeColor = Color.FromArgb(100, 116, 139);
+            lblStatTitle3.Location = new Point(10, 10);
             lblStatTitle3.Name = "lblStatTitle3";
-            lblStatTitle3.Size = new Size(230, 23);
+            lblStatTitle3.Size = new Size(215, 25);
             lblStatTitle3.TabIndex = 1;
             lblStatTitle3.Text = "NĂM THÀNH VIÊN";
-            lblStatTitle3.TextAlign = ContentAlignment.MiddleCenter;
+            lblStatTitle3.TextAlign = ContentAlignment.TopCenter;
             // 
             // panelStat2
             // 
-            panelStat2.BackColor = Color.WhiteSmoke;
+            panelStat2.BackColor = Color.White;
             panelStat2.Controls.Add(lblStatValue2);
             panelStat2.Controls.Add(lblStatTitle2);
             panelStat2.Dock = DockStyle.Fill;
-            panelStat2.Location = new Point(238, 3);
+            panelStat2.Location = new Point(240, 3);
+            panelStat2.Margin = new Padding(3, 3, 3, 12);
             panelStat2.Name = "panelStat2";
-            panelStat2.Size = new Size(229, 114);
+            panelStat2.Padding = new Padding(10);
+            panelStat2.Size = new Size(232, 115);
             panelStat2.TabIndex = 1;
             // 
             // lblStatValue2
             // 
             lblStatValue2.Dock = DockStyle.Fill;
-            lblStatValue2.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-            lblStatValue2.Location = new Point(0, 23);
+            lblStatValue2.Font = new Font("Segoe UI Bold", 18F, FontStyle.Bold);
+            lblStatValue2.ForeColor = Color.FromArgb(225, 29, 72);
+            lblStatValue2.Location = new Point(10, 35);
             lblStatValue2.Name = "lblStatValue2";
-            lblStatValue2.Size = new Size(229, 91);
+            lblStatValue2.Size = new Size(212, 70);
             lblStatValue2.TabIndex = 0;
-            lblStatValue2.Text = "*";
+            lblStatValue2.Text = "0đ";
             lblStatValue2.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // lblStatTitle2
             // 
             lblStatTitle2.Dock = DockStyle.Top;
-            lblStatTitle2.Location = new Point(0, 0);
+            lblStatTitle2.Font = new Font("Segoe UI Semibold", 8.5F, FontStyle.Bold);
+            lblStatTitle2.ForeColor = Color.FromArgb(100, 116, 139);
+            lblStatTitle2.Location = new Point(10, 10);
             lblStatTitle2.Name = "lblStatTitle2";
-            lblStatTitle2.Size = new Size(229, 23);
+            lblStatTitle2.Size = new Size(212, 25);
             lblStatTitle2.TabIndex = 1;
             lblStatTitle2.Text = "TỔNG CHI TIÊU";
-            lblStatTitle2.TextAlign = ContentAlignment.MiddleCenter;
+            lblStatTitle2.TextAlign = ContentAlignment.TopCenter;
             // 
             // panelStat1
             // 
-            panelStat1.BackColor = Color.WhiteSmoke;
+            panelStat1.BackColor = Color.White;
             panelStat1.Controls.Add(lblStatValue1);
             panelStat1.Controls.Add(lblStatTitle1);
             panelStat1.Dock = DockStyle.Fill;
-            panelStat1.Location = new Point(3, 3);
+            panelStat1.Location = new Point(0, 3);
+            panelStat1.Margin = new Padding(0, 3, 3, 12);
             panelStat1.Name = "panelStat1";
-            panelStat1.Size = new Size(229, 114);
+            panelStat1.Padding = new Padding(10);
+            panelStat1.Size = new Size(234, 115);
             panelStat1.TabIndex = 2;
             // 
             // lblStatValue1
             // 
             lblStatValue1.Dock = DockStyle.Fill;
-            lblStatValue1.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-            lblStatValue1.Location = new Point(0, 23);
+            lblStatValue1.Font = new Font("Segoe UI Bold", 18F, FontStyle.Bold);
+            lblStatValue1.ForeColor = Color.FromArgb(14, 165, 233);
+            lblStatValue1.Location = new Point(10, 35);
             lblStatValue1.Name = "lblStatValue1";
-            lblStatValue1.Size = new Size(229, 91);
+            lblStatValue1.Size = new Size(214, 70);
             lblStatValue1.TabIndex = 0;
-            lblStatValue1.Text = "*";
+            lblStatValue1.Text = "0";
             lblStatValue1.TextAlign = ContentAlignment.MiddleCenter;
             lblStatValue1.Click += lblStatValue1_Click;
             // 
             // lblStatTitle1
             // 
             lblStatTitle1.Dock = DockStyle.Top;
-            lblStatTitle1.Location = new Point(0, 0);
+            lblStatTitle1.Font = new Font("Segoe UI Semibold", 8.5F, FontStyle.Bold);
+            lblStatTitle1.ForeColor = Color.FromArgb(100, 116, 139);
+            lblStatTitle1.Location = new Point(10, 10);
             lblStatTitle1.Name = "lblStatTitle1";
-            lblStatTitle1.Size = new Size(229, 23);
+            lblStatTitle1.Size = new Size(214, 25);
             lblStatTitle1.TabIndex = 1;
             lblStatTitle1.Text = "ĐƠN HÀNG";
-            lblStatTitle1.TextAlign = ContentAlignment.MiddleCenter;
+            lblStatTitle1.TextAlign = ContentAlignment.TopCenter;
             // 
             // panelHeader
             // 
+            panelHeader.BackColor = Color.White;
             panelHeader.Controls.Add(lblAddress);
             panelHeader.Controls.Add(lblPhone);
             panelHeader.Controls.Add(lblHoTen);
             panelHeader.Controls.Add(picAvatar);
             panelHeader.Dock = DockStyle.Top;
-            panelHeader.Location = new Point(20, 20);
+            panelHeader.Location = new Point(10, 15);
             panelHeader.Name = "panelHeader";
-            panelHeader.Size = new Size(706, 120);
+            panelHeader.Size = new Size(713, 130);
             panelHeader.TabIndex = 2;
             // 
             // lblAddress
             // 
             lblAddress.AutoSize = true;
-            lblAddress.Location = new Point(135, 80);
+            lblAddress.Font = new Font("Segoe UI", 9.5F);
+            lblAddress.ForeColor = Color.FromArgb(71, 85, 105);
+            lblAddress.Location = new Point(145, 84);
             lblAddress.Name = "lblAddress";
-            lblAddress.Size = new Size(55, 20);
+            lblAddress.Size = new Size(57, 21);
             lblAddress.TabIndex = 0;
             lblAddress.Text = "Địa chỉ";
             // 
             // lblPhone
             // 
             lblPhone.AutoSize = true;
-            lblPhone.Location = new Point(135, 55);
+            lblPhone.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
+            lblPhone.ForeColor = Color.FromArgb(100, 116, 139);
+            lblPhone.Location = new Point(145, 54);
             lblPhone.Name = "lblPhone";
-            lblPhone.Size = new Size(89, 20);
+            lblPhone.Size = new Size(106, 23);
             lblPhone.TabIndex = 1;
             lblPhone.Text = "0905123456";
             lblPhone.Click += lblPhone_Click;
@@ -282,17 +311,18 @@
             // lblHoTen
             // 
             lblHoTen.AutoSize = true;
-            lblHoTen.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-            lblHoTen.Location = new Point(135, 15);
+            lblHoTen.Font = new Font("Segoe UI Bold", 15F, FontStyle.Bold);
+            lblHoTen.ForeColor = Color.FromArgb(15, 23, 42);
+            lblHoTen.Location = new Point(143, 14);
             lblHoTen.Name = "lblHoTen";
-            lblHoTen.Size = new Size(130, 32);
+            lblHoTen.Size = new Size(203, 35);
             lblHoTen.TabIndex = 2;
-            lblHoTen.Text = "Tên Khách";
+            lblHoTen.Text = "Tên Khách Hàng";
             // 
             // picAvatar
             // 
-            picAvatar.BackColor = Color.Gainsboro;
-            picAvatar.Location = new Point(15, 10);
+            picAvatar.BackColor = Color.FromArgb(241, 245, 249);
+            picAvatar.Location = new Point(20, 15);
             picAvatar.Name = "picAvatar";
             picAvatar.Size = new Size(100, 100);
             picAvatar.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -303,7 +333,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.White;
+            BackColor = Color.FromArgb(241, 245, 249);
             Controls.Add(mainSplit);
             Name = "ViewKhachHang";
             Size = new Size(1100, 700);

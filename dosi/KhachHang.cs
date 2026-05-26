@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Dapper;
-using System.Data.SQLite;
+using Microsoft.Data.Sqlite;
 
 namespace dosi
 {
@@ -21,7 +21,7 @@ namespace dosi
 
         public void LuuVaoDatabase()
         {
-            using (var conn = new SQLiteConnection(ConnectionString))
+            using (var conn = new SqliteConnection(ConnectionString))
             {
                 string sql = "INSERT INTO Khach (ho_ten, so_dien_thoai, dia_chi, ghi_chu) VALUES (@HoTen, @SoDienThoai, @DiaChi, @GhiChu)";
                 conn.Open();
@@ -31,7 +31,7 @@ namespace dosi
 
         public void CapNhatDatabase()
         {
-            using (var conn = new SQLiteConnection(ConnectionString))
+            using (var conn = new SqliteConnection(ConnectionString))
             {
                 string sql = "UPDATE Khach SET ho_ten = @HoTen, so_dien_thoai = @SoDienThoai, dia_chi = @DiaChi, ghi_chu = @GhiChu WHERE id = @id";
                 conn.Open();
@@ -41,7 +41,7 @@ namespace dosi
 
         public void XoaKhoiDatabase()
         {
-            using (var conn = new SQLiteConnection(ConnectionString))
+            using (var conn = new SqliteConnection(ConnectionString))
             {
                 string sql = "DELETE FROM Khach WHERE id = @id";
                 conn.Open();

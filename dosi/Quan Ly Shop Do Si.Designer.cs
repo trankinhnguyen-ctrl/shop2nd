@@ -20,32 +20,37 @@ namespace dosi
 
         private void InitializeComponent()
         {
-            panelSidebar = new System.Windows.Forms.Panel();
-            picLogo = new System.Windows.Forms.PictureBox();
-            lblLogoText = new System.Windows.Forms.Label();
-            lblLogoSub = new System.Windows.Forms.Label();
-            btnTongQuan = new ReaLTaiizor.Controls.HopeButton();
-            picTongQuan = new System.Windows.Forms.PictureBox();
-            btnKhoHang = new ReaLTaiizor.Controls.HopeButton();
-            picKhoHang = new System.Windows.Forms.PictureBox();
-            btnKhachHang = new ReaLTaiizor.Controls.HopeButton();
-            picKhachHang = new System.Windows.Forms.PictureBox();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            panelSidebar = new Panel();
             btnGiaoDich = new ReaLTaiizor.Controls.HopeButton();
-            picGiaoDich = new System.Windows.Forms.PictureBox();
-            panelMain = new System.Windows.Forms.Panel();
+            picGiaoDich = new PictureBox();
+            btnKhachHang = new ReaLTaiizor.Controls.HopeButton();
+            picKhachHang = new PictureBox();
+            btnKhoHang = new ReaLTaiizor.Controls.HopeButton();
+            picKhoHang = new PictureBox();
+            btnTongQuan = new ReaLTaiizor.Controls.HopeButton();
+            picTongQuan = new PictureBox();
+            lblLogoSub = new Label();
+            lblLogoText = new Label();
+            picLogo = new PictureBox();
+            panelMain = new Panel();
             panelSidebar.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(picLogo)).BeginInit();
-            btnTongQuan.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(picTongQuan)).BeginInit();
-            btnKhoHang.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(picKhoHang)).BeginInit();
-            btnKhachHang.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(picKhachHang)).BeginInit();
             btnGiaoDich.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(picGiaoDich)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)picGiaoDich).BeginInit();
+            btnKhachHang.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)picKhachHang).BeginInit();
+            btnKhoHang.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)picKhoHang).BeginInit();
+            btnTongQuan.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)picTongQuan).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)picLogo).BeginInit();
             SuspendLayout();
-
-            panelSidebar.BackColor = System.Drawing.Color.White;
+            // 
+            // panelSidebar
+            // 
+            panelSidebar.BackColor = Color.White;
+            panelSidebar.BackgroundImage = (Image)resources.GetObject("panelSidebar.BackgroundImage");
+            panelSidebar.BackgroundImageLayout = ImageLayout.Center;
             panelSidebar.Controls.Add(btnGiaoDich);
             panelSidebar.Controls.Add(btnKhachHang);
             panelSidebar.Controls.Add(btnKhoHang);
@@ -53,146 +58,214 @@ namespace dosi
             panelSidebar.Controls.Add(lblLogoSub);
             panelSidebar.Controls.Add(lblLogoText);
             panelSidebar.Controls.Add(picLogo);
-            panelSidebar.Dock = System.Windows.Forms.DockStyle.Left;
-            panelSidebar.Location = new System.Drawing.Point(0, 0);
+            panelSidebar.Dock = DockStyle.Left;
+            panelSidebar.Location = new Point(0, 0);
             panelSidebar.Name = "panelSidebar";
-            panelSidebar.Size = new System.Drawing.Size(250, 700);
+            panelSidebar.Size = new Size(250, 700);
             panelSidebar.TabIndex = 0;
-
-            picLogo.BackColor = System.Drawing.Color.FromArgb(124, 58, 237); // Giữ màu tím chủ đạo
-            picLogo.Location = new System.Drawing.Point(20, 20);
-            picLogo.Name = "picLogo";
-            picLogo.Size = new System.Drawing.Size(40, 40);
-            picLogo.TabIndex = 1;
-            picLogo.TabStop = false;
-
-            lblLogoText.AutoSize = true;
-            lblLogoText.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold);
-            lblLogoText.ForeColor = System.Drawing.Color.FromArgb(30, 41, 59);
-            lblLogoText.Location = new System.Drawing.Point(70, 20);
-            lblLogoText.Name = "lblLogoText";
-            lblLogoText.Size = new System.Drawing.Size(150, 32);
-            lblLogoText.TabIndex = 2;
-            lblLogoText.Text = "2Hand Store";
-
-            lblLogoSub.AutoSize = true;
-            lblLogoSub.Font = new System.Drawing.Font("Segoe UI", 9F);
-            lblLogoSub.ForeColor = System.Drawing.Color.FromArgb(100, 116, 139);
-            lblLogoSub.Location = new System.Drawing.Point(73, 50);
-            lblLogoSub.Name = "lblLogoSub";
-            lblLogoSub.Size = new System.Drawing.Size(95, 20);
-            lblLogoSub.TabIndex = 3;
-            lblLogoSub.Text = "Hệ thống kho";
-
-            // btnTongQuan
-            btnTongQuan.Controls.Add(picTongQuan);
-            btnTongQuan.Cursor = System.Windows.Forms.Cursors.Hand;
-            btnTongQuan.HoverTextColor = System.Drawing.Color.White;
-            btnTongQuan.Location = new System.Drawing.Point(15, 100);
-            btnTongQuan.Name = "btnTongQuan";
-            btnTongQuan.PrimaryColor = System.Drawing.Color.FromArgb(124, 58, 237);
-            btnTongQuan.Size = new System.Drawing.Size(220, 50);
-            btnTongQuan.TabIndex = 0;
-            btnTongQuan.Text = "          Tổng quan";
-            btnTongQuan.TextColor = System.Drawing.Color.White;
-            // Thuộc tính bo tròn mặc định của HopeButton
-            btnTongQuan.Click += new System.EventHandler(btnTongQuan_Click);
-
-            picTongQuan.BackColor = System.Drawing.Color.Transparent;
-            picTongQuan.Location = new System.Drawing.Point(15, 13);
-            picTongQuan.Name = "picTongQuan";
-            picTongQuan.Size = new System.Drawing.Size(24, 24);
-            picTongQuan.TabIndex = 4;
-            picTongQuan.TabStop = false;
-
-            // btnKhoHang
-            btnKhoHang.Controls.Add(picKhoHang);
-            btnKhoHang.Cursor = System.Windows.Forms.Cursors.Hand;
-            btnKhoHang.HoverTextColor = System.Drawing.Color.FromArgb(124, 58, 237); // Hover text màu tím
-            btnKhoHang.Location = new System.Drawing.Point(15, 160);
-            btnKhoHang.Name = "btnKhoHang";
-            btnKhoHang.PrimaryColor = System.Drawing.Color.White; // Nền trắng ban đầu
-            btnKhoHang.Size = new System.Drawing.Size(220, 50);
-            btnKhoHang.TabIndex = 1;
-            btnKhoHang.Text = "          Kho hàng";
-            btnKhoHang.TextColor = System.Drawing.Color.FromArgb(51, 65, 85);
-            btnKhoHang.Click += new System.EventHandler(btnKhoHang_Click);
-
-            picKhoHang.BackColor = System.Drawing.Color.Transparent;
-            picKhoHang.Location = new System.Drawing.Point(15, 13);
-            picKhoHang.Name = "picKhoHang";
-            picKhoHang.Size = new System.Drawing.Size(24, 24);
-            picKhoHang.TabIndex = 5;
-            picKhoHang.TabStop = false;
-
-            // btnKhachHang
-            btnKhachHang.Controls.Add(picKhachHang);
-            btnKhachHang.Cursor = System.Windows.Forms.Cursors.Hand;
-            btnKhachHang.HoverTextColor = System.Drawing.Color.FromArgb(124, 58, 237);
-            btnKhachHang.Location = new System.Drawing.Point(15, 220);
-            btnKhachHang.Name = "btnKhachHang";
-            btnKhachHang.PrimaryColor = System.Drawing.Color.White;
-            btnKhachHang.Size = new System.Drawing.Size(220, 50);
-            btnKhachHang.TabIndex = 2;
-            btnKhachHang.Text = "          Khách hàng";
-            btnKhachHang.TextColor = System.Drawing.Color.FromArgb(51, 65, 85);
-            btnKhachHang.Click += new System.EventHandler(btnKhachHang_Click);
-
-            picKhachHang.BackColor = System.Drawing.Color.Transparent;
-            picKhachHang.Location = new System.Drawing.Point(15, 13);
-            picKhachHang.Name = "picKhachHang";
-            picKhachHang.Size = new System.Drawing.Size(24, 24);
-            picKhachHang.TabIndex = 6;
-            picKhachHang.TabStop = false;
-
+            // 
             // btnGiaoDich
+            // 
+            btnGiaoDich.BorderColor = Color.FromArgb(220, 223, 230);
+            btnGiaoDich.ButtonType = ReaLTaiizor.Util.HopeButtonType.Primary;
             btnGiaoDich.Controls.Add(picGiaoDich);
-            btnGiaoDich.Cursor = System.Windows.Forms.Cursors.Hand;
-            btnGiaoDich.HoverTextColor = System.Drawing.Color.FromArgb(124, 58, 237);
-            btnGiaoDich.Location = new System.Drawing.Point(15, 280);
+            btnGiaoDich.Cursor = Cursors.Hand;
+            btnGiaoDich.DangerColor = Color.FromArgb(245, 108, 108);
+            btnGiaoDich.DefaultColor = Color.FromArgb(255, 255, 255);
+            btnGiaoDich.Font = new Font("Segoe UI", 12F);
+            btnGiaoDich.HoverTextColor = Color.FromArgb(124, 58, 237);
+            btnGiaoDich.InfoColor = Color.FromArgb(144, 147, 153);
+            btnGiaoDich.Location = new Point(15, 280);
             btnGiaoDich.Name = "btnGiaoDich";
-            btnGiaoDich.PrimaryColor = System.Drawing.Color.White;
-            btnGiaoDich.Size = new System.Drawing.Size(220, 50);
+            btnGiaoDich.PrimaryColor = Color.White;
+            btnGiaoDich.Size = new Size(220, 50);
+            btnGiaoDich.SuccessColor = Color.FromArgb(103, 194, 58);
             btnGiaoDich.TabIndex = 3;
             btnGiaoDich.Text = "          Giao dịch";
-            btnGiaoDich.TextColor = System.Drawing.Color.FromArgb(51, 65, 85);
-            btnGiaoDich.Click += new System.EventHandler(btnGiaoDich_Click);
-
-            picGiaoDich.BackColor = System.Drawing.Color.Transparent;
-            picGiaoDich.Location = new System.Drawing.Point(15, 13);
+            btnGiaoDich.TextColor = Color.FromArgb(51, 65, 85);
+            btnGiaoDich.WarningColor = Color.FromArgb(230, 162, 60);
+            btnGiaoDich.Click += btnGiaoDich_Click;
+            // 
+            // picGiaoDich
+            // 
+            picGiaoDich.BackColor = Color.Transparent;
+            picGiaoDich.Image = (Image)resources.GetObject("picGiaoDich.Image");
+            picGiaoDich.Location = new Point(15, 13);
             picGiaoDich.Name = "picGiaoDich";
-            picGiaoDich.Size = new System.Drawing.Size(24, 24);
+            picGiaoDich.Size = new Size(24, 24);
+            picGiaoDich.SizeMode = PictureBoxSizeMode.Zoom;
             picGiaoDich.TabIndex = 7;
             picGiaoDich.TabStop = false;
-
-            panelMain.BackColor = System.Drawing.Color.FromArgb(248, 250, 252);
-            panelMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            panelMain.Location = new System.Drawing.Point(250, 0);
+            // 
+            // btnKhachHang
+            // 
+            btnKhachHang.BorderColor = Color.FromArgb(220, 223, 230);
+            btnKhachHang.ButtonType = ReaLTaiizor.Util.HopeButtonType.Primary;
+            btnKhachHang.Controls.Add(picKhachHang);
+            btnKhachHang.Cursor = Cursors.Hand;
+            btnKhachHang.DangerColor = Color.FromArgb(245, 108, 108);
+            btnKhachHang.DefaultColor = Color.FromArgb(255, 255, 255);
+            btnKhachHang.Font = new Font("Segoe UI", 12F);
+            btnKhachHang.HoverTextColor = Color.FromArgb(124, 58, 237);
+            btnKhachHang.InfoColor = Color.FromArgb(144, 147, 153);
+            btnKhachHang.Location = new Point(15, 220);
+            btnKhachHang.Name = "btnKhachHang";
+            btnKhachHang.PrimaryColor = Color.White;
+            btnKhachHang.Size = new Size(220, 50);
+            btnKhachHang.SuccessColor = Color.FromArgb(103, 194, 58);
+            btnKhachHang.TabIndex = 2;
+            btnKhachHang.Text = "          Khách hàng";
+            btnKhachHang.TextColor = Color.FromArgb(51, 65, 85);
+            btnKhachHang.WarningColor = Color.FromArgb(230, 162, 60);
+            btnKhachHang.Click += btnKhachHang_Click;
+            // 
+            // picKhachHang
+            // 
+            picKhachHang.BackColor = Color.Transparent;
+            picKhachHang.Image = (Image)resources.GetObject("picKhachHang.Image");
+            picKhachHang.Location = new Point(15, 13);
+            picKhachHang.Name = "picKhachHang";
+            picKhachHang.Size = new Size(24, 24);
+            picKhachHang.SizeMode = PictureBoxSizeMode.Zoom;
+            picKhachHang.TabIndex = 6;
+            picKhachHang.TabStop = false;
+            // 
+            // btnKhoHang
+            // 
+            btnKhoHang.BorderColor = Color.FromArgb(220, 223, 230);
+            btnKhoHang.ButtonType = ReaLTaiizor.Util.HopeButtonType.Primary;
+            btnKhoHang.Controls.Add(picKhoHang);
+            btnKhoHang.Cursor = Cursors.Hand;
+            btnKhoHang.DangerColor = Color.FromArgb(245, 108, 108);
+            btnKhoHang.DefaultColor = Color.FromArgb(255, 255, 255);
+            btnKhoHang.Font = new Font("Segoe UI", 12F);
+            btnKhoHang.HoverTextColor = Color.FromArgb(124, 58, 237);
+            btnKhoHang.InfoColor = Color.FromArgb(144, 147, 153);
+            btnKhoHang.Location = new Point(15, 160);
+            btnKhoHang.Name = "btnKhoHang";
+            btnKhoHang.PrimaryColor = Color.White;
+            btnKhoHang.Size = new Size(220, 50);
+            btnKhoHang.SuccessColor = Color.FromArgb(103, 194, 58);
+            btnKhoHang.TabIndex = 1;
+            btnKhoHang.Text = "          Kho hàng";
+            btnKhoHang.TextColor = Color.FromArgb(51, 65, 85);
+            btnKhoHang.WarningColor = Color.FromArgb(230, 162, 60);
+            btnKhoHang.Click += btnKhoHang_Click;
+            // 
+            // picKhoHang
+            // 
+            picKhoHang.BackColor = Color.Transparent;
+            picKhoHang.Image = (Image)resources.GetObject("picKhoHang.Image");
+            picKhoHang.Location = new Point(15, 13);
+            picKhoHang.Name = "picKhoHang";
+            picKhoHang.Size = new Size(24, 24);
+            picKhoHang.SizeMode = PictureBoxSizeMode.Zoom;
+            picKhoHang.TabIndex = 5;
+            picKhoHang.TabStop = false;
+            // 
+            // btnTongQuan
+            // 
+            btnTongQuan.BackColor = Color.Fuchsia;
+            btnTongQuan.BackgroundImage = (Image)resources.GetObject("btnTongQuan.BackgroundImage");
+            btnTongQuan.BackgroundImageLayout = ImageLayout.Stretch;
+            btnTongQuan.BorderColor = Color.FromArgb(220, 223, 230);
+            btnTongQuan.ButtonType = ReaLTaiizor.Util.HopeButtonType.Primary;
+            btnTongQuan.Controls.Add(picTongQuan);
+            btnTongQuan.Cursor = Cursors.Hand;
+            btnTongQuan.DangerColor = Color.FromArgb(245, 108, 108);
+            btnTongQuan.DefaultColor = Color.FromArgb(255, 255, 255);
+            btnTongQuan.Font = new Font("Segoe UI", 12F);
+            btnTongQuan.HoverTextColor = Color.White;
+            btnTongQuan.InfoColor = Color.FromArgb(144, 147, 153);
+            btnTongQuan.Location = new Point(15, 100);
+            btnTongQuan.Name = "btnTongQuan";
+            btnTongQuan.PrimaryColor = Color.FromArgb(124, 58, 237);
+            btnTongQuan.Size = new Size(220, 50);
+            btnTongQuan.SuccessColor = Color.FromArgb(103, 194, 58);
+            btnTongQuan.TabIndex = 0;
+            btnTongQuan.Text = "          Tổng quan";
+            btnTongQuan.TextColor = Color.White;
+            btnTongQuan.WarningColor = Color.FromArgb(230, 162, 60);
+            btnTongQuan.Click += btnTongQuan_Click;
+            // 
+            // picTongQuan
+            // 
+            picTongQuan.BackColor = Color.Transparent;
+            picTongQuan.ImageLocation = "D:\\Dev\\vtc\\2Hand\\shop2nd\\dosi\\bin\\Debug\\net8.0-windows\\icon\\home.png";
+            picTongQuan.InitialImage = (Image)resources.GetObject("picTongQuan.InitialImage");
+            picTongQuan.Location = new Point(15, 13);
+            picTongQuan.Name = "picTongQuan";
+            picTongQuan.Size = new Size(24, 24);
+            picTongQuan.SizeMode = PictureBoxSizeMode.Zoom;
+            picTongQuan.TabIndex = 4;
+            picTongQuan.TabStop = false;
+            picTongQuan.Click += picTongQuan_Click;
+            // 
+            // lblLogoSub
+            // 
+            lblLogoSub.AutoSize = true;
+            lblLogoSub.Font = new Font("Segoe UI", 9F);
+            lblLogoSub.ForeColor = Color.FromArgb(100, 116, 139);
+            lblLogoSub.Location = new Point(73, 50);
+            lblLogoSub.Name = "lblLogoSub";
+            lblLogoSub.Size = new Size(99, 20);
+            lblLogoSub.TabIndex = 3;
+            lblLogoSub.Text = "Hệ thống kho";
+            // 
+            // lblLogoText
+            // 
+            lblLogoText.AutoSize = true;
+            lblLogoText.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            lblLogoText.ForeColor = Color.FromArgb(30, 41, 59);
+            lblLogoText.Location = new Point(70, 20);
+            lblLogoText.Name = "lblLogoText";
+            lblLogoText.Size = new Size(155, 32);
+            lblLogoText.TabIndex = 2;
+            lblLogoText.Text = "2Hand Store";
+            // 
+            // picLogo
+            // 
+            picLogo.BackColor = Color.Transparent;
+            picLogo.Image = (Image)resources.GetObject("picLogo.Image");
+            picLogo.Location = new Point(12, 12);
+            picLogo.Name = "picLogo";
+            picLogo.Size = new Size(60, 60);
+            picLogo.SizeMode = PictureBoxSizeMode.Zoom;
+            picLogo.TabIndex = 1;
+            picLogo.TabStop = false;
+            // 
+            // panelMain
+            // 
+            panelMain.BackColor = Color.FromArgb(248, 250, 252);
+            panelMain.Dock = DockStyle.Fill;
+            panelMain.Location = new Point(250, 0);
             panelMain.Name = "panelMain";
-            panelMain.Size = new System.Drawing.Size(850, 700);
+            panelMain.Size = new Size(850, 700);
             panelMain.TabIndex = 1;
-
-            AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
-            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            BackColor = System.Drawing.Color.FromArgb(248, 250, 252);
-            ClientSize = new System.Drawing.Size(1100, 700);
+            // 
+            // Form1
+            // 
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.FromArgb(248, 250, 252);
+            ClientSize = new Size(1100, 700);
             Controls.Add(panelMain);
             Controls.Add(panelSidebar);
-            MinimumSize = new System.Drawing.Size(1000, 600);
+            MinimumSize = new Size(1000, 600);
             Name = "Form1";
-            StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Hệ thống Quản lý 2Hand Store";
             panelSidebar.ResumeLayout(false);
             panelSidebar.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(picLogo)).EndInit();
-            btnTongQuan.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(picTongQuan)).EndInit();
-            btnKhoHang.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(picKhoHang)).EndInit();
-            btnKhachHang.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(picKhachHang)).EndInit();
             btnGiaoDich.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(picGiaoDich)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)picGiaoDich).EndInit();
+            btnKhachHang.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)picKhachHang).EndInit();
+            btnKhoHang.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)picKhoHang).EndInit();
+            btnTongQuan.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)picTongQuan).EndInit();
+            ((System.ComponentModel.ISupportInitialize)picLogo).EndInit();
             ResumeLayout(false);
         }
 

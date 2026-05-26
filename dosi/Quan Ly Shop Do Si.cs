@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
 namespace dosi
 {
     public partial class Form1 : Form
     {
-        private ReaLTaiizor.Controls.HopeButton currentActiveButton;
+        private ReaLTaiizor.Controls.HopeButton? currentActiveButton;
 
         public Form1()
         {
@@ -24,6 +25,7 @@ namespace dosi
                 {
                     if (btn != currentActiveButton)
                     {
+
                         btn.PrimaryColor = Color.FromArgb(241, 245, 249);
                         btn.Invalidate();
                     }
@@ -94,6 +96,11 @@ namespace dosi
             ViewGiaoDich uc = new ViewGiaoDich();
             addUserControl(uc);
             UpdateMenuUI(btnGiaoDich);
+        }
+
+        private void picTongQuan_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

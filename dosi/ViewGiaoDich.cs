@@ -1,6 +1,10 @@
-﻿using System.Data;
-using System.Data.SQLite;
-using Dapper;
+﻿using Dapper;
+using Microsoft.Data.Sqlite;
+using System;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace dosi
 {
@@ -12,7 +16,12 @@ namespace dosi
         public ViewGiaoDich()
         {
             InitializeComponent();
+
+            // Kích hoạt Double-Buffered chống nhấp nháy khi render danh sách sản phẩm
+            this.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer, true);
+
             KhoiTaoGioHang();
+            StyleCartDataGridView(); // Định hình giao diện phẳng hiện đại cho giỏ hàng
 
             this.Load += ViewGiaoDich_Load;
             this.Resize += (s, e) => { LoadSanPham(txtSearchProduct.Text); };
@@ -21,32 +30,65 @@ namespace dosi
             txtPhone.Leave += TxtPhone_Leave;
             btnThanhToan.Click += BtnThanhToan_Click;
 
-            dgvCart.CellValidating += DgvCart_CellValidating;
-            dgvCart.CellValueChanged += DgvCart_CellValueChanged;
-            dgvCart.RowsRemoved += DgvCart_RowsRemoved;
-            dgvCart.EditingControlShowing += DgvCart_EditingControlShowing;
+            dgvCart.CellValidating += dgvCart_CellValidating;
+            dgvCart.CellValueChanged += dgvCart_CellValueChanged;
+            dgvCart.RowsRemoved += dgvCart_RowsRemoved;
+            dgvCart.EditingControlShowing += dgvCart_EditingControlShowing;
 
             dgvCart.EditMode = DataGridViewEditMode.EditOnEnter;
+        }
+
+        // Làm đẹp bảng Giỏ hàng theo phong cách phẳng hiện đại (Figma Style)
+        private void StyleCartDataGridView()
+        {
+            dgvCart.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(248, 250, 252);
+            dgvCart.BackgroundColor = Color.White;
+            dgvCart.GridColor = Color.FromArgb(241, 245, 249);
+            dgvCart.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal; // Ẩn đường kẻ dọc
+            dgvCart.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvCart.MultiSelect = false;
+            dgvCart.EnableHeadersVisualStyles = false;
+
+            // Header phẳng tinh tế
+            dgvCart.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+            dgvCart.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(241, 245, 249);
+            dgvCart.ColumnHeadersDefaultCellStyle.ForeColor = Color.FromArgb(100, 116, 139);
+            dgvCart.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            dgvCart.ColumnHeadersHeight = 32;
+
+            // Hàng dữ liệu thoáng đãng
+            dgvCart.RowTemplate.Height = 32;
+            dgvCart.DefaultCellStyle.SelectionBackColor = Color.FromArgb(238, 242, 255);
+            dgvCart.DefaultCellStyle.SelectionForeColor = Color.FromArgb(79, 70, 229);
+            dgvCart.DefaultCellStyle.Font = new Font("Segoe UI", 9F);
+            dgvCart.DefaultCellStyle.ForeColor = Color.FromArgb(51, 65, 85);
         }
 
         private void TxtPhone_Leave(object? sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtPhone.Text)) return;
 
-            using (var conn = new SQLiteConnection(ConnectionString))
+            try
             {
-                conn.Open();
-                var khach = conn.QueryFirstOrDefault("SELECT ho_ten AS Ten, dia_chi AS DiaChi FROM Khach WHERE so_dien_thoai = @sdt", new { sdt = txtPhone.Text });
-
-                if (khach != null)
+                using (var conn = new SqliteConnection(ConnectionString))
                 {
-                    txtName.Text = khach.Ten;
-                    txtAddress.Text = khach.DiaChi;
+                    conn.Open();
+                    var khach = conn.QueryFirstOrDefault("SELECT ho_ten AS Ten, dia_chi AS DiaChi FROM Khach WHERE so_dien_thoai = @sdt", new { sdt = txtPhone.Text });
+
+                    if (khach != null)
+                    {
+                        txtName.Text = khach.Ten;
+                        txtAddress.Text = khach.DiaChi;
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi tìm kiếm khách hàng: " + ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
-        private void DgvCart_CellValidating(object? sender, DataGridViewCellValidatingEventArgs e)
+        private void dgvCart_CellValidating(object? sender, DataGridViewCellValidatingEventArgs e)
         {
             if (dgvCart.Columns[e.ColumnIndex].Name == "SoLuong")
             {
@@ -56,17 +98,13 @@ namespace dosi
                 string input = e.FormattedValue?.ToString() ?? "";
                 int maxStock = LayTonKhoThucTe(maSP);
 
-                if (!int.TryParse(input, out int inputQty))
-                {
-                    if (dgvCart.EditingControl is TextBox tb) tb.Text = "1";
-                }
-                else if (inputQty < 1)
+                if (!int.TryParse(input, out int inputQty) || inputQty < 1)
                 {
                     if (dgvCart.EditingControl is TextBox tb) tb.Text = "1";
                 }
                 else if (inputQty > maxStock)
                 {
-                    MessageBox.Show("Kho chỉ còn " + maxStock + " sản phẩm!");
+                    MessageBox.Show("Kho chỉ còn " + maxStock + " sản phẩm!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     if (dgvCart.EditingControl is TextBox tb) tb.Text = maxStock.ToString();
                 }
             }
@@ -76,17 +114,17 @@ namespace dosi
         {
             if (gioHang.Rows.Count == 0)
             {
-                MessageBox.Show("Giỏ hàng đang trống!");
+                MessageBox.Show("Giỏ hàng đang trống!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(txtPhone.Text))
             {
-                MessageBox.Show("Vui lòng nhập số điện thoại khách hàng!");
+                MessageBox.Show("Vui lòng nhập số điện thoại khách hàng!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            using (var conn = new SQLiteConnection(ConnectionString))
+            using (var conn = new SqliteConnection(ConnectionString))
             {
                 conn.Open();
                 using (var trans = conn.BeginTransaction())
@@ -127,18 +165,18 @@ namespace dosi
                                 new { ma = maSP },
                                 transaction: trans);
 
-                            if (sanPhamInfo == null) throw new Exception("Không tìm thấy sản phẩm: " + maSP);
+                            if (sanPhamInfo == null) throw new Exception("Không tìm thấy sản phẩm trên hệ thống: " + maSP);
 
                             conn.Execute(
                                 @"INSERT INTO NhapXuat (SAPHAM_id, KHACH_id, loai_giao_dich, so_luong, ngay_tao, ghi_chu) 
-                          VALUES (@spId, @khId, 'Xuat', @sl, @ngay, @note)",
+                                  VALUES (@spId, @khId, 'Xuat', @sl, @ngay, @note)",
                                 new
                                 {
                                     spId = sanPhamInfo.id,
                                     khId = khId,
                                     sl = slBan,
                                     ngay = thoiGianTao,
-                                    note = "Ban hang: " + row["TenSP"]
+                                    note = "Bán hàng trực tiếp: " + row["TenSP"]
                                 },
                                 transaction: trans);
 
@@ -149,18 +187,18 @@ namespace dosi
 
                             if (rowsAffected == 0)
                             {
-                                throw new Exception("Sản phẩm " + row["TenSP"] + " không đủ số lượng tồn kho!");
+                                throw new Exception("Sản phẩm " + row["TenSP"] + " vừa hết hoặc không đủ số lượng tồn kho thực tế!");
                             }
                         }
 
                         trans.Commit();
-                        MessageBox.Show("Thanh toán và cập nhật kho thành công!");
+                        MessageBox.Show("Thanh toán đơn hàng và cập nhật dữ liệu kho thành công!", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         LamMoiSauThanhToan();
                     }
                     catch (Exception ex)
                     {
                         trans.Rollback();
-                        MessageBox.Show("Lỗi hệ thống: " + ex.Message);
+                        MessageBox.Show("Hệ thống đã hủy giao dịch do xuất hiện lỗi: " + ex.Message, "Lỗi hệ thống", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
@@ -176,7 +214,7 @@ namespace dosi
             LoadSanPham();
         }
 
-        private void DgvCart_EditingControlShowing(object? sender, DataGridViewEditingControlShowingEventArgs e)
+        private void dgvCart_EditingControlShowing(object? sender, DataGridViewEditingControlShowingEventArgs e)
         {
             if (dgvCart.CurrentCell.ColumnIndex == dgvCart.Columns["SoLuong"].Index && e.Control is TextBox tb)
             {
@@ -194,6 +232,7 @@ namespace dosi
         {
             if (sender is TextBox tb)
             {
+                if (dgvCart.CurrentRow == null) return;
                 string? maSP = dgvCart.CurrentRow.Cells["MaSP"].Value?.ToString();
                 if (string.IsNullOrEmpty(maSP)) return;
 
@@ -214,13 +253,16 @@ namespace dosi
         private void TinhTongTienTuGiaoDien(string currentEditingText)
         {
             decimal tong = 0;
+            if (dgvCart.CurrentCell == null) return;
             int editingRowIndex = dgvCart.CurrentCell.RowIndex;
+
             foreach (DataGridViewRow r in dgvCart.Rows)
             {
                 if (r.IsNewRow) continue;
                 int sl = 0;
                 if (r.Index == editingRowIndex) int.TryParse(currentEditingText, out sl);
                 else sl = r.Cells["SoLuong"].Value == DBNull.Value ? 0 : Convert.ToInt32(r.Cells["SoLuong"].Value);
+
                 decimal gia = r.Cells["DonGia"].Value == DBNull.Value ? 0 : Convert.ToDecimal(r.Cells["DonGia"].Value);
                 tong += sl * gia;
             }
@@ -229,16 +271,12 @@ namespace dosi
 
         private void TinhTongTien()
         {
-            decimal tong = 0;
-            foreach (DataRow row in gioHang.Rows)
-            {
-                if (row.RowState != DataRowState.Deleted)
-                {
-                    int sl = row["SoLuong"] == DBNull.Value ? 0 : Convert.ToInt32(row["SoLuong"]);
-                    decimal gia = row["DonGia"] == DBNull.Value ? 0 : Convert.ToDecimal(row["DonGia"]);
-                    tong += sl * gia;
-                }
-            }
+            // Lấy các dòng hiện tại (bỏ qua các dòng trạng thái Deleted)
+            decimal tong = gioHang.AsEnumerable()
+                .Where(row => row.RowState != DataRowState.Deleted && row.RowState != DataRowState.Detached)
+                .Sum(row => (row["SoLuong"] == DBNull.Value ? 0 : Convert.ToInt32(row["SoLuong"])) *
+                            (row["DonGia"] == DBNull.Value ? 0 : Convert.ToDecimal(row["DonGia"])));
+
             lblTongTien.Text = "Tổng: " + tong.ToString("N0") + "đ";
         }
 
@@ -250,12 +288,12 @@ namespace dosi
             }
         }
 
-        private void DgvCart_CellValueChanged(object? sender, DataGridViewCellEventArgs e)
+        private void dgvCart_CellValueChanged(object? sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0) TinhTongTien();
         }
 
-        private void DgvCart_RowsRemoved(object? sender, DataGridViewRowsRemovedEventArgs e)
+        private void dgvCart_RowsRemoved(object? sender, DataGridViewRowsRemovedEventArgs e)
         {
             TinhTongTien();
         }
@@ -264,7 +302,7 @@ namespace dosi
         {
             try
             {
-                using (var conn = new SQLiteConnection(ConnectionString))
+                using (var conn = new SqliteConnection(ConnectionString))
                 {
                     conn.Open();
                     return conn.ExecuteScalar<int>("SELECT so_luong_ton FROM SanPham WHERE ma_sp = @ma", new { ma = maSP });
@@ -283,7 +321,9 @@ namespace dosi
                 gioHang.Columns.Add("DonGia", typeof(decimal));
                 gioHang.Columns.Add("ThanhTien", typeof(decimal), "SoLuong * DonGia");
             }
+
             dgvCart.DataSource = gioHang;
+
             if (!dgvCart.Columns.Contains("btnXoa"))
             {
                 DataGridViewButtonColumn btnXoa = new DataGridViewButtonColumn();
@@ -293,9 +333,15 @@ namespace dosi
                 btnXoa.UseColumnTextForButtonValue = true;
                 dgvCart.Columns.Add(btnXoa);
             }
+
             dgvCart.Columns["MaSP"].ReadOnly = true;
             dgvCart.Columns["TenSP"].ReadOnly = true;
             dgvCart.Columns["ThanhTien"].ReadOnly = true;
+
+            // Định dạng tiền tệ hiển thị trên các cột bảng
+            dgvCart.Columns["DonGia"].DefaultCellStyle.Format = "N0";
+            dgvCart.Columns["ThanhTien"].DefaultCellStyle.Format = "N0";
+
             dgvCart.CellContentClick += DgvCart_CellContentClick;
         }
 
@@ -328,37 +374,50 @@ namespace dosi
             {
                 flpProducts.SuspendLayout();
                 flpProducts.Controls.Clear();
-                using (var conn = new SQLiteConnection(ConnectionString))
+                using (var conn = new SqliteConnection(ConnectionString))
                 {
                     conn.Open();
                     string sql = "SELECT id, ma_sp AS MaSP, ten_sp AS TenSP, so_luong_ton AS SoLuong, hinh_anh AS HinhAnh, gia_ban AS GiaBan FROM SanPham";
                     if (!string.IsNullOrEmpty(searchKey)) sql += " WHERE ma_sp LIKE @key OR ten_sp LIKE @key";
                     var danhSach = conn.Query<SanPham>(sql, new { key = "%" + searchKey + "%" }).ToList();
+
                     foreach (var sp in danhSach)
                     {
                         TheSanPham card = new TheSanPham();
                         card.LayDuLieu(sp);
+
                         Action selectProduct = () => { ThemVaoGioHang(sp); };
                         card.Click += (s, ev) => selectProduct();
                         foreach (Control child in card.Controls) child.Click += (s, ev) => selectProduct();
+
                         flpProducts.Controls.Add(card);
                     }
                 }
                 flpProducts.ResumeLayout();
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message); }
+            catch (Exception ex) { MessageBox.Show("Lỗi hiển thị danh sách sản phẩm: " + ex.Message); }
         }
 
         private void ThemVaoGioHang(SanPham sp)
         {
-            if (sp.SoLuong <= 0) return;
+            if (sp.SoLuong <= 0)
+            {
+                MessageBox.Show("Sản phẩm này đã hết hàng tồn trong kho!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
             DataRow[] rows = gioHang.Select("MaSP = '" + sp.MaSP + "'");
             if (rows.Length > 0)
             {
                 int currentQty = (int)rows[0]["SoLuong"];
                 if (currentQty < sp.SoLuong) rows[0]["SoLuong"] = currentQty + 1;
+                else MessageBox.Show("Số lượng chọn đã đạt giới hạn tối đa trong kho!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
-            else gioHang.Rows.Add(sp.MaSP, sp.TenSP, 1, 100000);
+            else
+            {
+                // SỬA LỖI: Gán trực tiếp giá bán sp.GiaBan thực tế từ DB thay vì số cứng 100000
+                gioHang.Rows.Add(sp.MaSP, sp.TenSP, 1, sp.GiaBan);
+            }
             TinhTongTien();
         }
     }
