@@ -142,8 +142,7 @@ namespace dosi
             btn.Height = 32;
             btn.Width = TextRenderer.MeasureText(text, btn.Font).Width + 28;
             btn.FlatStyle = FlatStyle.Flat;
-            btn.FlatAppearance.BorderSize = 1;
-            btn.FlatAppearance.BorderColor = color;
+            btn.FlatAppearance.BorderSize = 0;
             btn.BackColor = selected ? color : Color.White;
             btn.ForeColor = selected ? Color.White : color;
             btn.Cursor = Cursors.Hand;
@@ -160,6 +159,28 @@ namespace dosi
                 path.AddArc(0, btn.Height - r * 2 - 1, r * 2, r * 2, 90, 90);
                 path.CloseFigure();
                 btn.Region = new Region(path);
+            }
+
+            // WinForms FlatStyle borders don't follow Region clipping — draw only the outline
+            if (!selected)
+            {
+                btn.Paint += (s, e) =>
+                {
+                    var b = (Button)s!;
+                    e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                    int bR = b.Height / 2;
+                    using (var p = new GraphicsPath())
+                    {
+                        p.StartFigure();
+                        p.AddArc(0, 0, bR * 2, bR * 2, 180, 90);
+                        p.AddArc(b.Width - bR * 2 - 1, 0, bR * 2, bR * 2, 270, 90);
+                        p.AddArc(b.Width - bR * 2 - 1, b.Height - bR * 2 - 1, bR * 2, bR * 2, 0, 90);
+                        p.AddArc(0, b.Height - bR * 2 - 1, bR * 2, bR * 2, 90, 90);
+                        p.CloseFigure();
+                        using (var pen = new Pen(color, 1.5f))
+                            e.Graphics.DrawPath(pen, p);
+                    }
+                };
             }
 
             return btn;

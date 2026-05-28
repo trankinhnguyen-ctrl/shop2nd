@@ -51,25 +51,22 @@ namespace dosi
             dgvCart.EditMode = DataGridViewEditMode.EditOnEnter;
         }
 
-        // Làm đẹp bảng Giỏ hàng theo phong cách phẳng hiện đại (Figma Style)
         private void StyleCartDataGridView()
         {
             dgvCart.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(248, 250, 252);
             dgvCart.BackgroundColor = Color.White;
             dgvCart.GridColor = Color.FromArgb(241, 245, 249);
-            dgvCart.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal; // Ẩn đường kẻ dọc
+            dgvCart.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
             dgvCart.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvCart.MultiSelect = false;
             dgvCart.EnableHeadersVisualStyles = false;
 
-            // Header phẳng tinh tế
             dgvCart.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
             dgvCart.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(241, 245, 249);
             dgvCart.ColumnHeadersDefaultCellStyle.ForeColor = Color.FromArgb(100, 116, 139);
             dgvCart.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
             dgvCart.ColumnHeadersHeight = 32;
 
-            // Hàng dữ liệu thoáng đãng
             dgvCart.RowTemplate.Height = 32;
             dgvCart.DefaultCellStyle.SelectionBackColor = Color.FromArgb(238, 242, 255);
             dgvCart.DefaultCellStyle.SelectionForeColor = Color.FromArgb(79, 70, 229);
@@ -351,7 +348,6 @@ namespace dosi
             dgvCart.Columns["TenSP"].ReadOnly = true;
             dgvCart.Columns["ThanhTien"].ReadOnly = true;
 
-            // Định dạng tiền tệ hiển thị trên các cột bảng
             dgvCart.Columns["DonGia"].DefaultCellStyle.Format = "N0";
             dgvCart.Columns["ThanhTien"].DefaultCellStyle.Format = "N0";
 
@@ -440,8 +436,7 @@ namespace dosi
             btn.Height = 32;
             btn.Width = TextRenderer.MeasureText(text, btn.Font).Width + 28;
             btn.FlatStyle = FlatStyle.Flat;
-            btn.FlatAppearance.BorderSize = 1;
-            btn.FlatAppearance.BorderColor = color;
+            btn.FlatAppearance.BorderSize = 0;
             btn.BackColor = selected ? color : Color.White;
             btn.ForeColor = selected ? Color.White : color;
             btn.Cursor = Cursors.Hand;
@@ -458,6 +453,28 @@ namespace dosi
                 path.AddArc(0, btn.Height - r * 2 - 1, r * 2, r * 2, 90, 90);
                 path.CloseFigure();
                 btn.Region = new Region(path);
+            }
+
+            // WinForms FlatStyle borders don't follow Region clipping — draw only the outline
+            if (!selected)
+            {
+                btn.Paint += (s, e) =>
+                {
+                    var b = (Button)s!;
+                    e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                    int bR = b.Height / 2;
+                    using (var p = new GraphicsPath())
+                    {
+                        p.StartFigure();
+                        p.AddArc(0, 0, bR * 2, bR * 2, 180, 90);
+                        p.AddArc(b.Width - bR * 2 - 1, 0, bR * 2, bR * 2, 270, 90);
+                        p.AddArc(b.Width - bR * 2 - 1, b.Height - bR * 2 - 1, bR * 2, bR * 2, 0, 90);
+                        p.AddArc(0, b.Height - bR * 2 - 1, bR * 2, bR * 2, 90, 90);
+                        p.CloseFigure();
+                        using (var pen = new Pen(color, 1.5f))
+                            e.Graphics.DrawPath(pen, p);
+                    }
+                };
             }
 
             return btn;
