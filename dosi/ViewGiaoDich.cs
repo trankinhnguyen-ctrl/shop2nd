@@ -3,6 +3,7 @@ using Microsoft.Data.Sqlite;
 using System;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -12,6 +13,18 @@ namespace dosi
     {
         private string ConnectionString = "Data Source=QuanLyKho.db";
         private DataTable gioHang = new DataTable();
+        private int? _selectedPhanLoaiId = null;
+
+        private static readonly Color[] _pillColors = {
+            Color.FromArgb(236, 72, 153),
+            Color.FromArgb(245, 158, 11),
+            Color.FromArgb(16, 185, 129),
+            Color.FromArgb(239, 68, 68),
+            Color.FromArgb(14, 165, 233),
+            Color.FromArgb(168, 85, 247),
+            Color.FromArgb(20, 184, 166),
+            Color.FromArgb(234, 88, 12),
+        };
 
         public ViewGiaoDich()
         {
@@ -358,8 +371,117 @@ namespace dosi
             }
         }
 
+        private void EnsureDatabase()
+        {
+            using (var conn = new SqliteConnection(ConnectionString))
+            {
+                conn.Open();
+                conn.Execute(@"CREATE TABLE IF NOT EXISTS PhanLoai (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    ten_phan_loai TEXT NOT NULL
+                )");
+                try { conn.Execute("ALTER TABLE SanPham ADD COLUMN phanloai_id INTEGER"); } catch { }
+            }
+        }
+
+        private void LoadPhanLoai()
+        {
+            flpCategory.SuspendLayout();
+            flpCategory.Controls.Clear();
+
+            bool allSelected = _selectedPhanLoaiId == null;
+            Button btnAll = CreatePillButton("Tất cả", Color.FromArgb(99, 102, 241), allSelected);
+            btnAll.Click += (s, e) =>
+            {
+                _selectedPhanLoaiId = null;
+                LoadPhanLoai();
+                LoadSanPham(txtSearchProduct.Text);
+            };
+            flpCategory.Controls.Add(btnAll);
+
+            try
+            {
+                using (var conn = new SqliteConnection(ConnectionString))
+                {
+                    conn.Open();
+                    var list = conn.Query("SELECT id, ten_phan_loai AS Ten FROM PhanLoai ORDER BY id").ToList();
+                    for (int i = 0; i < list.Count; i++)
+                    {
+                        int id = (int)(long)list[i].id;
+                        string ten = (string)list[i].Ten;
+                        Color color = _pillColors[i % _pillColors.Length];
+                        bool selected = _selectedPhanLoaiId == id;
+
+                        Button btn = CreatePillButton(ten, color, selected);
+                        int capturedId = id;
+                        btn.Click += (s, e) =>
+                        {
+                            _selectedPhanLoaiId = capturedId;
+                            LoadPhanLoai();
+                            LoadSanPham(txtSearchProduct.Text);
+                        };
+                        flpCategory.Controls.Add(btn);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi tải phân loại: " + ex.Message);
+            }
+
+            flpCategory.ResumeLayout();
+        }
+
+        private Button CreatePillButton(string text, Color color, bool selected)
+        {
+            Button btn = new Button();
+            btn.Text = text;
+            btn.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            btn.Height = 32;
+            btn.Width = TextRenderer.MeasureText(text, btn.Font).Width + 28;
+            btn.FlatStyle = FlatStyle.Flat;
+            btn.FlatAppearance.BorderSize = 0;
+            btn.Cursor = Cursors.Hand;
+            btn.Margin = new Padding(0, 0, 8, 0);
+            btn.UseVisualStyleBackColor = false;
+
+            btn.Paint += (s, e) =>
+            {
+                Button b = (Button)s!;
+                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                int r = b.Height / 2;
+
+                using (var path = new GraphicsPath())
+                {
+                    path.StartFigure();
+                    path.AddArc(0, 0, r * 2, r * 2, 180, 90);
+                    path.AddArc(b.Width - r * 2 - 1, 0, r * 2, r * 2, 270, 90);
+                    path.AddArc(b.Width - r * 2 - 1, b.Height - r * 2 - 1, r * 2, r * 2, 0, 90);
+                    path.AddArc(0, b.Height - r * 2 - 1, r * 2, r * 2, 90, 90);
+                    path.CloseFigure();
+
+                    b.Region = new Region(path);
+
+                    Color fill = selected ? color : Color.White;
+                    using (var brush = new SolidBrush(fill))
+                        e.Graphics.FillPath(brush, path);
+
+                    using (var pen = new Pen(color, 1.5f))
+                        e.Graphics.DrawPath(pen, path);
+
+                    Color textColor = selected ? Color.White : color;
+                    TextRenderer.DrawText(e.Graphics, b.Text, b.Font, b.ClientRectangle, textColor,
+                        TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+                }
+            };
+
+            return btn;
+        }
+
         private void ViewGiaoDich_Load(object? sender, EventArgs e)
         {
+            EnsureDatabase();
+            LoadPhanLoai();
             LoadSanPham();
         }
 
@@ -377,9 +499,10 @@ namespace dosi
                 using (var conn = new SqliteConnection(ConnectionString))
                 {
                     conn.Open();
-                    string sql = "SELECT id, ma_sp AS MaSP, ten_sp AS TenSP, so_luong_ton AS SoLuong, hinh_anh AS HinhAnh, gia_ban AS GiaBan FROM SanPham";
-                    if (!string.IsNullOrEmpty(searchKey)) sql += " WHERE ma_sp LIKE @key OR ten_sp LIKE @key";
-                    var danhSach = conn.Query<SanPham>(sql, new { key = "%" + searchKey + "%" }).ToList();
+                    string sql = "SELECT id, ma_sp AS MaSP, ten_sp AS TenSP, so_luong_ton AS SoLuong, hinh_anh AS HinhAnh, gia_ban AS GiaBan FROM SanPham WHERE 1=1";
+                    if (!string.IsNullOrEmpty(searchKey)) sql += " AND (ma_sp LIKE @key OR ten_sp LIKE @key)";
+                    if (_selectedPhanLoaiId.HasValue) sql += " AND phanloai_id = @plId";
+                    var danhSach = conn.Query<SanPham>(sql, new { key = "%" + searchKey + "%", plId = _selectedPhanLoaiId }).ToList();
 
                     foreach (var sp in danhSach)
                     {

@@ -20,6 +20,7 @@
             splitMain = new SplitContainer();
             flpProducts = new FlowLayoutPanel();
             panelSearch = new Panel();
+            flpCategory = new FlowLayoutPanel();
             txtSearchProduct = new TextBox();
             panelOrderInfo = new Panel();
             btnThanhToan = new Button();
@@ -61,11 +62,23 @@
 
             // --- panelSearch ---
             panelSearch.Controls.Add(txtSearchProduct);
+            panelSearch.Controls.Add(flpCategory);
             panelSearch.Dock = DockStyle.Top;
             panelSearch.Location = new Point(12, 12);
             panelSearch.Name = "panelSearch";
-            panelSearch.Size = new Size(732, 55);
+            panelSearch.Size = new Size(732, 107);
             panelSearch.TabIndex = 0;
+
+            // --- flpCategory ---
+            flpCategory.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+            flpCategory.AutoScroll = true;
+            flpCategory.BackColor = Color.FromArgb(248, 250, 252);
+            flpCategory.Location = new Point(0, 55);
+            flpCategory.Name = "flpCategory";
+            flpCategory.Padding = new Padding(0, 8, 0, 8);
+            flpCategory.Size = new Size(732, 52);
+            flpCategory.TabIndex = 1;
+            flpCategory.WrapContents = false;
 
             // --- txtSearchProduct ---
             txtSearchProduct.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
@@ -253,5 +266,6 @@
         private DataGridView dgvCart;
         private Label lblTongTien;
         private Button btnThanhToan;
+        private FlowLayoutPanel flpCategory;
     }
 }

@@ -16,6 +16,7 @@
         private void InitializeComponent()
         {
             panelSearch = new Panel();
+            flpCategory = new FlowLayoutPanel();
             Tim_bt = new Button();
             ThanhTimKiem = new TextBox();
             panelInput = new Panel();
@@ -49,11 +50,12 @@
             panelSearch.BackColor = Color.FromArgb(241, 245, 249);
             panelSearch.Controls.Add(Tim_bt);
             panelSearch.Controls.Add(ThanhTimKiem);
+            panelSearch.Controls.Add(flpCategory);
             panelSearch.Dock = DockStyle.Top;
             panelSearch.Location = new Point(0, 0);
             panelSearch.Name = "panelSearch";
             panelSearch.Padding = new Padding(20, 15, 20, 15);
-            panelSearch.Size = new Size(1100, 75);
+            panelSearch.Size = new Size(1100, 127);
             panelSearch.TabIndex = 0;
             // 
             // Tim_bt
@@ -83,7 +85,19 @@
             ThanhTimKiem.PlaceholderText = "  Tìm kiếm sản phẩm...";
             ThanhTimKiem.Size = new Size(925, 36);
             ThanhTimKiem.TabIndex = 0;
-            // 
+            //
+            // flpCategory
+            //
+            flpCategory.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+            flpCategory.AutoScroll = true;
+            flpCategory.BackColor = Color.FromArgb(241, 245, 249);
+            flpCategory.Location = new Point(0, 75);
+            flpCategory.Name = "flpCategory";
+            flpCategory.Padding = new Padding(20, 8, 20, 8);
+            flpCategory.Size = new Size(1100, 52);
+            flpCategory.TabIndex = 3;
+            flpCategory.WrapContents = false;
+            //
             // panelInput
             // 
             panelInput.BackColor = Color.FromArgb(241, 245, 249);
@@ -324,5 +338,6 @@
         private Panel panelActions;
         private Button Them_bt;
         private FlowLayoutPanel CardLayout;
+        private FlowLayoutPanel flpCategory;
     }
 }
