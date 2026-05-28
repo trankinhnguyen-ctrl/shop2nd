@@ -16,9 +16,9 @@
         private void InitializeComponent()
         {
             panelSearch = new Panel();
-            flpCategory = new FlowLayoutPanel();
             Tim_bt = new Button();
             ThanhTimKiem = new TextBox();
+            flpCategory = new FlowLayoutPanel();
             panelInput = new Panel();
             panelMainContainer = new Panel();
             tableContent = new TableLayoutPanel();
@@ -55,7 +55,7 @@
             panelSearch.Location = new Point(0, 0);
             panelSearch.Name = "panelSearch";
             panelSearch.Padding = new Padding(20, 15, 20, 15);
-            panelSearch.Size = new Size(1100, 127);
+            panelSearch.Size = new Size(1100, 129);
             panelSearch.TabIndex = 0;
             // 
             // Tim_bt
@@ -85,19 +85,18 @@
             ThanhTimKiem.PlaceholderText = "  Tìm kiếm sản phẩm...";
             ThanhTimKiem.Size = new Size(925, 36);
             ThanhTimKiem.TabIndex = 0;
-            //
+            // 
             // flpCategory
-            //
-            flpCategory.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+            // 
             flpCategory.AutoScroll = true;
             flpCategory.BackColor = Color.FromArgb(241, 245, 249);
-            flpCategory.Location = new Point(0, 75);
+            flpCategory.Dock = DockStyle.Bottom;
             flpCategory.Name = "flpCategory";
-            flpCategory.Padding = new Padding(20, 8, 20, 8);
-            flpCategory.Size = new Size(1100, 52);
+            flpCategory.Padding = new Padding(20, 8, 20, 22);
+            flpCategory.Size = new Size(1100, 62);
             flpCategory.TabIndex = 3;
             flpCategory.WrapContents = false;
-            //
+            // 
             // panelInput
             // 
             panelInput.BackColor = Color.FromArgb(241, 245, 249);
@@ -154,79 +153,6 @@
             panelFields.Size = new Size(561, 250);
             panelFields.TabIndex = 0;
             // 
-            // lblSectionTitle
-            // 
-            lblSectionTitle.AutoSize = true;
-            lblSectionTitle.Font = new Font("Segoe UI Semibold", 13F, FontStyle.Bold);
-            lblSectionTitle.ForeColor = Color.FromArgb(15, 23, 42);
-            lblSectionTitle.Location = new Point(0, 0);
-            lblSectionTitle.Name = "lblSectionTitle";
-            lblSectionTitle.Size = new Size(174, 30);
-            lblSectionTitle.Text = "Thông tin chi tiết";
-            // 
-            // lblMaSP
-            // 
-            lblMaSP.AutoSize = true;
-            lblMaSP.Font = new Font("Segoe UI Semibold", 9.5F, FontStyle.Bold);
-            lblMaSP.ForeColor = Color.FromArgb(71, 85, 105);
-            lblMaSP.Location = new Point(0, 42);
-            lblMaSP.Name = "lblMaSP";
-            lblMaSP.Size = new Size(55, 21);
-            lblMaSP.Text = "Mã SP";
-            // 
-            // txt_MaSP
-            // 
-            txt_MaSP.BackColor = Color.FromArgb(248, 250, 252);
-            txt_MaSP.BorderStyle = BorderStyle.FixedSingle;
-            txt_MaSP.Font = new Font("Segoe UI", 11F);
-            txt_MaSP.ForeColor = Color.FromArgb(15, 23, 42);
-            txt_MaSP.Location = new Point(0, 65);
-            txt_MaSP.Name = "txt_MaSP";
-            txt_MaSP.Size = new Size(530, 32);
-            txt_MaSP.TabIndex = 9;
-            // 
-            // lblTenSP
-            // 
-            lblTenSP.AutoSize = true;
-            lblTenSP.Font = new Font("Segoe UI Semibold", 9.5F, FontStyle.Bold);
-            lblTenSP.ForeColor = Color.FromArgb(71, 85, 105);
-            lblTenSP.Location = new Point(0, 110);
-            lblTenSP.Name = "lblTenSP";
-            lblTenSP.Size = new Size(57, 21);
-            lblTenSP.Text = "Tên SP";
-            // 
-            // txt_TenSP
-            // 
-            txt_TenSP.BackColor = Color.FromArgb(248, 250, 252);
-            txt_TenSP.BorderStyle = BorderStyle.FixedSingle;
-            txt_TenSP.Font = new Font("Segoe UI", 11F);
-            txt_TenSP.ForeColor = Color.FromArgb(15, 23, 42);
-            txt_TenSP.Location = new Point(0, 133);
-            txt_TenSP.Name = "txt_TenSP";
-            txt_TenSP.Size = new Size(530, 32);
-            txt_TenSP.TabIndex = 7;
-            // 
-            // lblGiaBan
-            // 
-            lblGiaBan.AutoSize = true;
-            lblGiaBan.Font = new Font("Segoe UI Semibold", 9.5F, FontStyle.Bold);
-            lblGiaBan.ForeColor = Color.FromArgb(71, 85, 105);
-            lblGiaBan.Location = new Point(0, 178);
-            lblGiaBan.Name = "lblGiaBan";
-            lblGiaBan.Size = new Size(63, 21);
-            lblGiaBan.Text = "Giá Bán";
-            // 
-            // txt_GiaBan
-            // 
-            txt_GiaBan.BackColor = Color.FromArgb(248, 250, 252);
-            txt_GiaBan.BorderStyle = BorderStyle.FixedSingle;
-            txt_GiaBan.Font = new Font("Segoe UI", 11F);
-            txt_GiaBan.ForeColor = Color.FromArgb(15, 23, 42);
-            txt_GiaBan.Location = new Point(0, 201);
-            txt_GiaBan.Name = "txt_GiaBan";
-            txt_GiaBan.Size = new Size(250, 32);
-            txt_GiaBan.TabIndex = 5;
-            // 
             // lblSL
             // 
             lblSL.AutoSize = true;
@@ -234,7 +160,8 @@
             lblSL.ForeColor = Color.FromArgb(71, 85, 105);
             lblSL.Location = new Point(280, 178);
             lblSL.Name = "lblSL";
-            lblSL.Size = new Size(78, 21);
+            lblSL.Size = new Size(80, 21);
+            lblSL.TabIndex = 0;
             lblSL.Text = "Số Lượng";
             // 
             // txtSL
@@ -248,10 +175,86 @@
             txtSL.Size = new Size(250, 32);
             txtSL.TabIndex = 1;
             // 
+            // lblGiaBan
+            // 
+            lblGiaBan.AutoSize = true;
+            lblGiaBan.Font = new Font("Segoe UI Semibold", 9.5F, FontStyle.Bold);
+            lblGiaBan.ForeColor = Color.FromArgb(71, 85, 105);
+            lblGiaBan.Location = new Point(0, 178);
+            lblGiaBan.Name = "lblGiaBan";
+            lblGiaBan.Size = new Size(64, 21);
+            lblGiaBan.TabIndex = 2;
+            lblGiaBan.Text = "Giá Bán";
+            // 
+            // txt_GiaBan
+            // 
+            txt_GiaBan.BackColor = Color.FromArgb(248, 250, 252);
+            txt_GiaBan.BorderStyle = BorderStyle.FixedSingle;
+            txt_GiaBan.Font = new Font("Segoe UI", 11F);
+            txt_GiaBan.ForeColor = Color.FromArgb(15, 23, 42);
+            txt_GiaBan.Location = new Point(0, 201);
+            txt_GiaBan.Name = "txt_GiaBan";
+            txt_GiaBan.Size = new Size(250, 32);
+            txt_GiaBan.TabIndex = 5;
+            // 
+            // lblTenSP
+            // 
+            lblTenSP.AutoSize = true;
+            lblTenSP.Font = new Font("Segoe UI Semibold", 9.5F, FontStyle.Bold);
+            lblTenSP.ForeColor = Color.FromArgb(71, 85, 105);
+            lblTenSP.Location = new Point(0, 110);
+            lblTenSP.Name = "lblTenSP";
+            lblTenSP.Size = new Size(57, 21);
+            lblTenSP.TabIndex = 6;
+            lblTenSP.Text = "Tên SP";
+            // 
+            // txt_TenSP
+            // 
+            txt_TenSP.BackColor = Color.FromArgb(248, 250, 252);
+            txt_TenSP.BorderStyle = BorderStyle.FixedSingle;
+            txt_TenSP.Font = new Font("Segoe UI", 11F);
+            txt_TenSP.ForeColor = Color.FromArgb(15, 23, 42);
+            txt_TenSP.Location = new Point(0, 133);
+            txt_TenSP.Name = "txt_TenSP";
+            txt_TenSP.Size = new Size(530, 32);
+            txt_TenSP.TabIndex = 7;
+            // 
+            // lblMaSP
+            // 
+            lblMaSP.AutoSize = true;
+            lblMaSP.Font = new Font("Segoe UI Semibold", 9.5F, FontStyle.Bold);
+            lblMaSP.ForeColor = Color.FromArgb(71, 85, 105);
+            lblMaSP.Location = new Point(0, 42);
+            lblMaSP.Name = "lblMaSP";
+            lblMaSP.Size = new Size(55, 21);
+            lblMaSP.TabIndex = 8;
+            lblMaSP.Text = "Mã SP";
+            // 
+            // txt_MaSP
+            // 
+            txt_MaSP.BackColor = Color.FromArgb(248, 250, 252);
+            txt_MaSP.BorderStyle = BorderStyle.FixedSingle;
+            txt_MaSP.Font = new Font("Segoe UI", 11F);
+            txt_MaSP.ForeColor = Color.FromArgb(15, 23, 42);
+            txt_MaSP.Location = new Point(0, 65);
+            txt_MaSP.Name = "txt_MaSP";
+            txt_MaSP.Size = new Size(530, 32);
+            txt_MaSP.TabIndex = 9;
+            // 
+            // lblSectionTitle
+            // 
+            lblSectionTitle.AutoSize = true;
+            lblSectionTitle.Font = new Font("Segoe UI Semibold", 13F, FontStyle.Bold);
+            lblSectionTitle.ForeColor = Color.FromArgb(15, 23, 42);
+            lblSectionTitle.Location = new Point(0, 0);
+            lblSectionTitle.Name = "lblSectionTitle";
+            lblSectionTitle.Size = new Size(185, 30);
+            lblSectionTitle.TabIndex = 10;
+            lblSectionTitle.Text = "Thông tin chi tiết";
+            // 
             // pic_HinhSP
             // 
             pic_HinhSP.BackColor = Color.FromArgb(248, 250, 252);
-            pic_HinhSP.BorderStyle = BorderStyle.None;
             pic_HinhSP.Dock = DockStyle.Fill;
             pic_HinhSP.Location = new Point(581, 40);
             pic_HinhSP.Margin = new Padding(20, 40, 0, 10);
@@ -290,10 +293,10 @@
             CardLayout.AutoScroll = true;
             CardLayout.BackColor = Color.FromArgb(241, 245, 249);
             CardLayout.Dock = DockStyle.Fill;
-            CardLayout.Location = new Point(0, 75);
+            CardLayout.Location = new Point(0, 127);
             CardLayout.Name = "CardLayout";
             CardLayout.Padding = new Padding(20, 10, 20, 10);
-            CardLayout.Size = new Size(1100, 235);
+            CardLayout.Size = new Size(1100, 183);
             CardLayout.TabIndex = 2;
             // 
             // ViewKhoHang
