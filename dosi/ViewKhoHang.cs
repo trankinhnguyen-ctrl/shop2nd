@@ -68,7 +68,7 @@ namespace dosi
                 conn.Open();
                 conn.Execute(@"CREATE TABLE IF NOT EXISTS PhanLoai (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    ten_phan_loai TEXT NOT NULL
+                    name TEXT NOT NULL
                 )");
                 try { conn.Execute("ALTER TABLE SanPham ADD COLUMN phanloai_id INTEGER"); } catch { }
             }
@@ -106,7 +106,7 @@ namespace dosi
                 using (var conn = new SqliteConnection(ConnectionString))
                 {
                     conn.Open();
-                    var list = conn.Query("SELECT id, ten_phan_loai AS Ten FROM PhanLoai ORDER BY id").ToList();
+                    var list = conn.Query("SELECT id, name AS Ten FROM PhanLoai ORDER BY id").ToList();
                     for (int i = 0; i < list.Count; i++)
                     {
                         int id = (int)(long)list[i].id;
@@ -142,40 +142,25 @@ namespace dosi
             btn.Height = 32;
             btn.Width = TextRenderer.MeasureText(text, btn.Font).Width + 28;
             btn.FlatStyle = FlatStyle.Flat;
-            btn.FlatAppearance.BorderSize = 0;
+            btn.FlatAppearance.BorderSize = 1;
+            btn.FlatAppearance.BorderColor = color;
+            btn.BackColor = selected ? color : Color.White;
+            btn.ForeColor = selected ? Color.White : color;
             btn.Cursor = Cursors.Hand;
             btn.Margin = new Padding(0, 0, 8, 0);
             btn.UseVisualStyleBackColor = false;
 
-            btn.Paint += (s, e) =>
+            int r = btn.Height / 2;
+            using (var path = new GraphicsPath())
             {
-                Button b = (Button)s!;
-                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-                int r = b.Height / 2;
-
-                using (var path = new GraphicsPath())
-                {
-                    path.StartFigure();
-                    path.AddArc(0, 0, r * 2, r * 2, 180, 90);
-                    path.AddArc(b.Width - r * 2 - 1, 0, r * 2, r * 2, 270, 90);
-                    path.AddArc(b.Width - r * 2 - 1, b.Height - r * 2 - 1, r * 2, r * 2, 0, 90);
-                    path.AddArc(0, b.Height - r * 2 - 1, r * 2, r * 2, 90, 90);
-                    path.CloseFigure();
-
-                    b.Region = new Region(path);
-
-                    Color fill = selected ? color : Color.White;
-                    using (var brush = new SolidBrush(fill))
-                        e.Graphics.FillPath(brush, path);
-
-                    using (var pen = new Pen(color, 1.5f))
-                        e.Graphics.DrawPath(pen, path);
-
-                    Color textColor = selected ? Color.White : color;
-                    TextRenderer.DrawText(e.Graphics, b.Text, b.Font, b.ClientRectangle, textColor,
-                        TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
-                }
-            };
+                path.StartFigure();
+                path.AddArc(0, 0, r * 2, r * 2, 180, 90);
+                path.AddArc(btn.Width - r * 2 - 1, 0, r * 2, r * 2, 270, 90);
+                path.AddArc(btn.Width - r * 2 - 1, btn.Height - r * 2 - 1, r * 2, r * 2, 0, 90);
+                path.AddArc(0, btn.Height - r * 2 - 1, r * 2, r * 2, 90, 90);
+                path.CloseFigure();
+                btn.Region = new Region(path);
+            }
 
             return btn;
         }
@@ -225,7 +210,7 @@ namespace dosi
                     using (var conn = new SqliteConnection(ConnectionString))
                     {
                         conn.Open();
-                        conn.Execute("INSERT INTO PhanLoai (ten_phan_loai) VALUES (@ten)", new { ten = txt.Text.Trim() });
+                        conn.Execute("INSERT INTO PhanLoai (name) VALUES (@ten)", new { ten = txt.Text.Trim() });
                     }
                     LoadPhanLoai();
                 }
