@@ -12,6 +12,7 @@ namespace dosi
     public partial class ViewKhachHang : UserControl
     {
         private string ConnectionString = "Data Source=QuanLyKho.db";
+        private KhachHang? _khachHangHienTai;
 
         public ViewKhachHang()
         {
@@ -34,6 +35,17 @@ namespace dosi
 
             // Định hình lại phong cách phẳng (Flat Design) cho DataGridView lịch sử mua hàng
             StyleDataGridView();
+
+            picChinhSua.Click += (s, e) =>
+            {
+                if (_khachHangHienTai == null) return;
+                using var form = new SuaKhachHangForm(_khachHangHienTai);
+                if (form.ShowDialog() == DialogResult.OK)
+                {
+                    LoadDanhSachKhachHang(txtSearch.Text);
+                    HienThiChiTiet(_khachHangHienTai);
+                }
+            };
         }
 
         private void ViewKhachHang_Load(object? sender, EventArgs e)
@@ -162,9 +174,11 @@ namespace dosi
 
         private void HienThiChiTiet(KhachHang kh)
         {
+            _khachHangHienTai = kh;
             lblHoTen.Text = kh.HoTen;
             lblPhone.Text = kh.SoDienThoai;
             lblAddress.Text = string.IsNullOrEmpty(kh.DiaChi) ? "Chưa cập nhật địa chỉ" : kh.DiaChi;
+            lblGhiChu.Text = string.IsNullOrEmpty(kh.GhiChu) ? "" : "📝 " + kh.GhiChu;
 
             CapNhatThongKe(kh.id);
             LoadLichSuMuaHang(kh.id);
@@ -273,7 +287,9 @@ namespace dosi
             }
         }
 
-        private void lblStatValue1_Click(object sender, EventArgs e) { }
-        private void lblPhone_Click(object sender, EventArgs e) { }
+        private void panelHeader_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

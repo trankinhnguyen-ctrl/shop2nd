@@ -15,14 +15,16 @@ namespace dosi
         public ViewTongQuan()
         {
             InitializeComponent();
+            this.DoubleBuffered = true;
             this.Load += ViewTongQuan_Load;
+            this.SizeChanged += (s, e) => this.Invalidate(true);
 
-            // Gán sự kiện Paint gốc để tự vẽ bo góc tròn trịa giống Figma
-            card1.Paint += Panels_Paint;
-            card2.Paint += Panels_Paint;
-            card3.Paint += Panels_Paint;
-            card4.Paint += Panels_Paint;
-            panelHistory.Paint += Panels_Paint;
+            Panel[] cards = { card1, card2, card3, card4, panelHistory };
+            foreach (var p in cards)
+            {
+                p.Paint += Panels_Paint;
+                p.SizeChanged += (s, e) => (s as Panel)?.Invalidate();
+            }
         }
 
         private void ViewTongQuan_Load(object? sender, EventArgs e)
@@ -127,6 +129,11 @@ namespace dosi
 
         private void lblTitle4_Click(object sender, EventArgs e)
         {
+        }
+
+        private void lblHistoryTitle_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

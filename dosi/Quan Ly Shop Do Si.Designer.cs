@@ -34,6 +34,10 @@ namespace dosi
             lblLogoText = new Label();
             picLogo = new PictureBox();
             panelMain = new Panel();
+            panelContent = new Panel();
+            panelShadow = new Panel();
+            panelTopBar = new Panel();
+            lblPageTitle = new Label();
             panelSidebar.SuspendLayout();
             btnGiaoDich.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)picGiaoDich).BeginInit();
@@ -44,12 +48,14 @@ namespace dosi
             btnTongQuan.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)picTongQuan).BeginInit();
             ((System.ComponentModel.ISupportInitialize)picLogo).BeginInit();
+            panelMain.SuspendLayout();
+            panelContent.SuspendLayout();
+            panelTopBar.SuspendLayout();
             SuspendLayout();
             // 
             // panelSidebar
             // 
             panelSidebar.BackColor = Color.White;
-            panelSidebar.BackgroundImage = (Image)resources.GetObject("panelSidebar.BackgroundImage");
             panelSidebar.BackgroundImageLayout = ImageLayout.Center;
             panelSidebar.Controls.Add(btnGiaoDich);
             panelSidebar.Controls.Add(btnKhachHang);
@@ -73,7 +79,7 @@ namespace dosi
             btnGiaoDich.DangerColor = Color.FromArgb(245, 108, 108);
             btnGiaoDich.DefaultColor = Color.FromArgb(255, 255, 255);
             btnGiaoDich.Font = new Font("Segoe UI", 12F);
-            btnGiaoDich.HoverTextColor = Color.FromArgb(124, 58, 237);
+            btnGiaoDich.HoverTextColor = Color.FromArgb(51, 65, 85);
             btnGiaoDich.InfoColor = Color.FromArgb(144, 147, 153);
             btnGiaoDich.Location = new Point(15, 280);
             btnGiaoDich.Name = "btnGiaoDich";
@@ -106,7 +112,7 @@ namespace dosi
             btnKhachHang.DangerColor = Color.FromArgb(245, 108, 108);
             btnKhachHang.DefaultColor = Color.FromArgb(255, 255, 255);
             btnKhachHang.Font = new Font("Segoe UI", 12F);
-            btnKhachHang.HoverTextColor = Color.FromArgb(124, 58, 237);
+            btnKhachHang.HoverTextColor = Color.FromArgb(51, 65, 85);
             btnKhachHang.InfoColor = Color.FromArgb(144, 147, 153);
             btnKhachHang.Location = new Point(15, 220);
             btnKhachHang.Name = "btnKhachHang";
@@ -139,7 +145,7 @@ namespace dosi
             btnKhoHang.DangerColor = Color.FromArgb(245, 108, 108);
             btnKhoHang.DefaultColor = Color.FromArgb(255, 255, 255);
             btnKhoHang.Font = new Font("Segoe UI", 12F);
-            btnKhoHang.HoverTextColor = Color.FromArgb(124, 58, 237);
+            btnKhoHang.HoverTextColor = Color.FromArgb(51, 65, 85);
             btnKhoHang.InfoColor = Color.FromArgb(144, 147, 153);
             btnKhoHang.Location = new Point(15, 160);
             btnKhoHang.Name = "btnKhoHang";
@@ -162,12 +168,9 @@ namespace dosi
             picKhoHang.SizeMode = PictureBoxSizeMode.Zoom;
             picKhoHang.TabIndex = 5;
             picKhoHang.TabStop = false;
-            // 
+            //
             // btnTongQuan
-            // 
-            btnTongQuan.BackColor = Color.Fuchsia;
-            btnTongQuan.BackgroundImage = (Image)resources.GetObject("btnTongQuan.BackgroundImage");
-            btnTongQuan.BackgroundImageLayout = ImageLayout.Stretch;
+            //
             btnTongQuan.BorderColor = Color.FromArgb(220, 223, 230);
             btnTongQuan.ButtonType = ReaLTaiizor.Util.HopeButtonType.Primary;
             btnTongQuan.Controls.Add(picTongQuan);
@@ -175,16 +178,16 @@ namespace dosi
             btnTongQuan.DangerColor = Color.FromArgb(245, 108, 108);
             btnTongQuan.DefaultColor = Color.FromArgb(255, 255, 255);
             btnTongQuan.Font = new Font("Segoe UI", 12F);
-            btnTongQuan.HoverTextColor = Color.White;
+            btnTongQuan.HoverTextColor = Color.FromArgb(51, 65, 85);
             btnTongQuan.InfoColor = Color.FromArgb(144, 147, 153);
             btnTongQuan.Location = new Point(15, 100);
             btnTongQuan.Name = "btnTongQuan";
-            btnTongQuan.PrimaryColor = Color.FromArgb(124, 58, 237);
+            btnTongQuan.PrimaryColor = Color.White;
             btnTongQuan.Size = new Size(220, 50);
             btnTongQuan.SuccessColor = Color.FromArgb(103, 194, 58);
             btnTongQuan.TabIndex = 0;
             btnTongQuan.Text = "          Tổng quan";
-            btnTongQuan.TextColor = Color.White;
+            btnTongQuan.TextColor = Color.FromArgb(51, 65, 85);
             btnTongQuan.WarningColor = Color.FromArgb(230, 162, 60);
             btnTongQuan.Click += btnTongQuan_Click;
             // 
@@ -192,7 +195,7 @@ namespace dosi
             // 
             picTongQuan.BackColor = Color.Transparent;
             picTongQuan.ImageLocation = "D:\\Dev\\vtc\\2Hand\\shop2nd\\dosi\\bin\\Debug\\net8.0-windows\\icon\\home.png";
-            picTongQuan.InitialImage = (Image)resources.GetObject("picTongQuan.InitialImage");
+            picTongQuan.InitialImage = null;
             picTongQuan.Location = new Point(15, 13);
             picTongQuan.Name = "picTongQuan";
             picTongQuan.Size = new Size(24, 24);
@@ -237,11 +240,55 @@ namespace dosi
             // panelMain
             // 
             panelMain.BackColor = Color.FromArgb(248, 250, 252);
+            panelMain.Controls.Add(panelContent);
+            panelMain.Controls.Add(panelShadow);
+            panelMain.Controls.Add(panelTopBar);
             panelMain.Dock = DockStyle.Fill;
             panelMain.Location = new Point(250, 0);
             panelMain.Name = "panelMain";
             panelMain.Size = new Size(850, 700);
             panelMain.TabIndex = 1;
+            // 
+            // panelContent
+            // 
+            panelContent.BackColor = Color.FromArgb(248, 250, 252);
+            panelContent.Dock = DockStyle.Fill;
+            panelContent.Location = new Point(0, 61);
+            panelContent.Name = "panelContent";
+            panelContent.Size = new Size(850, 639);
+            panelContent.TabIndex = 4;
+            // 
+            // panelShadow
+            // 
+            panelShadow.BackColor = Color.FromArgb(248, 250, 252);
+            panelShadow.Dock = DockStyle.Top;
+            panelShadow.Location = new Point(0, 56);
+            panelShadow.Name = "panelShadow";
+            panelShadow.Size = new Size(850, 5);
+            panelShadow.TabIndex = 3;
+            // 
+            // panelTopBar
+            // 
+            panelTopBar.BackColor = Color.White;
+            panelTopBar.Controls.Add(lblPageTitle);
+            panelTopBar.Dock = DockStyle.Top;
+            panelTopBar.Location = new Point(0, 0);
+            panelTopBar.Name = "panelTopBar";
+            panelTopBar.Size = new Size(850, 56);
+            panelTopBar.TabIndex = 2;
+            // 
+            // lblPageTitle
+            // 
+            lblPageTitle.Dock = DockStyle.Fill;
+            lblPageTitle.Font = new Font("Segoe UI Semibold", 13F, FontStyle.Bold);
+            lblPageTitle.ForeColor = Color.FromArgb(30, 41, 59);
+            lblPageTitle.Location = new Point(0, 0);
+            lblPageTitle.Name = "lblPageTitle";
+            lblPageTitle.Padding = new Padding(24, 0, 0, 0);
+            lblPageTitle.Size = new Size(850, 56);
+            lblPageTitle.TabIndex = 0;
+            lblPageTitle.Text = "Tổng quan";
+            lblPageTitle.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // Form1
             // 
@@ -266,6 +313,9 @@ namespace dosi
             btnTongQuan.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)picTongQuan).EndInit();
             ((System.ComponentModel.ISupportInitialize)picLogo).EndInit();
+            panelMain.ResumeLayout(false);
+            panelContent.ResumeLayout(false);
+            panelTopBar.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -277,6 +327,10 @@ namespace dosi
         private ReaLTaiizor.Controls.HopeButton btnTongQuan;
         private ReaLTaiizor.Controls.HopeButton btnGiaoDich;
         private System.Windows.Forms.Panel panelMain;
+        private System.Windows.Forms.Panel panelTopBar;
+        private System.Windows.Forms.Panel panelShadow;
+        private System.Windows.Forms.Panel panelContent;
+        private System.Windows.Forms.Label lblPageTitle;
         private System.Windows.Forms.PictureBox picLogo;
         private System.Windows.Forms.Label lblLogoText;
         private System.Windows.Forms.Label lblLogoSub;

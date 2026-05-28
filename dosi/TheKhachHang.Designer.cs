@@ -17,6 +17,7 @@
 
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TheKhachHang));
             lblTen = new Label();
             lblSdt = new Label();
             picAvatar = new PictureBox();
@@ -46,9 +47,11 @@
             // picAvatar
             // 
             picAvatar.BackColor = Color.LightSteelBlue;
+            picAvatar.Image = (Image)resources.GetObject("picAvatar.Image");
             picAvatar.Location = new Point(12, 12);
             picAvatar.Name = "picAvatar";
             picAvatar.Size = new Size(45, 45);
+            picAvatar.SizeMode = PictureBoxSizeMode.Zoom;
             picAvatar.TabIndex = 2;
             picAvatar.TabStop = false;
             // 

@@ -13,7 +13,18 @@ namespace dosi
         {
             InitializeComponent();
             SetupButtonHoverEffects();
+            panelShadow.Paint += PanelShadow_Paint;
             this.Load += (s, e) => MoTrangTongQuan();
+        }
+
+        private void PanelShadow_Paint(object? sender, PaintEventArgs e)
+        {
+            using var brush = new LinearGradientBrush(
+                panelShadow.ClientRectangle,
+                Color.FromArgb(18, 0, 0, 0),
+                Color.Transparent,
+                LinearGradientMode.Vertical);
+            e.Graphics.FillRectangle(brush, panelShadow.ClientRectangle);
         }
 
         private void SetupButtonHoverEffects()
@@ -25,8 +36,8 @@ namespace dosi
                 {
                     if (btn != currentActiveButton)
                     {
-
                         btn.PrimaryColor = Color.FromArgb(241, 245, 249);
+                        btn.TextColor = Color.FromArgb(51, 65, 85);
                         btn.Invalidate();
                     }
                 };
@@ -35,6 +46,7 @@ namespace dosi
                     if (btn != currentActiveButton)
                     {
                         btn.PrimaryColor = Color.White;
+                        btn.TextColor = Color.FromArgb(51, 65, 85);
                         btn.Invalidate();
                     }
                 };
@@ -44,8 +56,8 @@ namespace dosi
         private void addUserControl(UserControl userControl)
         {
             userControl.Dock = DockStyle.Fill;
-            panelMain.Controls.Clear();
-            panelMain.Controls.Add(userControl);
+            panelContent.Controls.Clear();
+            panelContent.Controls.Add(userControl);
             userControl.BringToFront();
         }
 
@@ -63,6 +75,11 @@ namespace dosi
             activeBtn.TextColor = Color.White;
             activeBtn.Invalidate();
             currentActiveButton = activeBtn;
+
+            if (activeBtn == btnTongQuan)       lblPageTitle.Text = "Tổng quan";
+            else if (activeBtn == btnKhoHang)   lblPageTitle.Text = "Kho hàng";
+            else if (activeBtn == btnKhachHang) lblPageTitle.Text = "Khách hàng";
+            else if (activeBtn == btnGiaoDich)  lblPageTitle.Text = "Giao dịch";
         }
 
         private void MoTrangTongQuan()

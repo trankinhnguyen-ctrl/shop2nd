@@ -15,7 +15,6 @@
 
         private void InitializeComponent()
         {
-            lblTitle = new Label();
             tableStats = new TableLayoutPanel();
             card4 = new Panel();
             lblVal4 = new Label();
@@ -40,19 +39,9 @@
             panelHistory.SuspendLayout();
             SuspendLayout();
             // 
-            // lblTitle
-            // 
-            lblTitle.AutoSize = true;
-            lblTitle.Font = new Font("Segoe UI Semibold", 20F, FontStyle.Bold);
-            lblTitle.ForeColor = Color.FromArgb(30, 41, 59);
-            lblTitle.Location = new Point(25, 25);
-            lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(185, 46);
-            lblTitle.TabIndex = 2;
-            lblTitle.Text = "Tổng quan";
-            // 
             // tableStats
             // 
+            tableStats.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             tableStats.ColumnCount = 2;
             tableStats.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableStats.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
@@ -60,7 +49,7 @@
             tableStats.Controls.Add(card3, 0, 1);
             tableStats.Controls.Add(card2, 1, 0);
             tableStats.Controls.Add(card1, 0, 0);
-            tableStats.Location = new Point(20, 85);
+            tableStats.Location = new Point(20, 15);
             tableStats.Name = "tableStats";
             tableStats.RowCount = 2;
             tableStats.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
@@ -68,17 +57,16 @@
             tableStats.Size = new Size(860, 310);
             tableStats.TabIndex = 1;
             // 
-            // card4 (Cảnh báo hết hàng)
+            // card4
             // 
             card4.BackColor = Color.White;
-            card4.BorderStyle = BorderStyle.None;
             card4.Controls.Add(lblVal4);
             card4.Controls.Add(lblTitle4);
             card4.Dock = DockStyle.Fill;
-            card4.Location = new Point(440, 165);
+            card4.Location = new Point(442, 167);
             card4.Margin = new Padding(12);
             card4.Name = "card4";
-            card4.Size = new Size(408, 133);
+            card4.Size = new Size(406, 131);
             card4.TabIndex = 0;
             // 
             // lblVal4
@@ -103,17 +91,16 @@
             lblTitle4.Text = "Cảnh báo hết hàng";
             lblTitle4.Click += lblTitle4_Click;
             // 
-            // card3 (Số lượng khách)
+            // card3
             // 
             card3.BackColor = Color.White;
-            card3.BorderStyle = BorderStyle.None;
             card3.Controls.Add(lblVal3);
             card3.Controls.Add(lblTitle3);
             card3.Dock = DockStyle.Fill;
-            card3.Location = new Point(12, 165);
+            card3.Location = new Point(12, 167);
             card3.Margin = new Padding(12);
             card3.Name = "card3";
-            card3.Size = new Size(408, 133);
+            card3.Size = new Size(406, 131);
             card3.TabIndex = 1;
             // 
             // lblVal3
@@ -137,17 +124,16 @@
             lblTitle3.TabIndex = 1;
             lblTitle3.Text = "Số lượng khách";
             // 
-            // card2 (Số lượng hàng)
+            // card2
             // 
             card2.BackColor = Color.White;
-            card2.BorderStyle = BorderStyle.None;
             card2.Controls.Add(lblVal2);
             card2.Controls.Add(lblTitle2);
             card2.Dock = DockStyle.Fill;
-            card2.Location = new Point(440, 12);
+            card2.Location = new Point(442, 12);
             card2.Margin = new Padding(12);
             card2.Name = "card2";
-            card2.Size = new Size(408, 133);
+            card2.Size = new Size(406, 131);
             card2.TabIndex = 2;
             // 
             // lblVal2
@@ -171,17 +157,16 @@
             lblTitle2.TabIndex = 1;
             lblTitle2.Text = "Số lượng hàng";
             // 
-            // card1 (Số lượng mẫu)
+            // card1
             // 
             card1.BackColor = Color.White;
-            card1.BorderStyle = BorderStyle.None;
             card1.Controls.Add(lblVal1);
             card1.Controls.Add(lblTitle1);
             card1.Dock = DockStyle.Fill;
             card1.Location = new Point(12, 12);
             card1.Margin = new Padding(12);
             card1.Name = "card1";
-            card1.Size = new Size(408, 133);
+            card1.Size = new Size(406, 131);
             card1.TabIndex = 3;
             // 
             // lblVal1
@@ -207,13 +192,13 @@
             // 
             // panelHistory
             // 
+            panelHistory.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             panelHistory.BackColor = Color.White;
-            panelHistory.BorderStyle = BorderStyle.None;
             panelHistory.Controls.Add(flpHistory);
             panelHistory.Controls.Add(lblHistoryTitle);
-            panelHistory.Location = new Point(32, 415);
+            panelHistory.Location = new Point(20, 415);
             panelHistory.Name = "panelHistory";
-            panelHistory.Size = new Size(836, 255);
+            panelHistory.Size = new Size(860, 255);
             panelHistory.TabIndex = 0;
             // 
             // flpHistory
@@ -221,10 +206,10 @@
             flpHistory.AutoScroll = true;
             flpHistory.BackColor = Color.White;
             flpHistory.Dock = DockStyle.Fill;
-            flpHistory.Location = new Point(0, 50);
+            flpHistory.Location = new Point(0, 55);
             flpHistory.Name = "flpHistory";
             flpHistory.Padding = new Padding(20, 10, 20, 10);
-            flpHistory.Size = new Size(836, 205);
+            flpHistory.Size = new Size(860, 200);
             flpHistory.TabIndex = 0;
             // 
             // lblHistoryTitle
@@ -235,9 +220,10 @@
             lblHistoryTitle.Location = new Point(0, 0);
             lblHistoryTitle.Name = "lblHistoryTitle";
             lblHistoryTitle.Padding = new Padding(20, 15, 0, 0);
-            lblHistoryTitle.Size = new Size(836, 50);
+            lblHistoryTitle.Size = new Size(860, 55);
             lblHistoryTitle.TabIndex = 1;
             lblHistoryTitle.Text = "Hoạt động gần đây";
+            lblHistoryTitle.Click += lblHistoryTitle_Click;
             // 
             // ViewTongQuan
             // 
@@ -246,7 +232,6 @@
             BackColor = Color.FromArgb(241, 245, 249);
             Controls.Add(panelHistory);
             Controls.Add(tableStats);
-            Controls.Add(lblTitle);
             Name = "ViewTongQuan";
             Size = new Size(900, 700);
             tableStats.ResumeLayout(false);
@@ -256,10 +241,7 @@
             card1.ResumeLayout(false);
             panelHistory.ResumeLayout(false);
             ResumeLayout(false);
-            PerformLayout();
         }
-
-        private Label lblTitle;
         private TableLayoutPanel tableStats;
         private Panel card1;
         private Label lblVal1;
