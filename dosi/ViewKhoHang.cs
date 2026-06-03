@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace dosi
@@ -32,24 +33,36 @@ namespace dosi
             this.Resize += (s, e) => { LoadSanPham(ThanhTimKiem.Text); };
             pic_HinhSP.Click += pic_HinhSP_Click;
             Tim_bt.Click += Tim_bt_Click;
+            Them_bt.Click += Them_bt_Click;
+            Them_bt.Cursor = Cursors.Hand;
+            Tim_bt.Cursor = Cursors.Hand;
 
             panelMainContainer.Paint += PanelMainContainer_Paint;
+            panelFields.Paint += PanelFields_Paint;
             pic_HinhSP.Paint += Pic_HinhSP_Paint;
+
+            foreach (Control ctrl in new Control[] { txt_TenSP, txt_GiaBan, txtSL, cbo_PhanLoai })
+            {
+                ctrl.Enter += (s, e) => panelFields.Invalidate();
+                ctrl.Leave += (s, e) => panelFields.Invalidate();
+            }
 
             Tim_bt.Paint += Buttons_Paint;
             Them_bt.Paint += Buttons_Paint;
 
-            txt_MaSP.BorderStyle = BorderStyle.None;
             txt_TenSP.BorderStyle = BorderStyle.None;
             txt_GiaBan.BorderStyle = BorderStyle.None;
             txtSL.BorderStyle = BorderStyle.None;
             ThanhTimKiem.BorderStyle = BorderStyle.None;
 
-            SetPaddingForTextBox(txt_MaSP);
             SetPaddingForTextBox(txt_TenSP);
             SetPaddingForTextBox(txt_GiaBan);
             SetPaddingForTextBox(txtSL);
             SetPaddingForTextBox(ThanhTimKiem);
+
+            // Shift all panelFields controls right so the drawn left border is not clipped at x=0
+            foreach (Control c in panelFields.Controls)
+                c.Location = new Point(c.Location.X + 6, c.Location.Y);
         }
 
         private void ViewKhoHang_Load(object? sender, EventArgs e)
@@ -68,8 +81,11 @@ namespace dosi
                 conn.Open();
                 conn.Execute(@"CREATE TABLE IF NOT EXISTS PhanLoai (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    name TEXT NOT NULL
+                    ten TEXT NOT NULL,
+                    ma TEXT NOT NULL
                 )");
+                try { conn.Execute("ALTER TABLE PhanLoai ADD COLUMN ten TEXT"); } catch { }
+                try { conn.Execute("ALTER TABLE PhanLoai ADD COLUMN ma TEXT"); } catch { }
                 try { conn.Execute("ALTER TABLE SanPham ADD COLUMN phanloai_id INTEGER"); } catch { }
             }
         }
@@ -100,22 +116,23 @@ namespace dosi
             };
             flpCategory.Controls.Add(btnAll);
 
-            // Category pills
+            // Category pills + refresh add-form dropdown
+            int? comboCurrentId = (cbo_PhanLoai.SelectedItem as PhanLoaiItem)?.Id;
+            cbo_PhanLoai.Items.Clear();
+
             try
             {
                 using (var conn = new SqliteConnection(ConnectionString))
                 {
                     conn.Open();
-                    var list = conn.Query("SELECT id, name AS Ten FROM PhanLoai ORDER BY id").ToList();
+                    var list = conn.Query<PhanLoaiItem>("SELECT id AS Id, ten AS Ten, ma AS Ma FROM PhanLoai ORDER BY id").ToList();
                     for (int i = 0; i < list.Count; i++)
                     {
-                        int id = (int)(long)list[i].id;
-                        string ten = (string)list[i].Ten;
                         Color color = _pillColors[i % _pillColors.Length];
-                        bool selected = _selectedPhanLoaiId == id;
+                        bool selected = _selectedPhanLoaiId == list[i].Id;
 
-                        Button btn = CreatePillButton(ten, color, selected);
-                        int capturedId = id;
+                        Button btn = CreatePillButton(list[i].Ten, color, selected);
+                        int capturedId = list[i].Id;
                         btn.Click += (s, e) =>
                         {
                             _selectedPhanLoaiId = capturedId;
@@ -123,6 +140,8 @@ namespace dosi
                             LoadSanPham(ThanhTimKiem.Text);
                         };
                         flpCategory.Controls.Add(btn);
+
+                        cbo_PhanLoai.Items.Add(list[i]);
                     }
                 }
             }
@@ -130,6 +149,13 @@ namespace dosi
             {
                 MessageBox.Show("Lỗi tải phân loại: " + ex.Message);
             }
+
+            // Restore or default combo selection
+            PhanLoaiItem? toSelect = null;
+            if (comboCurrentId.HasValue)
+                toSelect = cbo_PhanLoai.Items.OfType<PhanLoaiItem>().FirstOrDefault(p => p.Id == comboCurrentId);
+            if (cbo_PhanLoai.Items.Count > 0)
+                cbo_PhanLoai.SelectedItem = toSelect ?? cbo_PhanLoai.Items[0];
 
             flpCategory.ResumeLayout();
         }
@@ -143,45 +169,48 @@ namespace dosi
             btn.Width = TextRenderer.MeasureText(text, btn.Font).Width + 28;
             btn.FlatStyle = FlatStyle.Flat;
             btn.FlatAppearance.BorderSize = 0;
-            btn.BackColor = selected ? color : Color.White;
+            btn.BackColor = Color.White;
             btn.ForeColor = selected ? Color.White : color;
             btn.Cursor = Cursors.Hand;
-            btn.Margin = new Padding(0, 0, 8, 0);
+            btn.Margin = new Padding(0, 4, 8, 4);
             btn.UseVisualStyleBackColor = false;
 
-            int r = btn.Height / 2;
-            using (var path = new GraphicsPath())
+            btn.Paint += (s, e) =>
             {
-                path.StartFigure();
-                path.AddArc(0, 0, r * 2, r * 2, 180, 90);
-                path.AddArc(btn.Width - r * 2 - 1, 0, r * 2, r * 2, 270, 90);
-                path.AddArc(btn.Width - r * 2 - 1, btn.Height - r * 2 - 1, r * 2, r * 2, 0, 90);
-                path.AddArc(0, btn.Height - r * 2 - 1, r * 2, r * 2, 90, 90);
-                path.CloseFigure();
-                btn.Region = new Region(path);
-            }
+                var b = (Button)s!;
+                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
-            // WinForms FlatStyle borders don't follow Region clipping — draw only the outline
-            if (!selected)
-            {
-                btn.Paint += (s, e) =>
+                // Fill corners with parent bg so they blend in (no Region needed)
+                Color parentBg = b.Parent?.BackColor ?? Color.FromArgb(241, 245, 249);
+                using (var bgBrush = new SolidBrush(parentBg))
+                    e.Graphics.FillRectangle(bgBrush, b.ClientRectangle);
+
+                // Inset 1px so the 1.5px border's outer edge lands at y≈30.75, safely within 32px
+                const int inset = 1;
+                int diam = b.Height - inset * 2 - 1; // = 29
+                using (var p = new GraphicsPath())
                 {
-                    var b = (Button)s!;
-                    e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-                    int bR = b.Height / 2;
-                    using (var p = new GraphicsPath())
+                    p.AddArc(inset, inset, diam, diam, 90, 180);
+                    p.AddArc(b.Width - inset - diam - 1, inset, diam, diam, 270, 180);
+                    p.CloseFigure();
+
+                    if (selected)
                     {
-                        p.StartFigure();
-                        p.AddArc(0, 0, bR * 2, bR * 2, 180, 90);
-                        p.AddArc(b.Width - bR * 2 - 1, 0, bR * 2, bR * 2, 270, 90);
-                        p.AddArc(b.Width - bR * 2 - 1, b.Height - bR * 2 - 1, bR * 2, bR * 2, 0, 90);
-                        p.AddArc(0, b.Height - bR * 2 - 1, bR * 2, bR * 2, 90, 90);
-                        p.CloseFigure();
+                        using (var brush = new SolidBrush(color))
+                            e.Graphics.FillPath(brush, p);
+                    }
+                    else
+                    {
+                        using (var brush = new SolidBrush(Color.White))
+                            e.Graphics.FillPath(brush, p);
                         using (var pen = new Pen(color, 1.5f))
                             e.Graphics.DrawPath(pen, p);
                     }
-                };
-            }
+                }
+
+                TextRenderer.DrawText(e.Graphics, b.Text, b.Font, b.ClientRectangle,
+                    b.ForeColor, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+            };
 
             return btn;
         }
@@ -190,23 +219,37 @@ namespace dosi
         {
             using Form dlg = new Form();
             dlg.Text = "Thêm phân loại";
-            dlg.Size = new Size(340, 160);
+            dlg.Size = new Size(340, 230);
             dlg.StartPosition = FormStartPosition.CenterParent;
             dlg.FormBorderStyle = FormBorderStyle.FixedDialog;
             dlg.MaximizeBox = false;
             dlg.MinimizeBox = false;
 
-            TextBox txt = new TextBox();
-            txt.Font = new Font("Segoe UI", 10F);
-            txt.Location = new Point(20, 20);
-            txt.Size = new Size(285, 32);
-            txt.PlaceholderText = "Tên phân loại...";
-            dlg.Controls.Add(txt);
+            TextBox txtTen = new TextBox();
+            txtTen.Font = new Font("Segoe UI", 10F);
+            txtTen.Location = new Point(20, 20);
+            txtTen.Size = new Size(285, 32);
+            txtTen.PlaceholderText = "Tên phân loại... (VD: Áo Khoác)";
+            dlg.Controls.Add(txtTen);
+
+            Label lblMa = new Label();
+            lblMa.Text = "Mã (viết tắt):";
+            lblMa.Font = new Font("Segoe UI", 9F);
+            lblMa.Location = new Point(20, 62);
+            lblMa.AutoSize = true;
+            dlg.Controls.Add(lblMa);
+
+            TextBox txtMa = new TextBox();
+            txtMa.Font = new Font("Segoe UI", 10F);
+            txtMa.Location = new Point(20, 82);
+            txtMa.Size = new Size(285, 32);
+            txtMa.PlaceholderText = "VD: AK, QD, GD...";
+            dlg.Controls.Add(txtMa);
 
             Button btnOK = new Button();
             btnOK.Text = "Thêm";
             btnOK.DialogResult = DialogResult.OK;
-            btnOK.Location = new Point(100, 68);
+            btnOK.Location = new Point(100, 132);
             btnOK.Size = new Size(90, 36);
             btnOK.BackColor = Color.FromArgb(99, 102, 241);
             btnOK.ForeColor = Color.White;
@@ -217,21 +260,22 @@ namespace dosi
             Button btnCancel = new Button();
             btnCancel.Text = "Huỷ";
             btnCancel.DialogResult = DialogResult.Cancel;
-            btnCancel.Location = new Point(202, 68);
+            btnCancel.Location = new Point(202, 132);
             btnCancel.Size = new Size(90, 36);
             dlg.Controls.Add(btnCancel);
 
             dlg.AcceptButton = btnOK;
             dlg.CancelButton = btnCancel;
 
-            if (dlg.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(txt.Text))
+            if (dlg.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(txtTen.Text))
             {
                 try
                 {
                     using (var conn = new SqliteConnection(ConnectionString))
                     {
                         conn.Open();
-                        conn.Execute("INSERT INTO PhanLoai (name) VALUES (@ten)", new { ten = txt.Text.Trim() });
+                        conn.Execute("INSERT INTO PhanLoai (ten, ma) VALUES (@ten, @ma)",
+                            new { ten = txtTen.Text.Trim(), ma = txtMa.Text.Trim().ToUpper() });
                     }
                     LoadPhanLoai();
                 }
@@ -344,54 +388,130 @@ namespace dosi
             }
         }
 
+        private void PanelFields_Paint(object? sender, PaintEventArgs e)
+        {
+            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+            DrawInputContainer(e.Graphics, txt_TenSP);
+            DrawInputContainer(e.Graphics, txt_GiaBan);
+            DrawInputContainer(e.Graphics, txtSL);
+            DrawInputContainer(e.Graphics, cbo_PhanLoai);
+        }
+
+        private void DrawInputContainer(Graphics g, Control ctrl)
+        {
+            bool focused = ctrl.ContainsFocus;
+            const int padX = 2, padYTop = 4, padYBottom = 6, radius = 10;
+
+            Rectangle outer = new Rectangle(
+                ctrl.Left - padX,
+                ctrl.Top - padYTop,
+                ctrl.Width + padX * 2,
+                ctrl.Height + padYTop + padYBottom
+            );
+
+            using (GraphicsPath path = new GraphicsPath())
+            {
+                path.StartFigure();
+                path.AddArc(new Rectangle(outer.X, outer.Y, radius, radius), 180, 90);
+                path.AddArc(new Rectangle(outer.Right - radius - 1, outer.Y, radius, radius), 270, 90);
+                path.AddArc(new Rectangle(outer.Right - radius - 1, outer.Bottom - radius - 1, radius, radius), 0, 90);
+                path.AddArc(new Rectangle(outer.X, outer.Bottom - radius - 1, radius, radius), 90, 90);
+                path.CloseFigure();
+
+                using (SolidBrush brush = new SolidBrush(Color.FromArgb(248, 250, 252)))
+                    g.FillPath(brush, path);
+
+                Color borderColor = focused ? Color.FromArgb(99, 102, 241) : Color.FromArgb(209, 213, 219);
+                using (Pen pen = new Pen(borderColor, focused ? 2f : 1.5f))
+                    g.DrawPath(pen, path);
+            }
+        }
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
+
         private void SetPaddingForTextBox(TextBox textBox)
         {
             textBox.Location = new Point(textBox.Location.X, textBox.Location.Y + 4);
             textBox.Height = 32;
+            // EM_SETMARGINS: left=10px, right=6px
+            SendMessage(textBox.Handle, 0xD3, (IntPtr)3, (IntPtr)((6 << 16) | 10));
         }
 
         #endregion
 
         private void LamMoiForm()
         {
-            txt_MaSP.Clear();
             txt_TenSP.Clear();
             txt_GiaBan.Clear();
             txtSL.Clear();
             pic_HinhSP.Image = null;
             pic_HinhSP.Tag = null;
             pic_HinhSP.Refresh();
-            txt_MaSP.Focus();
+            if (cbo_PhanLoai.Items.Count > 0)
+                cbo_PhanLoai.SelectedIndex = 0;
+            txt_TenSP.Focus();
+        }
+
+        private string GenerateMaSP(string maPhanLoai)
+        {
+            using (var conn = new SqliteConnection(ConnectionString))
+            {
+                conn.Open();
+                var codes = conn.Query<string>(
+                    "SELECT ma_sp FROM SanPham WHERE ma_sp LIKE @prefix",
+                    new { prefix = maPhanLoai + "-%" }
+                ).ToList();
+
+                int maxNum = 0;
+                foreach (var code in codes)
+                {
+                    if (code.Length > maPhanLoai.Length + 1)
+                    {
+                        string numPart = code.Substring(maPhanLoai.Length + 1);
+                        if (int.TryParse(numPart, out int num) && num > maxNum)
+                            maxNum = num;
+                    }
+                }
+
+                return $"{maPhanLoai}-{(maxNum + 1):D3}";
+            }
         }
 
         private void ThemSanPham()
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(txt_MaSP.Text)) return;
+                var selectedPhanLoai = cbo_PhanLoai.SelectedItem as PhanLoaiItem;
+                if (selectedPhanLoai == null || string.IsNullOrEmpty(selectedPhanLoai.Ma))
+                {
+                    MessageBox.Show("Vui lòng chọn phân loại hợp lệ!");
+                    return;
+                }
 
                 string pathGoc = pic_HinhSP.Tag != null ? pic_HinhSP.Tag.ToString() ?? string.Empty : string.Empty;
                 string pathLuuDB = string.Empty;
 
                 if (!string.IsNullOrEmpty(pathGoc))
-                {
                     pathLuuDB = CopyAnhVaoProject(pathGoc);
-                }
 
                 decimal.TryParse(txt_GiaBan.Text, out decimal gia);
                 int.TryParse(txtSL.Text, out int sl);
 
+                string maSP = GenerateMaSP(selectedPhanLoai.Ma);
+
                 SanPham sp = new SanPham
                 {
-                    MaSP = txt_MaSP.Text,
+                    MaSP = maSP,
                     TenSP = txt_TenSP.Text,
                     GiaBan = gia,
                     SoLuong = sl,
-                    HinhAnh = pathLuuDB
+                    HinhAnh = pathLuuDB,
+                    PhanLoaiId = selectedPhanLoai.Id
                 };
 
                 sp.LuuVaoDatabase();
-                MessageBox.Show("Thêm thành công!");
+                MessageBox.Show($"Thêm thành công! Mã SP: {maSP}");
                 LamMoiForm();
                 LoadSanPham();
             }
@@ -411,7 +531,7 @@ namespace dosi
                 using (var conn = new SqliteConnection(ConnectionString))
                 {
                     conn.Open();
-                    string sql = "SELECT id, ma_sp AS MaSP, ten_sp AS TenSP, so_luong_ton AS SoLuong, hinh_anh AS HinhAnh, gia_ban AS GiaBan FROM SanPham WHERE 1=1";
+                    string sql = "SELECT id, ma_sp AS MaSP, ten_sp AS TenSP, so_luong_ton AS SoLuong, hinh_anh AS HinhAnh, gia_ban AS GiaBan, phanloai_id AS PhanLoaiId FROM SanPham WHERE 1=1";
 
                     if (!string.IsNullOrEmpty(searchKey))
                         sql += " AND (ma_sp LIKE @key OR ten_sp LIKE @key)";

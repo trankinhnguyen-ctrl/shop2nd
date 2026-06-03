@@ -19,12 +19,150 @@ namespace dosi
             this.Load += ViewTongQuan_Load;
             this.SizeChanged += (s, e) => this.Invalidate(true);
 
-            Panel[] cards = { card1, card2, card3, card4, panelHistory };
-            foreach (var p in cards)
+            panelHistory.Paint += Panels_Paint;
+            panelHistory.SizeChanged += (s, e) => panelHistory.Invalidate();
+
+            SetupStatCards();
+
+            flpHistory.FlowDirection = FlowDirection.TopDown;
+            flpHistory.WrapContents = false;
+            flpHistory.SizeChanged += (s, e) =>
             {
-                p.Paint += Panels_Paint;
-                p.SizeChanged += (s, e) => (s as Panel)?.Invalidate();
+                int w = Math.Max(flpHistory.ClientSize.Width - flpHistory.Padding.Horizontal, 300);
+                foreach (Control ctrl in flpHistory.Controls)
+                {
+                    if (ctrl is TheHoatDong card)
+                        card.Width = w;
+                }
+            };
+        }
+
+        private void SetupStatCards()
+        {
+            var specs = new (Panel card, Label title, Color accent, Action<Graphics, Rectangle, Color> icon)[]
+            {
+                (card1, lblTitle1, Color.FromArgb(99,  102, 241), DrawIconBars),
+                (card2, lblTitle2, Color.FromArgb(16,  185, 129), DrawIconBox),
+                (card3, lblTitle3, Color.FromArgb(245, 158,  11), DrawIconPerson),
+                (card4, lblTitle4, Color.FromArgb(239,  68,  68), DrawIconWarning),
+            };
+
+            foreach (var (card, title, accent, icon) in specs)
+            {
+                title.ForeColor = accent;
+                var a = accent;
+                var ic = icon;
+                var p = card;
+                p.Paint += (s, e) => DrawStatCard(e, p, a, ic);
+                p.SizeChanged += (s, e) => p.Invalidate();
             }
+        }
+
+        private void DrawStatCard(PaintEventArgs e, Panel pnl, Color accent, Action<Graphics, Rectangle, Color> drawIcon)
+        {
+            var g = e.Graphics;
+            g.SmoothingMode = SmoothingMode.AntiAlias;
+            g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+
+            const int radius = 24;
+            using var path = new GraphicsPath();
+            path.StartFigure();
+            path.AddArc(new Rectangle(0, 0, radius, radius), 180, 90);
+            path.AddArc(new Rectangle(pnl.Width - radius - 1, 0, radius, radius), 270, 90);
+            path.AddArc(new Rectangle(pnl.Width - radius - 1, pnl.Height - radius - 1, radius, radius), 0, 90);
+            path.AddArc(new Rectangle(0, pnl.Height - radius - 1, radius, radius), 90, 90);
+            path.CloseFigure();
+
+            // Clear anti-alias fringe with parent background
+            using (var bg = new SolidBrush(this.BackColor))
+                g.FillRectangle(bg, pnl.ClientRectangle);
+
+            // White card fill
+            using (var white = new SolidBrush(Color.White))
+                g.FillPath(white, path);
+
+            // 5px colored top accent strip, clipped to rounded shape
+            var state = g.Save();
+            g.SetClip(path);
+            using (var strip = new SolidBrush(accent))
+                g.FillRectangle(strip, 0, 0, pnl.Width, 5);
+            g.Restore(state);
+
+            // Subtle border
+            using (var border = new Pen(Color.FromArgb(226, 232, 240), 1))
+                g.DrawPath(border, path);
+
+            // Icon badge — rounded square, top-right
+            const int badgeSize = 44;
+            const int badgeRadius = 12;
+            const int by = 18;
+            int bx = pnl.Width - badgeSize - 18;
+
+            using var badgePath = new GraphicsPath();
+            badgePath.StartFigure();
+            badgePath.AddArc(new Rectangle(bx, by, badgeRadius, badgeRadius), 180, 90);
+            badgePath.AddArc(new Rectangle(bx + badgeSize - badgeRadius, by, badgeRadius, badgeRadius), 270, 90);
+            badgePath.AddArc(new Rectangle(bx + badgeSize - badgeRadius, by + badgeSize - badgeRadius, badgeRadius, badgeRadius), 0, 90);
+            badgePath.AddArc(new Rectangle(bx, by + badgeSize - badgeRadius, badgeRadius, badgeRadius), 90, 90);
+            badgePath.CloseFigure();
+
+            using (var badgeFill = new SolidBrush(Color.FromArgb(22, accent.R, accent.G, accent.B)))
+                g.FillPath(badgeFill, badgePath);
+
+            const int pad = 10;
+            drawIcon(g, new Rectangle(bx + pad, by + pad, badgeSize - pad * 2, badgeSize - pad * 2), accent);
+        }
+
+        // 3 horizontal bars — represents a catalog / item list
+        private static void DrawIconBars(Graphics g, Rectangle r, Color c)
+        {
+            using var brush = new SolidBrush(c);
+            const float barH = 3f;
+            float gap = (r.Height - 3 * barH) / 4f;
+            for (int i = 0; i < 3; i++)
+            {
+                float y = r.Y + gap + i * (barH + gap);
+                float w = i == 0 ? r.Width : r.Width * 0.70f;
+                g.FillRectangle(brush, r.X, y, w, barH);
+            }
+        }
+
+        // Box outline with lid line — represents stock/inventory
+        private static void DrawIconBox(Graphics g, Rectangle r, Color c)
+        {
+            using var pen = new Pen(c, 2f) { LineJoin = LineJoin.Round };
+            g.DrawRectangle(pen, r.X + 1, r.Y + 1, r.Width - 2, r.Height - 2);
+            float lidY = r.Y + r.Height * 0.38f;
+            g.DrawLine(pen, r.X + 1, lidY, r.X + r.Width - 1, lidY);
+            g.DrawLine(pen, r.X + r.Width / 2f, r.Y + 1, r.X + r.Width / 2f, lidY);
+        }
+
+        // Circle head + ellipse body — represents a customer
+        private static void DrawIconPerson(Graphics g, Rectangle r, Color c)
+        {
+            using var brush = new SolidBrush(c);
+            float headD = r.Width * 0.50f;
+            g.FillEllipse(brush, r.X + (r.Width - headD) / 2f, r.Y, headD, headD);
+            float bw = r.Width * 0.85f;
+            float bh = r.Height * 0.44f;
+            g.FillEllipse(brush, r.X + (r.Width - bw) / 2f, r.Bottom - bh, bw, bh);
+        }
+
+        // Filled triangle with white exclamation — represents a warning
+        private static void DrawIconWarning(Graphics g, Rectangle r, Color c)
+        {
+            using var brush = new SolidBrush(c);
+            PointF[] tri = {
+                new PointF(r.X + r.Width / 2f, r.Y),
+                new PointF(r.Right, r.Bottom),
+                new PointF(r.X, r.Bottom),
+            };
+            g.FillPolygon(brush, tri);
+
+            using var wb = new SolidBrush(Color.White);
+            float cx = r.X + r.Width / 2f - 1.5f;
+            g.FillRectangle(wb, cx, r.Y + r.Height * 0.30f, 3f, r.Height * 0.33f);
+            g.FillEllipse(wb, cx, r.Bottom - r.Height * 0.22f, 3f, 3f);
         }
 
         private void ViewTongQuan_Load(object? sender, EventArgs e)
@@ -98,34 +236,50 @@ namespace dosi
 
         private void LoadHistory()
         {
+            flpHistory.SuspendLayout();
             flpHistory.Controls.Clear();
             using (var conn = new SqliteConnection(ConnectionString))
             {
                 conn.Open();
                 string sql = @"
-                    SELECT k.ho_ten, nx.ngay_tao, s.ten_sp 
-                    FROM NhapXuat nx 
-                    JOIN Khach k ON nx.KHACH_id = k.id 
-                    JOIN SanPham s ON nx.SAPHAM_id = s.id 
-                    WHERE nx.loai_giao_dich = 'Xuat' 
-                    ORDER BY nx.ngay_tao DESC LIMIT 10";
+                    SELECT
+                        k.ho_ten AS HoTen,
+                        k.id AS KhachId,
+                        nx.ngay_tao AS NgayTao,
+                        SUM(nx.so_luong) AS TongSoLuong,
+                        SUM(nx.so_luong * sp.gia_ban) AS TongTien
+                    FROM NhapXuat nx
+                    JOIN Khach k ON nx.KHACH_id = k.id
+                    JOIN SanPham sp ON nx.SAPHAM_id = sp.id
+                    WHERE nx.loai_giao_dich = 'Xuat'
+                    GROUP BY COALESCE(CAST(nx.hoadon_id AS TEXT), nx.KHACH_id || '_' || nx.ngay_tao)
+                    ORDER BY nx.ngay_tao DESC
+                    LIMIT 10";
 
-                var activities = conn.Query(sql).ToList();
+                var invoices = conn.Query(sql).ToList();
+                int cardWidth = Math.Max(flpHistory.ClientSize.Width - flpHistory.Padding.Horizontal, 300);
 
-                foreach (var act in activities)
+                foreach (var inv in invoices)
                 {
-                    Label lbl = new Label();
-                    lbl.AutoSize = false;
-                    lbl.Size = new Size(flpHistory.Width - 40, 35);
-                    lbl.Text = "  •  " + act.ho_ten + " đã mua " + act.ten_sp + " (" + act.ngay_tao + ")";
-                    lbl.Font = new Font("Segoe UI", 10F);
-                    lbl.ForeColor = Color.FromArgb(71, 85, 105);
-                    lbl.TextAlign = ContentAlignment.MiddleLeft;
+                    int khachId = Convert.ToInt32(inv.KhachId);
+                    int tongSoLuong = Convert.ToInt32(inv.TongSoLuong ?? 0);
+                    decimal tongTien = Convert.ToDecimal(inv.TongTien ?? 0);
 
-                    flpHistory.Controls.Add(lbl);
+                    var card = new TheHoatDong();
+                    card.Width = cardWidth;
+                    card.LayDuLieu(
+                        inv.HoTen?.ToString() ?? "",
+                        inv.NgayTao?.ToString() ?? "",
+                        tongSoLuong,
+                        tongTien,
+                        khachId);
+                    card.OnSelect = () => (this.FindForm() as Form1)?.MoTrangKhachHang(khachId);
+                    flpHistory.Controls.Add(card);
                 }
             }
+            flpHistory.ResumeLayout();
         }
+
 
         private void lblTitle4_Click(object sender, EventArgs e)
         {

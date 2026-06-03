@@ -18,7 +18,9 @@
         private void InitializeComponent()
         {
             lblMa = new Label();
-            txt_MaSP = new TextBox();
+            lbl_MaSPValue = new Label();
+            lblPhanLoai = new Label();
+            cbo_PhanLoai = new ComboBox();
             lblTen = new Label();
             txt_TenSP = new TextBox();
             lblGia = new Label();
@@ -30,120 +32,144 @@
             btn_Xoa = new Button();
             ((System.ComponentModel.ISupportInitialize)pic_HinhSP).BeginInit();
             SuspendLayout();
-            // 
+            //
             // lblMa
-            // 
+            //
             lblMa.Location = new Point(20, 20);
             lblMa.Name = "lblMa";
             lblMa.Size = new Size(100, 20);
             lblMa.TabIndex = 10;
             lblMa.Text = "Mã sản phẩm:";
-            // 
-            // txt_MaSP
-            // 
-            txt_MaSP.Location = new Point(20, 45);
-            txt_MaSP.Name = "txt_MaSP";
-            txt_MaSP.Size = new Size(250, 27);
-            txt_MaSP.TabIndex = 9;
-            // 
+            //
+            // lbl_MaSPValue
+            //
+            lbl_MaSPValue.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
+            lbl_MaSPValue.ForeColor = Color.FromArgb(99, 102, 241);
+            lbl_MaSPValue.Location = new Point(20, 42);
+            lbl_MaSPValue.Name = "lbl_MaSPValue";
+            lbl_MaSPValue.Size = new Size(250, 24);
+            lbl_MaSPValue.TabIndex = 13;
+            //
+            // lblPhanLoai
+            //
+            lblPhanLoai.Location = new Point(20, 80);
+            lblPhanLoai.Name = "lblPhanLoai";
+            lblPhanLoai.Size = new Size(100, 20);
+            lblPhanLoai.TabIndex = 11;
+            lblPhanLoai.Text = "Phân loại:";
+            //
+            // cbo_PhanLoai
+            //
+            cbo_PhanLoai.BackColor = Color.FromArgb(248, 250, 252);
+            cbo_PhanLoai.DropDownStyle = ComboBoxStyle.DropDownList;
+            cbo_PhanLoai.FlatStyle = FlatStyle.Flat;
+            cbo_PhanLoai.Font = new Font("Segoe UI", 10F);
+            cbo_PhanLoai.ForeColor = Color.FromArgb(15, 23, 42);
+            cbo_PhanLoai.Location = new Point(20, 103);
+            cbo_PhanLoai.Name = "cbo_PhanLoai";
+            cbo_PhanLoai.Size = new Size(250, 27);
+            cbo_PhanLoai.TabIndex = 12;
+            //
             // lblTen
-            // 
-            lblTen.Location = new Point(20, 85);
+            //
+            lblTen.Location = new Point(20, 143);
             lblTen.Name = "lblTen";
             lblTen.Size = new Size(100, 20);
             lblTen.TabIndex = 8;
             lblTen.Text = "Tên sản phẩm:";
-            // 
+            //
             // txt_TenSP
-            // 
-            txt_TenSP.Location = new Point(20, 110);
+            //
+            txt_TenSP.Location = new Point(20, 166);
             txt_TenSP.Name = "txt_TenSP";
             txt_TenSP.Size = new Size(250, 27);
             txt_TenSP.TabIndex = 7;
-            // 
+            //
             // lblGia
-            // 
-            lblGia.Location = new Point(20, 150);
+            //
+            lblGia.Location = new Point(20, 206);
             lblGia.Name = "lblGia";
             lblGia.Size = new Size(100, 20);
             lblGia.TabIndex = 6;
             lblGia.Text = "Giá bán (đ):";
-            // 
+            //
             // txt_GiaBan
-            // 
-            txt_GiaBan.Location = new Point(20, 175);
+            //
+            txt_GiaBan.Location = new Point(20, 229);
             txt_GiaBan.Name = "txt_GiaBan";
             txt_GiaBan.Size = new Size(250, 27);
             txt_GiaBan.TabIndex = 5;
-            // 
+            //
             // lblSL
-            // 
-            lblSL.Location = new Point(20, 215);
+            //
+            lblSL.Location = new Point(20, 269);
             lblSL.Name = "lblSL";
             lblSL.Size = new Size(100, 20);
             lblSL.TabIndex = 4;
             lblSL.Text = "Số lượng tồn:";
-            // 
+            //
             // txt_SoLuong
-            // 
-            txt_SoLuong.Location = new Point(20, 240);
+            //
+            txt_SoLuong.Location = new Point(20, 292);
             txt_SoLuong.Name = "txt_SoLuong";
             txt_SoLuong.Size = new Size(250, 27);
             txt_SoLuong.TabIndex = 3;
-            // 
+            //
             // pic_HinhSP
-            // 
+            //
             pic_HinhSP.BackColor = Color.Gainsboro;
             pic_HinhSP.BorderStyle = BorderStyle.FixedSingle;
             pic_HinhSP.Cursor = Cursors.Hand;
-            pic_HinhSP.Location = new Point(290, 45);
+            pic_HinhSP.Location = new Point(290, 20);
             pic_HinhSP.Name = "pic_HinhSP";
             pic_HinhSP.Size = new Size(220, 222);
             pic_HinhSP.SizeMode = PictureBoxSizeMode.Zoom;
             pic_HinhSP.TabIndex = 2;
             pic_HinhSP.TabStop = false;
             pic_HinhSP.Click += pic_HinhSP_Click;
-            // 
+            //
             // btn_Luu
-            // 
+            //
             btn_Luu.BackColor = Color.LightGreen;
             btn_Luu.FlatStyle = FlatStyle.Flat;
-            btn_Luu.Location = new Point(20, 290);
+            btn_Luu.Location = new Point(20, 340);
             btn_Luu.Name = "btn_Luu";
             btn_Luu.Size = new Size(230, 45);
             btn_Luu.TabIndex = 1;
             btn_Luu.Text = "Lưu thay đổi";
             btn_Luu.UseVisualStyleBackColor = false;
             btn_Luu.Click += btn_Luu_Click;
-            // 
+            //
             // btn_Xoa
-            // 
+            //
             btn_Xoa.BackColor = Color.Tomato;
             btn_Xoa.FlatStyle = FlatStyle.Flat;
             btn_Xoa.ForeColor = Color.White;
-            btn_Xoa.Location = new Point(280, 290);
+            btn_Xoa.Location = new Point(280, 340);
             btn_Xoa.Name = "btn_Xoa";
             btn_Xoa.Size = new Size(230, 45);
             btn_Xoa.TabIndex = 0;
             btn_Xoa.Text = "Xóa sản phẩm";
             btn_Xoa.UseVisualStyleBackColor = false;
             btn_Xoa.Click += btn_Xoa_Click;
-            // 
+            //
             // SuaSanPhamForm
-            // 
+            //
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(540, 360);
+            ClientSize = new Size(540, 405);
             Controls.Add(btn_Xoa);
             Controls.Add(btn_Luu);
             Controls.Add(pic_HinhSP);
+            Controls.Add(cbo_PhanLoai);
+            Controls.Add(lblPhanLoai);
             Controls.Add(txt_SoLuong);
             Controls.Add(lblSL);
             Controls.Add(txt_GiaBan);
             Controls.Add(lblGia);
             Controls.Add(txt_TenSP);
             Controls.Add(lblTen);
-            Controls.Add(txt_MaSP);
+            Controls.Add(lbl_MaSPValue);
             Controls.Add(lblMa);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
@@ -159,7 +185,9 @@
         #endregion
 
         private Label lblMa;
-        private TextBox txt_MaSP;
+        private Label lbl_MaSPValue;
+        private Label lblPhanLoai;
+        private ComboBox cbo_PhanLoai;
         private Label lblTen;
         private TextBox txt_TenSP;
         private Label lblGia;

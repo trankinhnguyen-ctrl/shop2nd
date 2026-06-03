@@ -29,7 +29,7 @@ namespace dosi
 
         private void SetupButtonHoverEffects()
         {
-            ReaLTaiizor.Controls.HopeButton[] menus = { btnTongQuan, btnKhoHang, btnKhachHang, btnGiaoDich };
+            ReaLTaiizor.Controls.HopeButton[] menus = { btnTongQuan, btnKhoHang, btnKhachHang, btnGiaoDich, btnPhanTich };
             foreach (var btn in menus)
             {
                 btn.MouseEnter += (s, e) =>
@@ -63,7 +63,7 @@ namespace dosi
 
         private void UpdateMenuUI(ReaLTaiizor.Controls.HopeButton activeBtn)
         {
-            ReaLTaiizor.Controls.HopeButton[] menus = { btnTongQuan, btnKhoHang, btnKhachHang, btnGiaoDich };
+            ReaLTaiizor.Controls.HopeButton[] menus = { btnTongQuan, btnKhoHang, btnKhachHang, btnGiaoDich, btnPhanTich };
             foreach (var btn in menus)
             {
                 btn.PrimaryColor = Color.White;
@@ -80,6 +80,7 @@ namespace dosi
             else if (activeBtn == btnKhoHang)   lblPageTitle.Text = "Kho hàng";
             else if (activeBtn == btnKhachHang) lblPageTitle.Text = "Khách hàng";
             else if (activeBtn == btnGiaoDich)  lblPageTitle.Text = "Giao dịch";
+            else if (activeBtn == btnPhanTich)  lblPageTitle.Text = "Phân tích";
         }
 
         private void MoTrangTongQuan()
@@ -108,11 +109,26 @@ namespace dosi
             UpdateMenuUI(btnKhachHang);
         }
 
+        public void MoTrangKhachHang(int khachId)
+        {
+            ViewKhachHang uc = new ViewKhachHang();
+            addUserControl(uc);
+            UpdateMenuUI(btnKhachHang);
+            uc.ChonKhachHangTheoId(khachId);
+        }
+
         private void btnGiaoDich_Click(object sender, EventArgs e)
         {
             ViewGiaoDich uc = new ViewGiaoDich();
             addUserControl(uc);
             UpdateMenuUI(btnGiaoDich);
+        }
+
+        private void btnPhanTich_Click(object sender, EventArgs e)
+        {
+            ViewPhanTich uc = new ViewPhanTich();
+            addUserControl(uc);
+            UpdateMenuUI(btnPhanTich);
         }
 
         private void picTongQuan_Click(object sender, EventArgs e)

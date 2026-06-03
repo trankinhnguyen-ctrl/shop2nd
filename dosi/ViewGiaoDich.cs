@@ -30,11 +30,11 @@ namespace dosi
         {
             InitializeComponent();
 
-            // Kích hoạt Double-Buffered chống nhấp nháy khi render danh sách sản phẩm
+            
             this.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer, true);
 
             KhoiTaoGioHang();
-            StyleCartDataGridView(); // Định hình giao diện phẳng hiện đại cho giỏ hàng
+            StyleCartDataGridView();
 
             this.Load += ViewGiaoDich_Load;
             this.Resize += (s, e) => { LoadSanPham(txtSearchProduct.Text); };
@@ -162,6 +162,16 @@ namespace dosi
                         }
 
                         string thoiGianTao = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                        string maHoaDon = "HD" + DateTime.Now.ToString("yyyyMMddHHmmss");
+
+                        decimal tongTienHD = gioHang.AsEnumerable()
+                            .Where(r => r.RowState != DataRowState.Deleted)
+                            .Sum(r => Convert.ToDecimal(r["SoLuong"]) * Convert.ToDecimal(r["DonGia"]));
+
+                        long hoaDonId = conn.ExecuteScalar<long>(
+                            "INSERT INTO HoaDon (ma_hd, KHACH_id, ngay_tao, tong_tien) VALUES (@ma, @khId, @ngay, @tong); SELECT last_insert_rowid();",
+                            new { ma = maHoaDon, khId, ngay = thoiGianTao, tong = tongTienHD },
+                            transaction: trans);
 
                         foreach (DataRow row in gioHang.Rows)
                         {
@@ -178,15 +188,16 @@ namespace dosi
                             if (sanPhamInfo == null) throw new Exception("Không tìm thấy sản phẩm trên hệ thống: " + maSP);
 
                             conn.Execute(
-                                @"INSERT INTO NhapXuat (SAPHAM_id, KHACH_id, loai_giao_dich, so_luong, ngay_tao, ghi_chu) 
-                                  VALUES (@spId, @khId, 'Xuat', @sl, @ngay, @note)",
+                                @"INSERT INTO NhapXuat (SAPHAM_id, KHACH_id, loai_giao_dich, so_luong, ngay_tao, ghi_chu, hoadon_id)
+                                  VALUES (@spId, @khId, 'Xuat', @sl, @ngay, @note, @hdId)",
                                 new
                                 {
                                     spId = sanPhamInfo.id,
                                     khId = khId,
                                     sl = slBan,
                                     ngay = thoiGianTao,
-                                    note = "Bán hàng trực tiếp: " + row["TenSP"]
+                                    note = "Bán hàng trực tiếp: " + row["TenSP"],
+                                    hdId = hoaDonId
                                 },
                                 transaction: trans);
 
@@ -374,8 +385,11 @@ namespace dosi
                 conn.Open();
                 conn.Execute(@"CREATE TABLE IF NOT EXISTS PhanLoai (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    name TEXT NOT NULL
+                    ten TEXT NOT NULL,
+                    ma TEXT NOT NULL
                 )");
+                try { conn.Execute("ALTER TABLE PhanLoai ADD COLUMN ten TEXT"); } catch { }
+                try { conn.Execute("ALTER TABLE PhanLoai ADD COLUMN ma TEXT"); } catch { }
                 try { conn.Execute("ALTER TABLE SanPham ADD COLUMN phanloai_id INTEGER"); } catch { }
             }
         }
@@ -400,7 +414,7 @@ namespace dosi
                 using (var conn = new SqliteConnection(ConnectionString))
                 {
                     conn.Open();
-                    var list = conn.Query("SELECT id, name AS Ten FROM PhanLoai ORDER BY id").ToList();
+                    var list = conn.Query("SELECT id, ten AS Ten FROM PhanLoai ORDER BY id").ToList();
                     for (int i = 0; i < list.Count; i++)
                     {
                         int id = (int)(long)list[i].id;
@@ -437,45 +451,46 @@ namespace dosi
             btn.Width = TextRenderer.MeasureText(text, btn.Font).Width + 28;
             btn.FlatStyle = FlatStyle.Flat;
             btn.FlatAppearance.BorderSize = 0;
-            btn.BackColor = selected ? color : Color.White;
+            btn.BackColor = Color.White;
             btn.ForeColor = selected ? Color.White : color;
             btn.Cursor = Cursors.Hand;
-            btn.Margin = new Padding(0, 0, 8, 0);
+            btn.Margin = new Padding(0, 4, 8, 4);
             btn.UseVisualStyleBackColor = false;
 
-            int r = btn.Height / 2;
-            using (var path = new GraphicsPath())
+            btn.Paint += (s, e) =>
             {
-                path.StartFigure();
-                path.AddArc(0, 0, r * 2, r * 2, 180, 90);
-                path.AddArc(btn.Width - r * 2 - 1, 0, r * 2, r * 2, 270, 90);
-                path.AddArc(btn.Width - r * 2 - 1, btn.Height - r * 2 - 1, r * 2, r * 2, 0, 90);
-                path.AddArc(0, btn.Height - r * 2 - 1, r * 2, r * 2, 90, 90);
-                path.CloseFigure();
-                btn.Region = new Region(path);
-            }
+                var b = (Button)s!;
+                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
-            // WinForms FlatStyle borders don't follow Region clipping — draw only the outline
-            if (!selected)
-            {
-                btn.Paint += (s, e) =>
+                Color parentBg = b.Parent?.BackColor ?? Color.FromArgb(248, 250, 252);
+                using (var bgBrush = new SolidBrush(parentBg))
+                    e.Graphics.FillRectangle(bgBrush, b.ClientRectangle);
+
+                const int inset = 1;
+                int diam = b.Height - inset * 2 - 1;
+                using (var p = new GraphicsPath())
                 {
-                    var b = (Button)s!;
-                    e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-                    int bR = b.Height / 2;
-                    using (var p = new GraphicsPath())
+                    p.AddArc(inset, inset, diam, diam, 90, 180);
+                    p.AddArc(b.Width - inset - diam - 1, inset, diam, diam, 270, 180);
+                    p.CloseFigure();
+
+                    if (selected)
                     {
-                        p.StartFigure();
-                        p.AddArc(0, 0, bR * 2, bR * 2, 180, 90);
-                        p.AddArc(b.Width - bR * 2 - 1, 0, bR * 2, bR * 2, 270, 90);
-                        p.AddArc(b.Width - bR * 2 - 1, b.Height - bR * 2 - 1, bR * 2, bR * 2, 0, 90);
-                        p.AddArc(0, b.Height - bR * 2 - 1, bR * 2, bR * 2, 90, 90);
-                        p.CloseFigure();
+                        using (var brush = new SolidBrush(color))
+                            e.Graphics.FillPath(brush, p);
+                    }
+                    else
+                    {
+                        using (var brush = new SolidBrush(Color.White))
+                            e.Graphics.FillPath(brush, p);
                         using (var pen = new Pen(color, 1.5f))
                             e.Graphics.DrawPath(pen, p);
                     }
-                };
-            }
+                }
+
+                TextRenderer.DrawText(e.Graphics, b.Text, b.Font, b.ClientRectangle,
+                    b.ForeColor, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+            };
 
             return btn;
         }
@@ -540,7 +555,6 @@ namespace dosi
             }
             else
             {
-                // SỬA LỖI: Gán trực tiếp giá bán sp.GiaBan thực tế từ DB thay vì số cứng 100000
                 gioHang.Rows.Add(sp.MaSP, sp.TenSP, 1, sp.GiaBan);
             }
             TinhTongTien();

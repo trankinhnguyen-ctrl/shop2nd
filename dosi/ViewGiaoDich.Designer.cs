@@ -50,7 +50,7 @@
             splitMain.Location = new Point(0, 0);
             splitMain.Name = "splitMain";
             splitMain.Size = new Size(1100, 700);
-            splitMain.SplitterDistance = 750; // Tối ưu lại khoảng cách mặc định cho không gian bán hàng rộng rãi
+            splitMain.SplitterDistance = 750;
             splitMain.TabIndex = 0;
             // splitMain.Panel1 (Bên trái: Tìm kiếm & Danh sách sản phẩm)
             splitMain.Panel1.Controls.Add(flpProducts);
@@ -66,17 +66,16 @@
             panelSearch.Dock = DockStyle.Top;
             panelSearch.Location = new Point(12, 12);
             panelSearch.Name = "panelSearch";
-            panelSearch.Size = new Size(732, 107);
+            panelSearch.Size = new Size(732, 112);
             panelSearch.TabIndex = 0;
 
             // --- flpCategory ---
-            flpCategory.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
             flpCategory.AutoScroll = true;
             flpCategory.BackColor = Color.FromArgb(248, 250, 252);
-            flpCategory.Location = new Point(0, 55);
+            flpCategory.Dock = DockStyle.Bottom;
             flpCategory.Name = "flpCategory";
             flpCategory.Padding = new Padding(0, 8, 0, 8);
-            flpCategory.Size = new Size(732, 52);
+            flpCategory.Size = new Size(732, 64);
             flpCategory.TabIndex = 1;
             flpCategory.WrapContents = false;
 
@@ -85,13 +84,13 @@
             txtSearchProduct.Font = new Font("Segoe UI", 11F);
             txtSearchProduct.Location = new Point(0, 10);
             txtSearchProduct.Name = "txtSearchProduct";
-            txtSearchProduct.PlaceholderText = "Tìm nhanh tên hoặc mã sản phẩm để bán...";
+            txtSearchProduct.PlaceholderText = "Tìm nhanh tên hoặc mã sản phẩm";
             txtSearchProduct.Size = new Size(732, 32);
             txtSearchProduct.TabIndex = 0;
 
             // --- flpProducts ---
             flpProducts.AutoScroll = true;
-            flpProducts.BackColor = Color.FromArgb(248, 250, 252); // Đổi sang màu nền xám Slate cực nhẹ hiện đại
+            flpProducts.BackColor = Color.FromArgb(248, 250, 252);
             flpProducts.Dock = DockStyle.Fill;
             flpProducts.Location = new Point(12, 67);
             flpProducts.Name = "flpProducts";

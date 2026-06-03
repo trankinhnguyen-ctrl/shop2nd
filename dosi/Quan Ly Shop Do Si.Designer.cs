@@ -22,6 +22,8 @@ namespace dosi
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             panelSidebar = new Panel();
+            btnPhanTich = new ReaLTaiizor.Controls.HopeButton();
+            picPhanTich = new PictureBox();
             btnGiaoDich = new ReaLTaiizor.Controls.HopeButton();
             picGiaoDich = new PictureBox();
             btnKhachHang = new ReaLTaiizor.Controls.HopeButton();
@@ -39,6 +41,8 @@ namespace dosi
             panelTopBar = new Panel();
             lblPageTitle = new Label();
             panelSidebar.SuspendLayout();
+            btnPhanTich.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)picPhanTich).BeginInit();
             btnGiaoDich.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)picGiaoDich).BeginInit();
             btnKhachHang.SuspendLayout();
@@ -49,7 +53,6 @@ namespace dosi
             ((System.ComponentModel.ISupportInitialize)picTongQuan).BeginInit();
             ((System.ComponentModel.ISupportInitialize)picLogo).BeginInit();
             panelMain.SuspendLayout();
-            panelContent.SuspendLayout();
             panelTopBar.SuspendLayout();
             SuspendLayout();
             // 
@@ -57,6 +60,7 @@ namespace dosi
             // 
             panelSidebar.BackColor = Color.White;
             panelSidebar.BackgroundImageLayout = ImageLayout.Center;
+            panelSidebar.Controls.Add(btnPhanTich);
             panelSidebar.Controls.Add(btnGiaoDich);
             panelSidebar.Controls.Add(btnKhachHang);
             panelSidebar.Controls.Add(btnKhoHang);
@@ -69,6 +73,39 @@ namespace dosi
             panelSidebar.Name = "panelSidebar";
             panelSidebar.Size = new Size(250, 700);
             panelSidebar.TabIndex = 0;
+            // 
+            // btnPhanTich
+            // 
+            btnPhanTich.BorderColor = Color.FromArgb(220, 223, 230);
+            btnPhanTich.ButtonType = ReaLTaiizor.Util.HopeButtonType.Primary;
+            btnPhanTich.Controls.Add(picPhanTich);
+            btnPhanTich.Cursor = Cursors.Hand;
+            btnPhanTich.DangerColor = Color.FromArgb(245, 108, 108);
+            btnPhanTich.DefaultColor = Color.FromArgb(255, 255, 255);
+            btnPhanTich.Font = new Font("Segoe UI", 12F);
+            btnPhanTich.HoverTextColor = Color.FromArgb(51, 65, 85);
+            btnPhanTich.InfoColor = Color.FromArgb(144, 147, 153);
+            btnPhanTich.Location = new Point(15, 340);
+            btnPhanTich.Name = "btnPhanTich";
+            btnPhanTich.PrimaryColor = Color.White;
+            btnPhanTich.Size = new Size(220, 50);
+            btnPhanTich.SuccessColor = Color.FromArgb(103, 194, 58);
+            btnPhanTich.TabIndex = 5;
+            btnPhanTich.Text = "          Phân tích";
+            btnPhanTich.TextColor = Color.FromArgb(51, 65, 85);
+            btnPhanTich.WarningColor = Color.FromArgb(230, 162, 60);
+            btnPhanTich.Click += btnPhanTich_Click;
+            // 
+            // picPhanTich
+            // 
+            picPhanTich.BackColor = Color.Transparent;
+            picPhanTich.Image = (Image)resources.GetObject("picPhanTich.Image");
+            picPhanTich.Location = new Point(15, 13);
+            picPhanTich.Name = "picPhanTich";
+            picPhanTich.Size = new Size(24, 24);
+            picPhanTich.SizeMode = PictureBoxSizeMode.Zoom;
+            picPhanTich.TabIndex = 8;
+            picPhanTich.TabStop = false;
             // 
             // btnGiaoDich
             // 
@@ -168,9 +205,9 @@ namespace dosi
             picKhoHang.SizeMode = PictureBoxSizeMode.Zoom;
             picKhoHang.TabIndex = 5;
             picKhoHang.TabStop = false;
-            //
+            // 
             // btnTongQuan
-            //
+            // 
             btnTongQuan.BorderColor = Color.FromArgb(220, 223, 230);
             btnTongQuan.ButtonType = ReaLTaiizor.Util.HopeButtonType.Primary;
             btnTongQuan.Controls.Add(picTongQuan);
@@ -304,6 +341,8 @@ namespace dosi
             Text = "Hệ thống Quản lý 2Hand Store";
             panelSidebar.ResumeLayout(false);
             panelSidebar.PerformLayout();
+            btnPhanTich.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)picPhanTich).EndInit();
             btnGiaoDich.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)picGiaoDich).EndInit();
             btnKhachHang.ResumeLayout(false);
@@ -314,7 +353,6 @@ namespace dosi
             ((System.ComponentModel.ISupportInitialize)picTongQuan).EndInit();
             ((System.ComponentModel.ISupportInitialize)picLogo).EndInit();
             panelMain.ResumeLayout(false);
-            panelContent.ResumeLayout(false);
             panelTopBar.ResumeLayout(false);
             ResumeLayout(false);
         }
@@ -326,6 +364,7 @@ namespace dosi
         private ReaLTaiizor.Controls.HopeButton btnKhachHang;
         private ReaLTaiizor.Controls.HopeButton btnTongQuan;
         private ReaLTaiizor.Controls.HopeButton btnGiaoDich;
+        private ReaLTaiizor.Controls.HopeButton btnPhanTich;
         private System.Windows.Forms.Panel panelMain;
         private System.Windows.Forms.Panel panelTopBar;
         private System.Windows.Forms.Panel panelShadow;
@@ -338,5 +377,6 @@ namespace dosi
         private System.Windows.Forms.PictureBox picKhoHang;
         private System.Windows.Forms.PictureBox picKhachHang;
         private System.Windows.Forms.PictureBox picGiaoDich;
+        private System.Windows.Forms.PictureBox picPhanTich;
     }
 }

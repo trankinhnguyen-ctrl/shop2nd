@@ -9,6 +9,7 @@ namespace dosi
     public partial class TheSanPham : UserControl
     {
         public Action? OnSelect { get; set; }
+        private bool _isOutOfStock = false;
 
         public TheSanPham()
         {
@@ -49,8 +50,9 @@ namespace dosi
                 // Cắt vùng hiển thị của UserControl theo hình bo góc
                 this.Region = new Region(path);
 
-                // Vẽ đường viền mảnh tinh tế bao quanh thẻ
-                using (Pen borderPen = new Pen(Color.FromArgb(226, 232, 240), 1.5f))
+                Color borderColor = _isOutOfStock ? Color.FromArgb(239, 68, 68) : Color.FromArgb(226, 232, 240);
+                float borderWidth = _isOutOfStock ? 3f : 1.5f;
+                using (Pen borderPen = new Pen(borderColor, borderWidth))
                 {
                     e.Graphics.DrawPath(borderPen, path);
                 }
@@ -77,6 +79,7 @@ namespace dosi
 
         public void LayDuLieu(SanPham sp)
         {
+            _isOutOfStock = sp.SoLuong <= 0;
             TenSP.Text = sp.TenSP;
             MaSP.Text = sp.MaSP;
             SL.Text = "Tồn: " + sp.SoLuong;

@@ -1,4 +1,6 @@
-﻿using System.Drawing;
+﻿using Dapper;
+using Microsoft.Data.Sqlite;
+using System.Drawing;
 using System.IO;
 
 namespace dosi
@@ -6,6 +8,7 @@ namespace dosi
     public partial class SuaSanPhamForm : Form
     {
         private SanPham _sp;
+        private string ConnectionString = "Data Source=QuanLyKho.db";
 
         public SuaSanPhamForm(SanPham sp)
         {
@@ -16,7 +19,7 @@ namespace dosi
 
         private void HienThiDuLieu()
         {
-            txt_MaSP.Text = _sp.MaSP;
+            lbl_MaSPValue.Text = _sp.MaSP;
             txt_TenSP.Text = _sp.TenSP;
             txt_GiaBan.Text = _sp.GiaBan.ToString("N0");
             txt_SoLuong.Text = _sp.SoLuong.ToString();
@@ -75,7 +78,6 @@ namespace dosi
 
         private void btn_Luu_Click(object? sender, EventArgs e)
         {
-            _sp.MaSP = txt_MaSP.Text;
             _sp.TenSP = txt_TenSP.Text;
 
             string giaText = txt_GiaBan.Text.Replace(",", "").Replace(".", "");
@@ -87,6 +89,8 @@ namespace dosi
             {
                 _sp.HinhAnh = CopyAnhVaoProject(path);
             }
+
+            _sp.PhanLoaiId = (cbo_PhanLoai.SelectedItem as PhanLoaiItem)?.Id ?? 0;
 
             _sp.CapNhatDatabase();
             this.DialogResult = DialogResult.OK;
@@ -106,7 +110,25 @@ namespace dosi
 
         private void SuaSanPhamForm_Load(object sender, EventArgs e)
         {
+            LoadPhanLoaiDropdown();
+        }
 
+        private void LoadPhanLoaiDropdown()
+        {
+            cbo_PhanLoai.Items.Clear();
+            try
+            {
+                using var conn = new SqliteConnection(ConnectionString);
+                conn.Open();
+                var list = conn.Query<PhanLoaiItem>("SELECT id AS Id, ten AS Ten, ma AS Ma FROM PhanLoai ORDER BY id").ToList();
+                foreach (var item in list)
+                    cbo_PhanLoai.Items.Add(item);
+            }
+            catch { }
+
+            PhanLoaiItem? toSelect = cbo_PhanLoai.Items.OfType<PhanLoaiItem>().FirstOrDefault(p => p.Id == _sp.PhanLoaiId);
+            if (cbo_PhanLoai.Items.Count > 0)
+                cbo_PhanLoai.SelectedItem = toSelect ?? cbo_PhanLoai.Items[0];
         }
     }
 }
