@@ -16,12 +16,15 @@ namespace dosi
         private DateTimePicker dtpFrom = null!;
         private DateTimePicker dtpTo = null!;
         private Label lblKpiRevenue = null!;
+        private Label lblKpiProfit = null!;
         private Label lblKpiOrders = null!;
         private Label lblKpiItems = null!;
         private Chart chartRevenue = null!;
         private Panel panelChartContainer = null!;
         private DataGridView dgvTopProducts = null!;
         private DataGridView dgvTopCustomers = null!;
+        private Button _btnTatCa = null!;
+        private bool _tatCa = false;
 
         public ViewPhanTich()
         {
@@ -117,14 +120,41 @@ namespace dosi
                 BackColor = Color.FromArgb(99, 102, 241),
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat,
-                Size = new Size(90, 28),
+                Size = new Size(80, 28),
                 Location = new Point(437, 40),
                 Cursor = Cursors.Hand,
             };
             btnFilter.FlatAppearance.BorderSize = 0;
-            btnFilter.Click += (s, e) => TaiDuLieu();
+            btnFilter.Click += (s, e) =>
+            {
+                _tatCa = false;
+                _btnTatCa.BackColor = Color.White;
+                _btnTatCa.ForeColor = Color.FromArgb(99, 102, 241);
+                TaiDuLieu();
+            };
 
-            panel.Controls.AddRange(new Control[] { lblTitle, lblFrom, dtpFrom, lblTo, dtpTo, btnFilter });
+            _btnTatCa = new Button
+            {
+                Text = "Tất cả",
+                Font = new Font("Segoe UI", 9, FontStyle.Bold),
+                BackColor = Color.White,
+                ForeColor = Color.FromArgb(99, 102, 241),
+                FlatStyle = FlatStyle.Flat,
+                Size = new Size(80, 28),
+                Location = new Point(525, 40),
+                Cursor = Cursors.Hand,
+            };
+            _btnTatCa.FlatAppearance.BorderSize = 1;
+            _btnTatCa.FlatAppearance.BorderColor = Color.FromArgb(99, 102, 241);
+            _btnTatCa.Click += (s, e) =>
+            {
+                _tatCa = true;
+                _btnTatCa.BackColor = Color.FromArgb(99, 102, 241);
+                _btnTatCa.ForeColor = Color.White;
+                TaiDuLieu();
+            };
+
+            panel.Controls.AddRange(new Control[] { lblTitle, lblFrom, dtpFrom, lblTo, dtpTo, btnFilter, _btnTatCa });
             return panel;
         }
 
@@ -133,27 +163,29 @@ namespace dosi
             var tlp = new TableLayoutPanel
             {
                 Dock = DockStyle.Fill,
-                ColumnCount = 3,
+                ColumnCount = 4,
                 RowCount = 1,
                 BackColor = Color.Transparent,
                 Padding = new Padding(0, 0, 0, 10),
                 CellBorderStyle = TableLayoutPanelCellBorderStyle.None,
             };
-            tlp.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33f));
-            tlp.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33f));
-            tlp.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.34f));
+            tlp.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25f));
+            tlp.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25f));
+            tlp.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25f));
+            tlp.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25f));
             tlp.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
 
             var specs = new (string title, string initVal, Color accent)[]
             {
                 ("Doanh Thu", "0 ₫", Color.FromArgb(99, 102, 241)),
-                ("Số Đơn Hàng", "0", Color.FromArgb(16, 185, 129)),
-                ("Sản Phẩm Đã Bán", "0", Color.FromArgb(245, 158, 11)),
+                ("Lợi Nhuận", "0 ₫", Color.FromArgb(16, 185, 129)),
+                ("Số Đơn Hàng", "0", Color.FromArgb(245, 158, 11)),
+                ("Sản Phẩm Đã Bán", "0", Color.FromArgb(239, 68, 68)),
             };
 
-            Label[] kpiLabels = new Label[3];
+            Label[] kpiLabels = new Label[4];
 
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 4; i++)
             {
                 var (title, initVal, accent) = specs[i];
                 int col = i;
@@ -162,7 +194,7 @@ namespace dosi
                 {
                     Dock = DockStyle.Fill,
                     BackColor = Color.White,
-                    Margin = new Padding(col > 0 ? 8 : 0, 0, col < 2 ? 8 : 0, 0),
+                    Margin = new Padding(col > 0 ? 8 : 0, 0, col < 3 ? 8 : 0, 0),
                 };
 
                 var accentStrip = new Panel
@@ -185,7 +217,7 @@ namespace dosi
                 var lblVal = new Label
                 {
                     Text = initVal,
-                    Font = new Font("Segoe UI", 18, FontStyle.Bold),
+                    Font = new Font("Segoe UI", 16, FontStyle.Bold),
                     ForeColor = accent,
                     Dock = DockStyle.Fill,
                     Padding = new Padding(16, 0, 0, 0),
@@ -201,8 +233,9 @@ namespace dosi
             }
 
             lblKpiRevenue = kpiLabels[0];
-            lblKpiOrders = kpiLabels[1];
-            lblKpiItems = kpiLabels[2];
+            lblKpiProfit = kpiLabels[1];
+            lblKpiOrders = kpiLabels[2];
+            lblKpiItems = kpiLabels[3];
             return tlp;
         }
 
@@ -363,8 +396,8 @@ namespace dosi
 
         private void TaiDuLieu()
         {
-            DateTime tuNgay = dtpFrom.Value.Date;
-            DateTime denNgay = dtpTo.Value.Date.AddDays(1);
+            DateTime tuNgay = _tatCa ? new DateTime(1900, 1, 1) : dtpFrom.Value.Date;
+            DateTime denNgay = _tatCa ? new DateTime(2100, 1, 1) : dtpTo.Value.Date.AddDays(1);
 
             using var conn = new SqliteConnection(ConnectionString);
             conn.Open();
@@ -372,24 +405,40 @@ namespace dosi
             decimal tongDoanhThu = conn.ExecuteScalar<decimal>(@"
                 SELECT COALESCE(SUM(nx.so_luong * sp.gia_ban), 0)
                 FROM NhapXuat nx JOIN SanPham sp ON nx.SAPHAM_id = sp.id
+                LEFT JOIN HoaDon hd ON nx.hoadon_id = hd.id
                 WHERE nx.loai_giao_dich = 'Xuat'
-                  AND nx.ngay_tao >= @tuNgay AND nx.ngay_tao < @denNgay",
+                  AND nx.ngay_tao >= @tuNgay AND nx.ngay_tao < @denNgay
+                  AND (nx.hoadon_id IS NULL OR hd.TrangThai != 'DaChinhSua')",
                 new { tuNgay, denNgay });
             lblKpiRevenue.Text = tongDoanhThu.ToString("N0") + " ₫";
 
+            decimal loiNhuan = conn.ExecuteScalar<decimal>(@"
+                SELECT COALESCE(SUM(nx.so_luong * (sp.gia_ban - COALESCE(sp.gia_von, 0))), 0)
+                FROM NhapXuat nx JOIN SanPham sp ON nx.SAPHAM_id = sp.id
+                LEFT JOIN HoaDon hd ON nx.hoadon_id = hd.id
+                WHERE nx.loai_giao_dich = 'Xuat'
+                  AND nx.ngay_tao >= @tuNgay AND nx.ngay_tao < @denNgay
+                  AND (nx.hoadon_id IS NULL OR hd.TrangThai != 'DaChinhSua')",
+                new { tuNgay, denNgay });
+            lblKpiProfit.Text = loiNhuan.ToString("N0") + " ₫";
+
             int tongDon = conn.ExecuteScalar<int>(@"
-                SELECT COUNT(DISTINCT COALESCE(CAST(hoadon_id AS TEXT), CAST(KHACH_id AS TEXT) || '_' || ngay_tao))
-                FROM NhapXuat
-                WHERE loai_giao_dich = 'Xuat'
-                  AND ngay_tao >= @tuNgay AND ngay_tao < @denNgay",
+                SELECT COUNT(DISTINCT COALESCE(CAST(nx.hoadon_id AS TEXT), CAST(nx.KHACH_id AS TEXT) || '_' || nx.ngay_tao))
+                FROM NhapXuat nx
+                LEFT JOIN HoaDon hd ON nx.hoadon_id = hd.id
+                WHERE nx.loai_giao_dich = 'Xuat'
+                  AND nx.ngay_tao >= @tuNgay AND nx.ngay_tao < @denNgay
+                  AND (nx.hoadon_id IS NULL OR hd.TrangThai != 'DaChinhSua')",
                 new { tuNgay, denNgay });
             lblKpiOrders.Text = tongDon.ToString("N0");
 
             int tongSanPham = conn.ExecuteScalar<int>(@"
-                SELECT COALESCE(SUM(so_luong), 0)
-                FROM NhapXuat
-                WHERE loai_giao_dich = 'Xuat'
-                  AND ngay_tao >= @tuNgay AND ngay_tao < @denNgay",
+                SELECT COALESCE(SUM(nx.so_luong), 0)
+                FROM NhapXuat nx
+                LEFT JOIN HoaDon hd ON nx.hoadon_id = hd.id
+                WHERE nx.loai_giao_dich = 'Xuat'
+                  AND nx.ngay_tao >= @tuNgay AND nx.ngay_tao < @denNgay
+                  AND (nx.hoadon_id IS NULL OR hd.TrangThai != 'DaChinhSua')",
                 new { tuNgay, denNgay });
             lblKpiItems.Text = tongSanPham.ToString("N0");
 
@@ -397,8 +446,10 @@ namespace dosi
             var chartRows = conn.Query(@"
                 SELECT DATE(nx.ngay_tao) AS Ngay, SUM(nx.so_luong * sp.gia_ban) AS DoanhThu
                 FROM NhapXuat nx JOIN SanPham sp ON nx.SAPHAM_id = sp.id
+                LEFT JOIN HoaDon hd ON nx.hoadon_id = hd.id
                 WHERE nx.loai_giao_dich = 'Xuat'
                   AND nx.ngay_tao >= @tuNgay AND nx.ngay_tao < @denNgay
+                  AND (nx.hoadon_id IS NULL OR hd.TrangThai != 'DaChinhSua')
                 GROUP BY DATE(nx.ngay_tao)
                 ORDER BY Ngay ASC",
                 new { tuNgay, denNgay }).ToList();
@@ -412,8 +463,10 @@ namespace dosi
             var topProds = conn.Query(@"
                 SELECT sp.ten_sp AS TenSP, SUM(nx.so_luong) AS SoLuong, SUM(nx.so_luong * sp.gia_ban) AS DoanhThu
                 FROM NhapXuat nx JOIN SanPham sp ON nx.SAPHAM_id = sp.id
+                LEFT JOIN HoaDon hd ON nx.hoadon_id = hd.id
                 WHERE nx.loai_giao_dich = 'Xuat'
                   AND nx.ngay_tao >= @tuNgay AND nx.ngay_tao < @denNgay
+                  AND (nx.hoadon_id IS NULL OR hd.TrangThai != 'DaChinhSua')
                 GROUP BY sp.id
                 ORDER BY SoLuong DESC
                 LIMIT 5",
@@ -435,8 +488,10 @@ namespace dosi
                 FROM NhapXuat nx
                 JOIN Khach k ON nx.KHACH_id = k.id
                 JOIN SanPham sp ON nx.SAPHAM_id = sp.id
+                LEFT JOIN HoaDon hd ON nx.hoadon_id = hd.id
                 WHERE nx.loai_giao_dich = 'Xuat'
                   AND nx.ngay_tao >= @tuNgay AND nx.ngay_tao < @denNgay
+                  AND (nx.hoadon_id IS NULL OR hd.TrangThai != 'DaChinhSua')
                 GROUP BY k.id
                 ORDER BY TongChi DESC
                 LIMIT 5",

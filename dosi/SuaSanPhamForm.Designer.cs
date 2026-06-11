@@ -25,6 +25,8 @@
             txt_TenSP = new TextBox();
             lblGia = new Label();
             txt_GiaBan = new TextBox();
+            lblGiaVon = new Label();
+            txt_GiaVon = new TextBox();
             lblSL = new Label();
             txt_SoLuong = new TextBox();
             pic_HinhSP = new PictureBox();
@@ -100,9 +102,24 @@
             txt_GiaBan.Size = new Size(250, 27);
             txt_GiaBan.TabIndex = 5;
             //
+            // lblGiaVon
+            //
+            lblGiaVon.Location = new Point(20, 269);
+            lblGiaVon.Name = "lblGiaVon";
+            lblGiaVon.Size = new Size(100, 20);
+            lblGiaVon.TabIndex = 14;
+            lblGiaVon.Text = "Giá vốn (đ):";
+            //
+            // txt_GiaVon
+            //
+            txt_GiaVon.Location = new Point(20, 292);
+            txt_GiaVon.Name = "txt_GiaVon";
+            txt_GiaVon.Size = new Size(250, 27);
+            txt_GiaVon.TabIndex = 15;
+            //
             // lblSL
             //
-            lblSL.Location = new Point(20, 269);
+            lblSL.Location = new Point(20, 332);
             lblSL.Name = "lblSL";
             lblSL.Size = new Size(100, 20);
             lblSL.TabIndex = 4;
@@ -110,7 +127,7 @@
             //
             // txt_SoLuong
             //
-            txt_SoLuong.Location = new Point(20, 292);
+            txt_SoLuong.Location = new Point(20, 355);
             txt_SoLuong.Name = "txt_SoLuong";
             txt_SoLuong.Size = new Size(250, 27);
             txt_SoLuong.TabIndex = 3;
@@ -122,7 +139,7 @@
             pic_HinhSP.Cursor = Cursors.Hand;
             pic_HinhSP.Location = new Point(290, 20);
             pic_HinhSP.Name = "pic_HinhSP";
-            pic_HinhSP.Size = new Size(220, 222);
+            pic_HinhSP.Size = new Size(220, 280);
             pic_HinhSP.SizeMode = PictureBoxSizeMode.Zoom;
             pic_HinhSP.TabIndex = 2;
             pic_HinhSP.TabStop = false;
@@ -132,7 +149,7 @@
             //
             btn_Luu.BackColor = Color.LightGreen;
             btn_Luu.FlatStyle = FlatStyle.Flat;
-            btn_Luu.Location = new Point(20, 340);
+            btn_Luu.Location = new Point(20, 405);
             btn_Luu.Name = "btn_Luu";
             btn_Luu.Size = new Size(230, 45);
             btn_Luu.TabIndex = 1;
@@ -145,7 +162,7 @@
             btn_Xoa.BackColor = Color.Tomato;
             btn_Xoa.FlatStyle = FlatStyle.Flat;
             btn_Xoa.ForeColor = Color.White;
-            btn_Xoa.Location = new Point(280, 340);
+            btn_Xoa.Location = new Point(280, 405);
             btn_Xoa.Name = "btn_Xoa";
             btn_Xoa.Size = new Size(230, 45);
             btn_Xoa.TabIndex = 0;
@@ -157,7 +174,7 @@
             //
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(540, 405);
+            ClientSize = new Size(540, 470);
             Controls.Add(btn_Xoa);
             Controls.Add(btn_Luu);
             Controls.Add(pic_HinhSP);
@@ -165,6 +182,8 @@
             Controls.Add(lblPhanLoai);
             Controls.Add(txt_SoLuong);
             Controls.Add(lblSL);
+            Controls.Add(txt_GiaVon);
+            Controls.Add(lblGiaVon);
             Controls.Add(txt_GiaBan);
             Controls.Add(lblGia);
             Controls.Add(txt_TenSP);
@@ -192,6 +211,8 @@
         private TextBox txt_TenSP;
         private Label lblGia;
         private TextBox txt_GiaBan;
+        private Label lblGiaVon;
+        private TextBox txt_GiaVon;
         private Label lblSL;
         private TextBox txt_SoLuong;
         private PictureBox pic_HinhSP;

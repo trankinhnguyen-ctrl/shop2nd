@@ -22,6 +22,7 @@ namespace dosi
             lbl_MaSPValue.Text = _sp.MaSP;
             txt_TenSP.Text = _sp.TenSP;
             txt_GiaBan.Text = _sp.GiaBan.ToString("N0");
+            txt_GiaVon.Text = _sp.GiaVon.ToString("N0");
             txt_SoLuong.Text = _sp.SoLuong.ToString();
 
             if (!string.IsNullOrEmpty(_sp.HinhAnh))
@@ -82,6 +83,9 @@ namespace dosi
 
             string giaText = txt_GiaBan.Text.Replace(",", "").Replace(".", "");
             _sp.GiaBan = decimal.TryParse(giaText, out decimal gia) ? gia : 0;
+
+            string giaVonText = txt_GiaVon.Text.Replace(",", "").Replace(".", "");
+            _sp.GiaVon = decimal.TryParse(giaVonText, out decimal giaVon) ? giaVon : 0;
 
             _sp.SoLuong = int.TryParse(txt_SoLuong.Text, out int sl) ? sl : 0;
 

@@ -2,7 +2,6 @@ using Dapper;
 using Microsoft.Data.Sqlite;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
@@ -154,8 +153,11 @@ namespace dosi
                 {
                     conn.Open();
 
-                    int donHangCoHD = conn.ExecuteScalar<int>(
-                        "SELECT COUNT(DISTINCT hoadon_id) FROM NhapXuat WHERE KHACH_id = @id AND loai_giao_dich = 'Xuat' AND hoadon_id IS NOT NULL",
+                    int donHangCoHD = conn.ExecuteScalar<int>(@"
+                        SELECT COUNT(DISTINCT nx.hoadon_id)
+                        FROM NhapXuat nx JOIN HoaDon hd ON nx.hoadon_id = hd.id
+                        WHERE nx.KHACH_id = @id AND nx.loai_giao_dich = 'Xuat'
+                          AND hd.TrangThai != 'DaChinhSua'",
                         new { id = khachId });
 
                     int donHangCu = conn.ExecuteScalar<int>(
@@ -171,7 +173,9 @@ namespace dosi
                             MIN(nx.ngay_tao) AS NgayDau
                         FROM NhapXuat nx
                         JOIN SanPham sp ON nx.SAPHAM_id = sp.id
-                        WHERE nx.KHACH_id = @id AND nx.loai_giao_dich = 'Xuat'";
+                        LEFT JOIN HoaDon hd ON nx.hoadon_id = hd.id
+                        WHERE nx.KHACH_id = @id AND nx.loai_giao_dich = 'Xuat'
+                          AND (nx.hoadon_id IS NULL OR hd.TrangThai != 'DaChinhSua')";
 
                     var stats = conn.QueryFirstOrDefault(sql, new { id = khachId });
 
@@ -221,9 +225,13 @@ namespace dosi
                             sp.ten_sp AS TenSP,
                             nx.so_luong AS SoLuong,
                             sp.gia_ban AS GiaBan,
-                            (nx.so_luong * sp.gia_ban) AS ThanhTien
+                            (nx.so_luong * sp.gia_ban) AS ThanhTien,
+                            COALESCE(hd.ma_hd, '') AS MaHD,
+                            COALESCE(hd.TrangThai, 'HoanThanh') AS TrangThai,
+                            COALESCE(hd.MaHoaDonMoi, '') AS MaHoaDonMoi
                         FROM NhapXuat nx
                         JOIN SanPham sp ON nx.SAPHAM_id = sp.id
+                        LEFT JOIN HoaDon hd ON nx.hoadon_id = hd.id
                         WHERE nx.KHACH_id = @id AND nx.loai_giao_dich = 'Xuat'
                         ORDER BY nx.ngay_tao DESC";
 
@@ -234,12 +242,15 @@ namespace dosi
                         .OrderByDescending(g => g.First().ngay_tao?.ToString() ?? "")
                         .ToList();
 
-                    int cardWidth = Math.Max(flpInvoices.ClientSize.Width - 16, 300);
+                    int cardWidth = Math.Max(flpInvoices.ClientSize.Width - SystemInformation.VerticalScrollBarWidth - 8, 300);
 
                     foreach (var group in groups)
                     {
                         var items = group.ToList();
                         string ngayTao = items[0].ngay_tao?.ToString() ?? "";
+                        string maHD = items[0].MaHD?.ToString() ?? "";
+                        string trangThai = items[0].TrangThai?.ToString() ?? "HoanThanh";
+                        string maHoaDonMoi = items[0].MaHoaDonMoi?.ToString() ?? "";
 
                         int soMon = 0;
                         decimal tongHoaDon = 0;
@@ -249,9 +260,16 @@ namespace dosi
                             tongHoaDon += Convert.ToDecimal((object)(item.ThanhTien ?? 0));
                         }
 
+                        string captureMaHD = maHD;
+                        string captureTrangThai = trangThai;
+                        Action<string>? onEdit = string.IsNullOrEmpty(maHD) ? null
+                            : _ => MoEditHoaDon(captureMaHD, captureTrangThai);
+                        Action<string>? onPrint = string.IsNullOrEmpty(maHD) ? null
+                            : _ => HoaDonPdfService.InHoaDonTheoMa(captureMaHD);
+
                         var card = new TheHoaDon();
                         card.Width = cardWidth;
-                        card.LayDuLieu(ngayTao, soMon, tongHoaDon, items);
+                        card.LayDuLieu(ngayTao, soMon, tongHoaDon, items, maHD, trangThai, maHoaDonMoi, onEdit, onPrint);
                         flpInvoices.Controls.Add(card);
                     }
                 }
@@ -262,6 +280,99 @@ namespace dosi
             }
 
             flpInvoices.ResumeLayout();
+        }
+
+        private void MoEditHoaDon(string maHoaDon, string trangThai)
+        {
+            string msg = trangThai == "DangChinhSua"
+                ? $"Đơn hàng {maHoaDon} đang được chỉnh sửa từ phiên trước.\n\nTiếp tục chỉnh sửa đơn này?"
+                : $"Bạn sắp mở lại đơn hàng {maHoaDon} để chỉnh sửa.\n\n" +
+                  "⚠ Kho hàng sẽ được hoàn lại số lượng của đơn gốc.\n" +
+                  "Sau khi xác nhận thanh toán ở Giao dịch, kho sẽ trừ lại theo đơn mới.\n\n" +
+                  "Tiếp tục?";
+
+            if (MessageBox.Show(msg, "Chỉnh sửa đơn hàng", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                return;
+
+            EditOrderContext? ctx = null;
+
+            try
+            {
+                using var conn = new SqliteConnection(ConnectionString);
+                conn.Open();
+
+                var rows = conn.Query(@"
+                    SELECT sp.ma_sp AS MaSP, sp.ten_sp AS TenSP, nx.so_luong AS SoLuong,
+                           sp.gia_ban AS DonGia, nx.SAPHAM_id AS SanPhamDbId
+                    FROM NhapXuat nx
+                    JOIN SanPham sp ON nx.SAPHAM_id = sp.id
+                    JOIN HoaDon hd ON nx.hoadon_id = hd.id
+                    WHERE hd.ma_hd = @maHD AND nx.loai_giao_dich = 'Xuat'",
+                    new { maHD = maHoaDon }).ToList();
+
+                var khachInfo = conn.QueryFirstOrDefault(@"
+                    SELECT k.so_dien_thoai AS SDT, k.ho_ten AS Ten, k.dia_chi AS DC
+                    FROM HoaDon hd JOIN Khach k ON hd.KHACH_id = k.id
+                    WHERE hd.ma_hd = @maHD", new { maHD = maHoaDon });
+
+                if (khachInfo == null || rows.Count == 0)
+                {
+                    MessageBox.Show("Không tìm thấy dữ liệu đơn hàng!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                if (trangThai != "DangChinhSua")
+                {
+                    using var trans = conn.BeginTransaction();
+                    try
+                    {
+                        foreach (dynamic r in rows)
+                        {
+                            int exists = conn.ExecuteScalar<int>(
+                                "SELECT COUNT(*) FROM SanPham WHERE id = @id",
+                                new { id = (long)r.SanPhamDbId }, transaction: trans);
+                            if (exists == 0) continue;
+
+                            conn.Execute(
+                                "UPDATE SanPham SET so_luong_ton = so_luong_ton + @sl WHERE id = @id",
+                                new { sl = (int)(long)r.SoLuong, id = (long)r.SanPhamDbId },
+                                transaction: trans);
+                        }
+                        conn.Execute("UPDATE HoaDon SET TrangThai = 'DangChinhSua' WHERE ma_hd = @maHD",
+                            new { maHD = maHoaDon }, transaction: trans);
+                        trans.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        trans.Rollback();
+                        MessageBox.Show("Lỗi khi mở đơn hàng: " + ex.Message, "Lỗi hệ thống", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                }
+
+                ctx = new EditOrderContext
+                {
+                    MaHoaDonGoc = maHoaDon,
+                    SoDienThoai = khachInfo.SDT?.ToString() ?? "",
+                    TenKhachHang = khachInfo.Ten?.ToString() ?? "",
+                    DiaChi = khachInfo.DC?.ToString() ?? "",
+                    Items = rows.Select(r => new EditOrderItem
+                    {
+                        MaSP = r.MaSP?.ToString() ?? "",
+                        TenSP = r.TenSP?.ToString() ?? "",
+                        SoLuong = (int)(long)r.SoLuong,
+                        DonGia = Convert.ToDecimal((object)r.DonGia)
+                    }).ToList()
+                };
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (ctx != null)
+                (this.FindForm() as Form1)?.MoTrangGiaoDichVoiEdit(ctx);
         }
 
         public void ChonKhachHangTheoId(int id)
@@ -290,7 +401,7 @@ namespace dosi
                     card.Width = listKhachHang.Width > 50 ? listKhachHang.Width - 25 : 320;
             }
 
-            int invoiceWidth = Math.Max(flpInvoices.ClientSize.Width - 16, 300);
+            int invoiceWidth = Math.Max(flpInvoices.ClientSize.Width - SystemInformation.VerticalScrollBarWidth - 8, 300);
             foreach (Control ctrl in flpInvoices.Controls)
             {
                 if (ctrl is TheHoaDon hoaDon)

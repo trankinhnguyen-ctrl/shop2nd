@@ -33,6 +33,7 @@ namespace dosi
             this.Resize += (s, e) => { LoadSanPham(ThanhTimKiem.Text); };
             pic_HinhSP.Click += pic_HinhSP_Click;
             Tim_bt.Click += Tim_bt_Click;
+            ThanhTimKiem.TextChanged += (s, e) => LoadSanPham(ThanhTimKiem.Text);
             Them_bt.Click += Them_bt_Click;
             Them_bt.Cursor = Cursors.Hand;
             Tim_bt.Cursor = Cursors.Hand;
@@ -41,22 +42,29 @@ namespace dosi
             panelFields.Paint += PanelFields_Paint;
             pic_HinhSP.Paint += Pic_HinhSP_Paint;
 
-            foreach (Control ctrl in new Control[] { txt_TenSP, txt_GiaBan, txtSL, cbo_PhanLoai })
+            foreach (Control ctrl in new Control[] { txt_TenSP, txt_GiaBan, txt_GiaVon, txtSL, cbo_PhanLoai })
             {
                 ctrl.Enter += (s, e) => panelFields.Invalidate();
                 ctrl.Leave += (s, e) => panelFields.Invalidate();
             }
+
+            txt_TenSP.KeyDown += (s, e) => { if (e.KeyCode == Keys.Enter) { e.SuppressKeyPress = true; FocusEndOf(txt_GiaBan); } };
+            txt_GiaBan.KeyDown += (s, e) => { if (e.KeyCode == Keys.Enter) { e.SuppressKeyPress = true; FocusEndOf(txt_GiaVon); } };
+            txt_GiaVon.KeyDown += (s, e) => { if (e.KeyCode == Keys.Enter) { e.SuppressKeyPress = true; FocusEndOf(txtSL); } };
+            txtSL.KeyDown += (s, e) => { if (e.KeyCode == Keys.Enter) { e.SuppressKeyPress = true; cbo_PhanLoai.Focus(); } };
 
             Tim_bt.Paint += Buttons_Paint;
             Them_bt.Paint += Buttons_Paint;
 
             txt_TenSP.BorderStyle = BorderStyle.None;
             txt_GiaBan.BorderStyle = BorderStyle.None;
+            txt_GiaVon.BorderStyle = BorderStyle.None;
             txtSL.BorderStyle = BorderStyle.None;
             ThanhTimKiem.BorderStyle = BorderStyle.None;
 
             SetPaddingForTextBox(txt_TenSP);
             SetPaddingForTextBox(txt_GiaBan);
+            SetPaddingForTextBox(txt_GiaVon);
             SetPaddingForTextBox(txtSL);
             SetPaddingForTextBox(ThanhTimKiem);
 
@@ -67,30 +75,9 @@ namespace dosi
 
         private void ViewKhoHang_Load(object? sender, EventArgs e)
         {
-            EnsureDatabase();
             LoadPhanLoai();
             LoadSanPham();
         }
-
-        #region Database Migration
-
-        private void EnsureDatabase()
-        {
-            using (var conn = new SqliteConnection(ConnectionString))
-            {
-                conn.Open();
-                conn.Execute(@"CREATE TABLE IF NOT EXISTS PhanLoai (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    ten TEXT NOT NULL,
-                    ma TEXT NOT NULL
-                )");
-                try { conn.Execute("ALTER TABLE PhanLoai ADD COLUMN ten TEXT"); } catch { }
-                try { conn.Execute("ALTER TABLE PhanLoai ADD COLUMN ma TEXT"); } catch { }
-                try { conn.Execute("ALTER TABLE SanPham ADD COLUMN phanloai_id INTEGER"); } catch { }
-            }
-        }
-
-        #endregion
 
         #region Category Pills
 
@@ -393,6 +380,7 @@ namespace dosi
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
             DrawInputContainer(e.Graphics, txt_TenSP);
             DrawInputContainer(e.Graphics, txt_GiaBan);
+            DrawInputContainer(e.Graphics, txt_GiaVon);
             DrawInputContainer(e.Graphics, txtSL);
             DrawInputContainer(e.Graphics, cbo_PhanLoai);
         }
@@ -440,10 +428,17 @@ namespace dosi
 
         #endregion
 
+        private void FocusEndOf(TextBox txt)
+        {
+            txt.Focus();
+            txt.BeginInvoke(new Action(() => { txt.SelectionStart = txt.Text.Length; txt.SelectionLength = 0; }));
+        }
+
         private void LamMoiForm()
         {
             txt_TenSP.Clear();
             txt_GiaBan.Clear();
+            txt_GiaVon.Clear();
             txtSL.Clear();
             pic_HinhSP.Image = null;
             pic_HinhSP.Tag = null;
@@ -496,6 +491,7 @@ namespace dosi
                     pathLuuDB = CopyAnhVaoProject(pathGoc);
 
                 decimal.TryParse(txt_GiaBan.Text, out decimal gia);
+                decimal.TryParse(txt_GiaVon.Text, out decimal giaVon);
                 int.TryParse(txtSL.Text, out int sl);
 
                 string maSP = GenerateMaSP(selectedPhanLoai.Ma);
@@ -505,6 +501,7 @@ namespace dosi
                     MaSP = maSP,
                     TenSP = txt_TenSP.Text,
                     GiaBan = gia,
+                    GiaVon = giaVon,
                     SoLuong = sl,
                     HinhAnh = pathLuuDB,
                     PhanLoaiId = selectedPhanLoai.Id
@@ -531,7 +528,7 @@ namespace dosi
                 using (var conn = new SqliteConnection(ConnectionString))
                 {
                     conn.Open();
-                    string sql = "SELECT id, ma_sp AS MaSP, ten_sp AS TenSP, so_luong_ton AS SoLuong, hinh_anh AS HinhAnh, gia_ban AS GiaBan, phanloai_id AS PhanLoaiId FROM SanPham WHERE 1=1";
+                    string sql = "SELECT id, ma_sp AS MaSP, ten_sp AS TenSP, so_luong_ton AS SoLuong, hinh_anh AS HinhAnh, gia_ban AS GiaBan, COALESCE(gia_von, 0) AS GiaVon, phanloai_id AS PhanLoaiId FROM SanPham WHERE 1=1";
 
                     if (!string.IsNullOrEmpty(searchKey))
                         sql += " AND (ma_sp LIKE @key OR ten_sp LIKE @key)";

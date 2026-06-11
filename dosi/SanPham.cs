@@ -21,6 +21,7 @@ namespace dosi
         public string TenSP { get; set; } = string.Empty;
         public int SoLuong { get; set; }
         public decimal GiaBan { get; set; }
+        public decimal GiaVon { get; set; }
         public string HinhAnh { get; set; } = string.Empty;
         public int PhanLoaiId { get; set; }
 
@@ -28,7 +29,7 @@ namespace dosi
         {
             using (var conn = new SqliteConnection(ConnectionString))
             {
-                string sql = "INSERT INTO SanPham (ma_sp, ten_sp, so_luong_ton, gia_ban, hinh_anh, phanloai_id) VALUES (@MaSP, @TenSP, @SoLuong, @GiaBan, @HinhAnh, @PhanLoaiId)";
+                string sql = "INSERT INTO SanPham (ma_sp, ten_sp, so_luong_ton, gia_ban, gia_von, hinh_anh, phanloai_id) VALUES (@MaSP, @TenSP, @SoLuong, @GiaBan, @GiaVon, @HinhAnh, @PhanLoaiId)";
                 conn.Open();
                 conn.Execute(sql, this);
             }
@@ -38,7 +39,7 @@ namespace dosi
         {
             using (var conn = new SqliteConnection(ConnectionString))
             {
-                string sql = "UPDATE SanPham SET ma_sp = @MaSP, ten_sp = @TenSP, so_luong_ton = @SoLuong, gia_ban = @GiaBan, hinh_anh = @HinhAnh, phanloai_id = @PhanLoaiId WHERE id = @id";
+                string sql = "UPDATE SanPham SET ma_sp = @MaSP, ten_sp = @TenSP, so_luong_ton = @SoLuong, gia_ban = @GiaBan, gia_von = @GiaVon, hinh_anh = @HinhAnh, phanloai_id = @PhanLoaiId WHERE id = @id";
                 conn.Open();
                 conn.Execute(sql, this);
             }

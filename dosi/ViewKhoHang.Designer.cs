@@ -23,6 +23,8 @@
             panelMainContainer = new Panel();
             tableContent = new TableLayoutPanel();
             panelFields = new Panel();
+            lblGiaVon = new Label();
+            txt_GiaVon = new TextBox();
             lblSL = new Label();
             txtSL = new TextBox();
             lblGiaBan = new Label();
@@ -138,6 +140,8 @@
             // 
             // panelFields
             // 
+            panelFields.Controls.Add(lblGiaVon);
+            panelFields.Controls.Add(txt_GiaVon);
             panelFields.Controls.Add(lblSL);
             panelFields.Controls.Add(txtSL);
             panelFields.Controls.Add(lblGiaBan);
@@ -153,6 +157,29 @@
             panelFields.Name = "panelFields";
             panelFields.Size = new Size(561, 320);
             panelFields.TabIndex = 0;
+            //
+            // lblGiaVon
+            //
+            lblGiaVon.AutoSize = true;
+            lblGiaVon.Font = new Font("Segoe UI Semibold", 9.5F, FontStyle.Bold);
+            lblGiaVon.ForeColor = Color.FromArgb(71, 85, 105);
+            lblGiaVon.Location = new Point(0, 244);
+            lblGiaVon.Name = "lblGiaVon";
+            lblGiaVon.Size = new Size(64, 21);
+            lblGiaVon.TabIndex = 14;
+            lblGiaVon.Text = "Giá Vốn";
+            //
+            // txt_GiaVon
+            //
+            txt_GiaVon.BackColor = Color.FromArgb(248, 250, 252);
+            txt_GiaVon.BorderStyle = BorderStyle.FixedSingle;
+            txt_GiaVon.Font = new Font("Segoe UI", 11F);
+            txt_GiaVon.ForeColor = Color.FromArgb(15, 23, 42);
+            txt_GiaVon.Location = new Point(0, 267);
+            txt_GiaVon.Name = "txt_GiaVon";
+            txt_GiaVon.Size = new Size(250, 32);
+            txt_GiaVon.TabIndex = 15;
+            txt_GiaVon.PlaceholderText = "0";
             //
             // lblSL
             //
@@ -335,6 +362,8 @@
         private TextBox txt_TenSP;
         private Label lblGiaBan;
         private TextBox txt_GiaBan;
+        private Label lblGiaVon;
+        private TextBox txt_GiaVon;
         private Label lblSL;
         private TextBox txtSL;
         private PictureBox pic_HinhSP;

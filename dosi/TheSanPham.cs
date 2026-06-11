@@ -32,48 +32,69 @@ namespace dosi
             HinhAnh.Paint += HinhAnh_Paint;
         }
 
-        // 1. Tự vẽ bo góc 16px và viền mảnh nhẹ (Figma Light Border) cho Thẻ sản phẩm
+        private const int RADIUS = 16;
+
+        // 1. Set rounded Region + draw bottom-half border (top is covered by HinhAnh child)
         private void TheSanPham_Paint(object? sender, PaintEventArgs e)
         {
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-            int radius = 16;
 
-            using (GraphicsPath path = new GraphicsPath())
+            using (GraphicsPath regionPath = new GraphicsPath())
             {
-                path.StartFigure();
-                path.AddArc(new Rectangle(0, 0, radius, radius), 180, 90);
-                path.AddArc(new Rectangle(this.Width - radius - 1, 0, radius, radius), 270, 90);
-                path.AddArc(new Rectangle(this.Width - radius - 1, this.Height - radius - 1, radius, radius), 0, 90);
-                path.AddArc(new Rectangle(0, this.Height - radius - 1, radius, radius), 90, 90);
-                path.CloseFigure();
-
-                // Cắt vùng hiển thị của UserControl theo hình bo góc
-                this.Region = new Region(path);
-
-                Color borderColor = _isOutOfStock ? Color.FromArgb(239, 68, 68) : Color.FromArgb(226, 232, 240);
-                float borderWidth = _isOutOfStock ? 3f : 1.5f;
-                using (Pen borderPen = new Pen(borderColor, borderWidth))
-                {
-                    e.Graphics.DrawPath(borderPen, path);
-                }
+                regionPath.StartFigure();
+                regionPath.AddArc(new Rectangle(0, 0, RADIUS, RADIUS), 180, 90);
+                regionPath.AddArc(new Rectangle(this.Width - RADIUS - 1, 0, RADIUS, RADIUS), 270, 90);
+                regionPath.AddArc(new Rectangle(this.Width - RADIUS - 1, this.Height - RADIUS - 1, RADIUS, RADIUS), 0, 90);
+                regionPath.AddArc(new Rectangle(0, this.Height - RADIUS - 1, RADIUS, RADIUS), 90, 90);
+                regionPath.CloseFigure();
+                this.Region = new Region(regionPath);
             }
+
+            DrawCardBorder(e.Graphics);
         }
 
-        // 2. Bo tròn 2 góc trên của ảnh để khớp hoàn toàn với độ cong của thẻ sản phẩm
+        // 2. Round top corners of image + draw top-half border on top of the image
         private void HinhAnh_Paint(object? sender, PaintEventArgs e)
         {
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-            int radius = 16;
+
+            using (GraphicsPath clipPath = new GraphicsPath())
+            {
+                clipPath.StartFigure();
+                clipPath.AddArc(new Rectangle(0, 0, RADIUS, RADIUS), 180, 90);
+                clipPath.AddArc(new Rectangle(HinhAnh.Width - RADIUS - 1, 0, RADIUS, RADIUS), 270, 90);
+                clipPath.AddLine(HinhAnh.Width - 1, HinhAnh.Height, 0, HinhAnh.Height);
+                clipPath.CloseFigure();
+                HinhAnh.Region = new Region(clipPath);
+            }
+
+            // Translate to card coordinate space and draw the border; the HinhAnh bounds
+            // naturally clip the drawing to just the top portion of the card.
+            e.Graphics.TranslateTransform(-HinhAnh.Left, -HinhAnh.Top);
+            DrawCardBorder(e.Graphics);
+            e.Graphics.ResetTransform();
+        }
+
+        // Draws the full card border path inset by half pen-width so the stroke stays inside the Region.
+        private void DrawCardBorder(Graphics g)
+        {
+            Color borderColor = _isOutOfStock ? Color.FromArgb(239, 68, 68) : Color.FromArgb(226, 232, 240);
+            float borderWidth = _isOutOfStock ? 5f : 1.5f;
+            float inset = borderWidth / 2f;
+            int W = this.Width;
+            int H = this.Height;
 
             using (GraphicsPath path = new GraphicsPath())
             {
                 path.StartFigure();
-                path.AddArc(new Rectangle(0, 0, radius, radius), 180, 90);
-                path.AddArc(new Rectangle(HinhAnh.Width - radius - 1, 0, radius, radius), 270, 90);
-                path.AddLine(HinhAnh.Width - 1, HinhAnh.Height, 0, HinhAnh.Height);
+                path.AddArc(new RectangleF(inset, inset, RADIUS, RADIUS), 180, 90);
+                path.AddArc(new RectangleF(W - RADIUS - 1 - inset, inset, RADIUS, RADIUS), 270, 90);
+                path.AddArc(new RectangleF(W - RADIUS - 1 - inset, H - RADIUS - 1 - inset, RADIUS, RADIUS), 0, 90);
+                path.AddArc(new RectangleF(inset, H - RADIUS - 1 - inset, RADIUS, RADIUS), 90, 90);
                 path.CloseFigure();
 
-                HinhAnh.Region = new Region(path);
+                using (Pen pen = new Pen(borderColor, borderWidth))
+                    g.DrawPath(pen, path);
             }
         }
 

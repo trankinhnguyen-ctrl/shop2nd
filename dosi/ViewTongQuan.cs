@@ -251,7 +251,9 @@ namespace dosi
                     FROM NhapXuat nx
                     JOIN Khach k ON nx.KHACH_id = k.id
                     JOIN SanPham sp ON nx.SAPHAM_id = sp.id
+                    LEFT JOIN HoaDon hd ON nx.hoadon_id = hd.id
                     WHERE nx.loai_giao_dich = 'Xuat'
+                      AND (nx.hoadon_id IS NULL OR hd.TrangThai != 'DaChinhSua')
                     GROUP BY COALESCE(CAST(nx.hoadon_id AS TEXT), nx.KHACH_id || '_' || nx.ngay_tao)
                     ORDER BY nx.ngay_tao DESC
                     LIMIT 10";

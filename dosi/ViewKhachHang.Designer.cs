@@ -120,7 +120,7 @@ namespace dosi
             flpInvoices.WrapContents = false;
             flpInvoices.Location = new Point(10, 305);
             flpInvoices.Name = "flpInvoices";
-            flpInvoices.Padding = new Padding(0, 6, 0, 6);
+            flpInvoices.Padding = new Padding(8, 6, 0, 6);
             flpInvoices.Size = new Size(713, 380);
             flpInvoices.TabIndex = 0;
             panelStats.ColumnCount = 4;

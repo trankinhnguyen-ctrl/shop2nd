@@ -1,6 +1,9 @@
-﻿using System;
+using Dapper;
+using Microsoft.Data.Sqlite;
+using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace dosi
@@ -14,7 +17,79 @@ namespace dosi
             InitializeComponent();
             SetupButtonHoverEffects();
             panelShadow.Paint += PanelShadow_Paint;
-            this.Load += (s, e) => MoTrangTongQuan();
+            this.Load += (s, e) =>
+            {
+                try
+                {
+                    using var mc = new SqliteConnection("Data Source=QuanLyKho.db");
+                    mc.Open();
+                    mc.Execute("ALTER TABLE SanPham ADD COLUMN gia_von REAL NOT NULL DEFAULT 0");
+                }
+                catch { }
+                KhoiPhucDonBiNgat();
+                MoTrangTongQuan();
+            };
+        }
+
+        private void KhoiPhucDonBiNgat()
+        {
+            try
+            {
+                using var conn = new SqliteConnection("Data Source=QuanLyKho.db");
+                conn.Open();
+                var stuck = conn.Query<string>("SELECT ma_hd FROM HoaDon WHERE TrangThai = 'DangChinhSua'").ToList();
+                if (stuck.Count == 0) return;
+
+                var result = MessageBox.Show(
+                    $"Phát hiện {stuck.Count} đơn hàng chưa hoàn tất chỉnh sửa từ phiên trước.\n\n" +
+                    "Nhấn Có để khôi phục tự động (hủy các chỉnh sửa chưa lưu).\n" +
+                    "Nhấn Không để bỏ qua (chỉ chọn nếu bạn biết chắc điều này).",
+                    "Khôi phục dữ liệu",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning);
+
+                if (result == DialogResult.Yes)
+                {
+                    foreach (string maHD in stuck)
+                        RollbackStuckOrder(maHD, conn);
+                }
+            }
+            catch { }
+        }
+
+        private static void RollbackStuckOrder(string maHoaDon, SqliteConnection conn)
+        {
+            try
+            {
+                using var trans = conn.BeginTransaction();
+                var items = conn.Query(@"
+                    SELECT nx.SAPHAM_id AS SpId, nx.so_luong AS SoLuong
+                    FROM NhapXuat nx JOIN HoaDon hd ON nx.hoadon_id = hd.id
+                    WHERE hd.ma_hd = @maHD AND nx.loai_giao_dich = 'Xuat'",
+                    new { maHD = maHoaDon }, transaction: trans).ToList();
+
+                foreach (dynamic item in items)
+                {
+                    conn.Execute(
+                        "UPDATE SanPham SET so_luong_ton = MAX(0, so_luong_ton - @sl) WHERE id = @id",
+                        new { sl = (int)(long)item.SoLuong, id = (long)item.SpId },
+                        transaction: trans);
+                }
+
+                conn.Execute("UPDATE HoaDon SET TrangThai = 'HoanThanh' WHERE ma_hd = @maHD",
+                    new { maHD = maHoaDon }, transaction: trans);
+
+                trans.Commit();
+            }
+            catch { }
+        }
+
+        private bool OKToNavigateAway()
+        {
+            var gd = panelContent.Controls.OfType<ViewGiaoDich>().FirstOrDefault();
+            if (gd != null && gd.DangChinhSua)
+                return gd.XacNhanHuyChinhSua();
+            return true;
         }
 
         private void PanelShadow_Paint(object? sender, PaintEventArgs e)
@@ -92,11 +167,13 @@ namespace dosi
 
         private void btnTongQuan_Click(object sender, EventArgs e)
         {
+            if (!OKToNavigateAway()) return;
             MoTrangTongQuan();
         }
 
         private void btnKhoHang_Click(object sender, EventArgs e)
         {
+            if (!OKToNavigateAway()) return;
             ViewKhoHang uc = new ViewKhoHang();
             addUserControl(uc);
             UpdateMenuUI(btnKhoHang);
@@ -104,6 +181,7 @@ namespace dosi
 
         private void btnKhachHang_Click(object sender, EventArgs e)
         {
+            if (!OKToNavigateAway()) return;
             ViewKhachHang uc = new ViewKhachHang();
             addUserControl(uc);
             UpdateMenuUI(btnKhachHang);
@@ -111,6 +189,7 @@ namespace dosi
 
         public void MoTrangKhachHang(int khachId)
         {
+            if (!OKToNavigateAway()) return;
             ViewKhachHang uc = new ViewKhachHang();
             addUserControl(uc);
             UpdateMenuUI(btnKhachHang);
@@ -119,13 +198,24 @@ namespace dosi
 
         private void btnGiaoDich_Click(object sender, EventArgs e)
         {
+            if (!OKToNavigateAway()) return;
             ViewGiaoDich uc = new ViewGiaoDich();
             addUserControl(uc);
             UpdateMenuUI(btnGiaoDich);
         }
 
+        public void MoTrangGiaoDichVoiEdit(EditOrderContext ctx)
+        {
+            if (!OKToNavigateAway()) return;
+            var uc = new ViewGiaoDich();
+            addUserControl(uc);
+            UpdateMenuUI(btnGiaoDich);
+            uc.LoadEditOrder(ctx);
+        }
+
         private void btnPhanTich_Click(object sender, EventArgs e)
         {
+            if (!OKToNavigateAway()) return;
             ViewPhanTich uc = new ViewPhanTich();
             addUserControl(uc);
             UpdateMenuUI(btnPhanTich);
